@@ -1,0 +1,1110 @@
+@import url("https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;500;600&display=swap");
+@import url("https://fonts.cdnfonts.com/css/sinami");
+@import url("https://fonts.cdnfonts.com/css/love-you");
+@import url("https://fonts.cdnfonts.com/css/thirty-seven");
+@import url("https://fonts.cdnfonts.com/css/g-glegar");
+@import url("https://fonts.cdnfonts.com/css/tt-marxiana-trial");
+@import url("https://fonts.cdnfonts.com/css/dec-terminal-modern");
+@import url("https://fonts.cdnfonts.com/css/capriola-buisiness");
+
+/*ALL BLOCK*/
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Raleway", sans-serif;
+}
+
+.hidden {
+  display: none !important;
+}
+
+.disabled{
+  pointer-events: none;
+  cursor: default;
+}
+
+/*INDEX BLOCK*/
+.main__container__index {
+  height: 90vh;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  position: sticky;
+}
+
+.index__route--static a {
+  /*STATIC BUTTON*/
+  background-color: aquamarine;
+  color: black;
+  margin-top: 100px;
+  white-space: normal;
+  border: solid black 2px;
+  border-radius: 20px;
+  font-family: "Sinami", sans-serif;
+  font-size: 3.125rem;
+  padding: 15px;
+  padding-bottom: 5px;
+  transition: all 500ms ease;
+}
+
+.index__route--static a:hover {
+  color: rgb(195, 7, 195);
+  box-shadow: #9966cc 0px 0px 20px 0px;
+  cursor: pointer;
+}
+
+.index__route--dinamic a {
+  /*DINAMIC BUTTON*/
+  background-color: rgb(96, 104, 255);
+  color: black;
+  margin-top: 50px;
+  white-space: normal;
+  border: solid black 2px;
+  border-radius: 20px;
+  font-family: "Sinami", sans-serif;
+  font-size: 3.125rem;
+  padding: 15px;
+  padding-bottom: 5px;
+  transition: all 500ms ease;
+}
+
+.index__route--dinamic a:hover {
+  border: solid black 2px;
+  color: rgb(255, 196, 0);
+  box-shadow: #9966cc 0px 0px 20px 0px;
+  cursor: pointer;
+}
+
+.index__route--chat a {
+  /*CHAT BUTTON*/
+  background-color: pink;
+  color: black;
+  margin-top: 50px;
+  white-space: normal;
+  border: solid black 2px;
+  border-radius: 20px;
+  font-family: "Sinami", sans-serif;
+  font-size: 3.125rem;
+  padding: 15px;
+  padding-bottom: 5px;
+  transition: all 500ms ease;
+}
+
+.index__route--chat a:hover {
+  border: solid black 2px;
+  color: blue;
+  box-shadow: #9966cc 0px 0px 20px 0px;
+  cursor: pointer;
+}
+
+/*MAIN BLOCK*/
+.container__grid {
+  display: grid;
+  flex-wrap: wrap;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  grid-template-rows: repeat(auto-fill, 1fr);
+  grid-auto-flow: dense;
+  grid-auto-rows: 1fr;
+  grid-auto-columns: 1fr;
+  grid-gap: 10px;
+  height: auto;
+  margin-top: 1vh;
+  margin-bottom: 3vh;
+}
+
+.keep {
+  border: solid yellow 3px;
+  border-top-right-radius: 40px;
+  border-bottom-right-radius: 40px;
+  left: 8vw !important;
+}
+
+/*HEAD BLOCK*/
+.head {
+  margin: 0;
+  z-index: 50;
+  position: sticky;
+  top: 0;
+  background: linear-gradient(rgb(190, 240, 255), white);
+}
+
+.head__h2 {
+  height: 6vh;
+  margin: 0;
+  padding-left: 11vw;
+  outline: solid grey 3px;
+  text-align: center;
+  font-family: "Love You", cursive;
+  font-size: 3rem;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+/*NAVIGATION BLOCK*/
+.nav {
+  background-image: url("https://img.freepik.com/vector-gratis/fondo-degradado-cielo-pastel_23-2148917404.jpg?w=2000");
+  z-index: 2;
+}
+
+.nav__container--email-logged {
+  color: black;
+  position: relative;
+  margin-top: 5px;
+  height: 85%;
+  width: 6vw;
+  border-radius: 10px;
+  text-align: center;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.nav__container--email-logged:hover {
+  overflow: visible;
+  cursor: pointer;
+}
+
+/*NAVIGATION BLOCK REF*/
+.nav__container--a {
+  outline-offset: solid black 1px;
+}
+.nav__container--a a {
+  border: solid black 1px;
+  color: black;
+  position: relative;
+  margin-top: 5px;
+  height: 85%;
+  width: 6vw;
+  border-radius: 10px;
+  text-align: center;
+  overflow: hidden;
+}
+.nav__container--a a:hover {
+  cursor: pointer;
+  background-color: rgb(0, 255, 195);
+  box-shadow: #2cfff1 0px 0px 15px 0px;
+}
+.nav__container--a i {
+  position: relative;
+  top: 2vh;
+}
+.nav__container--a b {
+  position: relative;
+}
+
+/*SIDEBAR BLOCK */
+.aside__dropdown {
+  height: 50vh;
+  width: 8.3vw;
+  position: fixed;
+  top: 6vh;
+  bottom: 50vh;
+  z-index: 4;
+  display: block;
+  background-color: #9d00ff;
+  transition: all ease-in-out 300ms;
+}
+.aside__dropdown:hover > .aside__menu {
+  left: 8.3vw;
+}
+
+.aside__dropdown--contain button {
+  background-color: white;
+  font-size: 3.5vw;
+  position: relative;
+  height: 100%;
+  width: 8.3vw;
+  border-bottom-right-radius: 30px;
+  z-index: 4;
+  display: flex;
+  align-items: center;
+}
+.aside__dropdown--contain button:hover {
+  background: linear-gradient(rgb(190, 240, 255), white);
+  cursor: pointer;
+  z-index: 4;
+}
+.aside__dropdown--contain i {
+  display: flex;
+  align-items: center;
+  padding: 2vw;
+  position: relative;
+  font-size: 100%;
+  z-index: 4;
+}
+
+.aside__menu {
+  position: absolute;
+  outline: solid black 1px;
+  background-color: #ffffff;
+  overflow: hidden;
+  z-index: 2;
+  top: 0;
+  left: -46vw;
+  transition: all ease-in-out 700ms;
+  width: 42vw;
+  display: block;
+  height: auto;
+}
+
+.aside__menu--logo {
+  background-color: #ffffff;
+  position: sticky;
+  top: 0;
+  margin: auto;
+  height: 16vh;
+}
+
+.aside__menu--logo img {
+  object-fit: cover;
+  height: 16vh;
+  width: 60%;
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+  position: relative;
+}
+
+.aside__menu--keep-hide {
+  background-color: #ffffff;
+  height: 10vh;
+  display: flex;
+  align-items: center;
+}
+
+.aside__menu--keep-hide button {
+  font-family: "Sinami", sans-serif;
+  font-size: 2em;
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+  width: 90%;
+  border-radius: 15px;
+  background-color: #5b8bf3;
+  height: 6vh;
+}
+
+.aside__menu--keep-hide button:hover {
+  box-shadow: #00befe 0px 0px 10px 0px;
+  cursor: pointer;
+  background-color: #61bdff;
+}
+
+.aside__menu--keep-hide i {
+  display: inline-block;
+  height: 0;
+  font-size: 20px;
+  margin: 5px;
+  position: relative;
+}
+
+.aside__menu--options {
+  background-color: #ffffff;
+  outline: solid purple 5px;
+  width: 100%;
+}
+
+.aside__menu--options h6 {
+  background-color: #ffffff;
+  color: #9d00ff;
+  position: relative;
+  display: block;
+  text-align: start;
+  margin-left: 20px;
+  margin-right: 20px;
+  font-family: "Love You", sans-serif;
+  font-size: 1.7em;
+}
+
+.aside__menu--options button {
+  position: relative;
+  background: none;
+  border: none;
+  text-align: start;
+  margin: 5px;
+  padding: 5px;
+  font-size: 0.8em;
+}
+
+.aside__menu--options button:hover {
+  background-color: #2755b8;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.aside__menu--options ul {
+  overflow: scroll;
+  display: block;
+  text-align: start;
+  height: 50vh;
+}
+
+.aside__menu--options li {
+  display: block;
+}
+
+.aside__menu--options a {
+  color: black;
+  font-family: "Sinami", sans-serif;
+  font-size: 1.2em;
+  width: 85%;
+  padding: 1.5vh 0 1.5vh 4vw;
+  margin: 10px 10px;
+}
+
+.aside__menu--options a:hover {
+  box-shadow: #00befe 0px 0px 10px 0px;
+  border-radius: 15px;
+  outline: solid black 2px;
+  background-color: #84f9e9;
+  cursor: pointer;
+  color: orangered;
+  font-size: 1.3em;
+}
+.aside__menu--options a:active {
+  background-color: rgb(0, 136, 255);
+  cursor: wait;
+}
+
+.aside__menu--options i {
+  display: inline-block;
+  height: 0;
+  font-size: 1em;
+  position: relative;
+  bottom: 1px;
+}
+
+/*MAIN BLOCK*/
+.main__container {
+  margin: auto;
+  background: linear-gradient(white, rgb(190, 240, 255));
+  height: auto;
+  z-index: 0;
+}
+
+.main__container--side {
+  background-image: url("https://img.freepik.com/vector-gratis/fondo-degradado-cielo-pastel_23-2148917404.jpg?w=2000");
+  background-size: cover;
+  z-index: 1;
+  height: 100vh;
+  position: sticky;
+  top: 0;
+  display: block;
+}
+
+.main__container__dinamic {
+  z-index: 1;
+}
+
+/*DINAMIC BLOCK*/
+.dinamic__container {
+  position: sticky;
+  top: 6vh;
+  display: block;
+  margin: 0;
+  padding-top: 10px;
+}
+
+.dinamic__tittle {
+  margin: 0;
+  padding: 0;
+}
+
+.dinamic__tittle--h3 {
+  position: sticky;
+  margin: 0;
+  top: 0;
+  display: block;
+  margin-left: 10px;
+  font-size: 3.5rem;
+  width: 100%;
+  font-family: "Sinami", sans-serif;
+}
+
+/*FORM BLOCK*/
+.form__contain {
+  margin: 1px;
+}
+
+.form__contain label {
+  font-size: 1.5rem;
+  font-family: "Love You", sans-serif;
+}
+
+.form--btnSave {
+  /*SAVE BUTTON*/
+  white-space: normal;
+  background: #250092;
+  border: solid black 2px;
+  border-radius: 20px;
+  color: #ffffff;
+  font-family: "Sinami", sans-serif;
+  font-size: 1.875rem;
+  padding-top: 8px !important;
+  transition: all 500ms ease;
+}
+.form--btnSave:hover {
+  box-shadow: #9966cc 0px 0px 20px 0px;
+  background: rgb(0, 73, 189);
+  color: #ffff00;
+  cursor: pointer;
+}
+
+.form--btnCancel {
+  /*CANCEL BUTTON*/
+  white-space: normal;
+  background: rgb(0, 201, 151);
+  border: solid black 2px;
+  border-radius: 20px;
+  color: #ffffff;
+  font-family: "Sinami", sans-serif;
+  font-size: 1.875rem;
+  padding-top: 10px !important;
+  transition: all 500ms ease;
+}
+.form--btnCancel:hover {
+  box-shadow: #00befe 0px 0px 10px 0px;
+  background: rgb(48, 238, 175);
+  color: #ff8000;
+  cursor: pointer;
+}
+
+/*STATIC BLOCK*/
+.static__tittle {
+  background-color: white;
+  position: sticky;
+  top: 6vh;
+  display: block;
+  z-index: 2;
+}
+
+.static__tittle h4 {
+  margin: 0;
+  padding-top: 1vh;
+  position: static;
+  font-size: 2.875rem;
+  font-family: "Sinami", sans-serif;
+}
+
+/*GRID BLOCK*/
+.container__grid__card {
+  border: solid 1px black;
+  height: 45vh;
+  margin: 0;
+  z-index: 1;
+  background-color: rgb(255, 255, 255);
+}
+.container__grid__card:hover{
+  background-color: rgb(230, 230, 230);
+}
+.container__empty__card {
+  position: absolute;
+  top: 27vh;
+  width:38vw;
+  height: 0;
+  margin: 0;
+  z-index: 2;
+  background-color: rgb(255, 255, 255);
+}
+
+.container__grid__card .card {
+  margin: 0;
+  height: 20vh;
+}
+
+.container__empty__card .card {
+  margin: 0;
+  height: 60vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.card-title--filled {
+  margin: 0;
+  opacity: 0.8;
+  color: black;
+  background: linear-gradient(white, rgb(232, 119, 255));
+  position: relative;
+  display: block;
+  font-family: "TT Marxiana Trial", sans-serif;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: all 500ms ease;
+}
+
+.card-title--filled:hover {
+  cursor: pointer;
+  width: 100%;
+  height: auto;
+  line-height: auto;
+  white-space: normal;
+  word-wrap: break-word;
+  box-shadow: #2cff37 0px 0px 15px 0px;
+}
+
+.card-img-top--filled {
+  object-fit: cover;
+  border-bottom: solid black 3px;
+  border-bottom-left-radius:10%;
+  border-bottom-right-radius:10%;
+  height: 100%;
+  width: 100%;
+}
+
+.card-item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.card-item i{
+  font-size: 15vw;
+}
+
+.card-body {
+  position: relative;
+  width: auto;
+  text-align: center;
+  font-size: large;
+  justify-content: center;
+  height: 18vh;
+  overflow: hidden;
+}
+
+.card-text--description {
+  display: block;
+  font-size: 1.125rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-align: center;
+  position: relative;
+  top: 3vh;
+}
+
+.card-text--description:hover,
+.card-text--description:active {
+  position: sticky;
+  cursor: pointer;
+  color: blue;
+  font-size: 1.25rem;
+  overflow: visible;
+  text-overflow: "";
+  white-space: break-spaces;
+  width: 100%;
+}
+
+.card-text--price {
+  font-size: 1.3125rem;
+  margin-bottom: 2vh;
+  position: relative;
+  top: 6vh;
+  font-family: "TT Marxiana Trial", sans-serif;
+}
+
+.card-text--price:hover {
+  color: red;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+.card-text--code {
+  display: block;
+  font-size: 1rem;
+  text-align: start;
+  margin-left: 5px;
+  color: #6a00ff;
+}
+
+.card-text--empty{
+  display: block;
+  font-size: 1.5rem;
+  text-align: center;
+  margin-left: 5px;
+  color: #6a00ff;
+  position: relative;
+  top: 10%;
+}
+
+.card__btnDelete {
+  background-color: transparent;
+  color: black;
+  position: absolute;
+  display: block;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  margin-top: 3.5vh;
+}
+.card__btnDelete:hover {
+  cursor: pointer;
+  color: red;
+  background-color: rgb(255, 196, 196);
+  box-shadow: red 1px 1px 5px 0px;
+}
+
+/*BUTTONS BLOCK*/
+.btnUpdate {
+  background-color: transparent;
+  position: absolute;
+  display: block;
+  z-index: 1;
+  right: 0;
+  top: 0;
+  margin-top: 3.5vh;
+  width: 3rem;
+}
+
+.btnUpdate a {
+  position: relative;
+  color: black;
+  font-size: 1.375rem;
+  z-index: 2;
+  padding: 8px;
+  right: 1rem;
+}
+.btnUpdate a:hover {
+  background-color: rgb(188, 255, 220);
+  cursor: pointer;
+  color: green;
+  padding: 8px 10px;
+  box-shadow: green 0 1px 5px 0;
+}
+
+.btnAdd{
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 50%;
+  background-color: transparent;
+}
+
+.btnAdd a{
+  color: black;
+  font-size: 2rem;
+  width: 100%;
+  overflow: hidden;
+  height: 5vh;
+}
+
+.btnAdd i{
+  font-size: 1.25rem;
+}
+
+.btnAdd b{
+  font-size: 0.8125rem;
+  padding-left: 5px;
+}
+
+/*VALIDATE BLOCK*/
+#validate {
+  background-color: greenyellow;
+  z-index: 100;
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  font-family: "Love You", sans-serif;
+  color: black;
+  border-radius: 10px;
+  border: solid 2px black;
+  width: 14vw;
+  height: 4vh;
+  font-size: 1.25rem;
+  transition: all 400ms ease;
+}
+
+#validate:hover {
+  color: rgb(38, 2, 108);
+  width: 16vw;
+  cursor: pointer;
+  box-shadow: #2cff37 0px 0px 15px 0px;
+}
+
+/*RETURN BLOCK*/
+#return {
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: greenyellow;
+  transition: all 600ms ease;
+  z-index: 100;
+  border-radius: 10px;
+  margin: 5px;
+  width: 9vw;
+  display: flex;
+  align-items: center;
+}
+
+#return:hover {
+  color: rgb(38, 2, 108);
+  width: 30vw;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+}
+
+#return a {
+  font-size: 1.5rem;
+  border: solid black 1px;
+  color: black;
+  position: relative;
+  height: 5vh;
+  width: 100%;
+  border-radius: 10px;
+  text-align: center;
+  overflow: hidden;
+  white-space: nowrap;
+  justify-content: center;
+  overflow: hidden;
+  white-space: nowrap;
+  align-items: start;
+  text-overflow: ellipsis;
+}
+
+#return a:hover {
+  color: rgb(15, 6, 140);
+  box-shadow: #9966cc 0px 0px 20px 0px;
+}
+
+#return b {
+  font-family: "thirty-seven", sans-serif;
+}
+
+#return i {
+  position: relative;
+  margin: 7px;
+  left: 0;
+  font-size: 1.625rem;
+  position: relative;
+}
+
+/*CHAT LOGIN BLOCK*/
+.chat{
+  position: relative;
+  margin: 0;
+  padding: 0;
+}
+
+.chat__login--tittle {
+  color: rgb(46, 12, 200);
+  font-family: "g Glegar", sans-serif;
+  font-size: 2.5rem;
+}
+
+.chat__login--text {
+  color: black;
+  font-family: "DEC Terminal Modern", sans-serif;
+  font-size: 2rem;
+}
+
+.chat__login--confirm,.chat__login--exit {
+  font-family: "TT Marxiana Trial", sans-serif;
+  font-size: 1.25rem;
+  color: black;
+}
+.chat__login--confirm:hover,.chat__login--exit:hover {
+  color: white;
+  font-size: 1.375rem;
+}
+
+.chat__login--notification {
+  font-size: auto;
+  color: black;
+  font-family: "Gentium Plus", sans-serif;
+}
+
+.chat__footer--left{
+  position: absolute;
+  left: 5px;
+  bottom: 5px;
+  color: black;
+}
+
+.chat__footer--right{
+  position: absolute;
+  right: 5px;
+  bottom: 5px;
+  color: black;
+}
+
+.chat__footer--left:hover,.chat__footer--right:hover{
+  color: blueviolet;
+  cursor: pointer;
+}
+
+/*CHAT CONTAINER BLOCK*/
+.main__container__dinamic--chat {
+  height: auto;
+  position: sticky;
+  top: 6vh;
+}
+
+.chat__tittle {
+  background-color: white;
+  position: sticky;
+  top: 0;
+  display: flex;
+  justify-content: center;
+  z-index: 2;
+  margin: 0;
+  border-top: solid 1px black;
+  background-color: rgb(175, 255, 175);
+}
+
+.chat__tittle u {
+  margin: 0;
+  margin-top: 10px;
+  position: relative;
+  color: #9d00ff;
+  background-color: rgb(175, 255, 175);
+  font-size: 5vw;
+  font-family: "Sinami", sans-serif;
+}
+
+.chat__container--response {
+  position: relative;
+  padding-left: 1vw;
+  background-color: rgb(175, 255, 175);
+  border-bottom: solid 1px black;
+  margin: 0;
+}
+
+.chat__container {
+  display: flex;
+  flex-direction: column;
+  height: auto;
+  margin: 0;
+}
+
+.chat__container__dinamic {
+  position: relative;
+  width:  100%;
+  margin: 0;
+  height: 60vh;
+  overflow: scroll;
+  overflow-x: hidden;
+}
+
+/*CHAT MESSAGE BLOCK*/
+.chat__message {
+  display: flex;
+  margin: 10px;
+}
+
+.chat__message--bubble {
+  display: flex;
+  flex-direction: column;
+  padding: 10px 15px;
+  border-radius: 10px;
+  background-color: #ffffff;
+  border: solid 1px #ddd;
+}
+
+.chat__message--sender {
+  font-size: 0.9375rem;
+  color: black;
+  margin-bottom: 5px;
+  justify-content: space-between;
+  font-weight: bold;
+}
+
+.chat__message p {
+  margin: 0;
+  height: 100%;
+  background-color: #ffffff;
+  color: black;
+  font-size: 1rem;
+  border: none;
+  cursor: text;
+}
+
+/*CHAT INPUT BLOCK*/
+.chat__input {
+  position: relative;
+  display: flex;
+  height: 10vh;
+  width: 100%;
+  align-items: center;
+  z-index: 100;
+  margin: 0;
+  left: 10px;
+}
+
+.chat__input--chatBox {
+  width: 100%;
+  background-color: white;
+  border-radius: 60px;
+}
+
+.chat__input--chatBox input {
+  flex: 1;
+  border: none;
+  font-size: 1rem;
+}
+.chat__input--chatBox input:hover {
+  cursor: text;
+}
+
+.chat__input--button {
+  height: 50%;
+  display: flex;
+}
+
+#btnSend{
+  width: 100%;
+  font-size: 1.5rem;
+  border-radius: 60px;
+  background-color: rgb(82, 248, 82);
+  cursor: pointer;
+  border: solid 2px black;
+}
+
+/*CSS DEVICES*/
+
+/*CSS DEVICE < 600px (37.5rem)(base 1rem=16px) (CEL)*/
+
+@media only screen and (max-width: 37.5rem) {
+
+  /*DEVICE CEL MAIN BLOCK*/
+  .container__grid {
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    grid-template-rows: repeat(auto-fill, 1fr);
+    grid-auto-flow: dense;
+    grid-auto-rows: 1fr;
+    grid-auto-columns: 1fr;
+    grid-column-gap: 5px;
+  }
+
+  /*DEVICE CEL HEAD BLOCK*/
+  .head__h2 {
+    font-size: 7vw;
+    padding-top: 1vw;
+  }
+
+  /*DEVICE CEL NAV BLOCK*/
+  .nav__container--a i {
+    position: relative;
+    top: 1.7vh;
+  }
+  /*DEVICE CEL ASIDE BLOCK*/
+  .aside__dropdown {
+    height: 35vh;
+  }
+  .aside__menu {
+    width: 45vw;
+  }
+
+  /*DEVICE CEL DINAMIC BLOCK*/
+  .dinamic__container h3 {
+    font-size: 3em;
+    width: 100%;
+  }
+
+  /*DEVICE CEL STATIC BLOCK*/
+  .static__container {
+    display: flex;
+    justify-content: center;
+  }
+
+  /*DEVICE CEL FORM BLOCK*/
+  .form__contain div {
+    margin: 0;
+  }
+
+  /*DEVICE CEL CHAT BLOCK*/
+  .chat__tittle u {
+    font-size: 5vh;
+  }
+  .container__empty__card {
+    position: relative;
+    border: solid 1px black;
+    height: auto;
+    width: 77vw;
+    top: 6vh;
+  }
+
+}
+
+/*CSS DEVICE > 992px (62rem) (base 16px=1rem) (LAP)*/
+
+@media only screen and (min-width: 62rem) {
+  /*DEVICE LAP MAIN BLOCK*/
+  .container__grid {
+    grid-template-columns: repeat(auto-fill, minmax(12.5rem, 1fr));
+    grid-template-rows: repeat(auto-fill, 1fr);
+    grid-auto-flow: dense;
+    grid-auto-rows: 1fr;
+    grid-auto-columns: 1fr;
+    grid-gap: 5px;
+  }
+
+  /*DEVICE LAP NAV BLOCK*/
+  .nav__container--a a {
+    width: 7.5vw;
+    align-items: start;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+  .nav__container--a i {
+    position: relative;
+    right: 0.2vw;
+    top: 0.05vh;
+  }
+  .nav__container--a b {
+    bottom: 0.6vh;
+  }
+
+  /*DEVICE LAP ASIDE BLOCK*/
+  .aside__dropdown {
+    height: 35vh;
+  }
+
+  .aside__menu {
+    width: 28vw;
+  }
+
+  /*DEVIDE LAP CARD BLOCK*/
+  .container__empty__card {
+    height: auto;
+    width: 53vw;
+  }
+
+  /*DEVICE LAP CHAT BLOCK*/
+  .chat__tittle u {
+    font-size: 3.5vw;
+  }
+
+  /*DEVICE LAP RETURN BLOCK*/
+  #return a {
+    align-items: start;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+  #return i {
+    position: relative;
+    right: 0.2vw;
+    top: 0.05vh;
+  }
+  #return b {
+    bottom: 0.6vh;
+  }
+
+  
+}
+
+/*FOOTER BLOCK*/
+.footer__contain {
+  position: fixed;
+  left: 0px;
+  bottom: 0px;
+  height: 4vh;
+  width: 100%;
+  background: linear-gradient(white, rgb(190, 240, 255));
+  z-index: 4;
+  display: flex;
+  justify-content: center;
+}

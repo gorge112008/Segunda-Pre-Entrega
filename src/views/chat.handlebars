@@ -1,0 +1,51 @@
+<div class="main__container--side col s1"></div>
+<div class="main__container__dinamic--chat col s10">
+  <div class="chat__tittle row"><u>Chat Comunitario</u></div>
+  <div class="chat row">
+    <div class="chat__container">
+      <b class="chat__container--response"><i>Bienvenido a la seccion de
+          mensajes:
+        </i></b>
+      <div class="chat__container__dinamic">
+        {{#each resMessages}}
+          <div class="chat__message">
+            <div class="chat__message--bubble">
+              <div class="chat__message--sender">{{user}}</div>
+              <p>{{message}}</p>
+            </div>
+          </div>
+        {{/each}}
+      </div>
+    </div>
+  </div>
+  <div class="chat__input row">
+    <div class="chat__input--chatBox col s10">
+      <input
+        type="text"
+        placeholder="Escribe un mensaje..."
+        name="message"
+        id="chatBox"
+      />
+    </div>
+    <div class="chat__input--button col s2">
+      <button id="btnSend" class="fa-solid fa-location-arrow"></button>
+    </div>
+  </div>
+</div>
+<div class="main__container--side col s1"></div>
+<div id="return"><a href="/" type="button"><i
+      class="fas fa-light fa-reply-all"
+    ></i><b>RETURN</b></a></div>
+<script
+  type="text/javascript"
+  src="https://cdn.jsdelivr.net/npm/toastify-js"
+></script>
+<script
+  src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.24/dist/sweetalert2.all.min.js"
+></script>
+<script
+  src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"
+></script>
+<script src="/socket.io/socket.io.js"></script>
+<script src="/js/index.js"></script>
+<script src="/js/chat.js"></script>
