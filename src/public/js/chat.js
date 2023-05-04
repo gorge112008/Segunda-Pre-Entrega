@@ -301,12 +301,10 @@ if (existSession != null) {
             emailLogged.innerHTML = `<b>${email}<b>`;
             postData(UrlU, newuser)
               .then((data) => {
-                if (data == null) {
-                  console.log("Usuario ya registrado");
-                  sessionStorage.setItem("user", email);
-                } else {
-                  sessionStorage.setItem("user", email);
-                }
+                console.log("LA DATA RECIBIDA ES: "+data);
+                  const { email } = data;
+                  console.log("Se almaceno el email: " + email);
+                  sessionStorage.setItem("user", email);     
               })
               .catch((error) => console.log("Error:" + error));
             socket.emit("newUser", { user: email, id: socket.id });

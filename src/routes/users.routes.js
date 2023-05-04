@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { UserFM} from "../dao/classes/DBmanager.js";
+import { UserFM} from "../dao/Mongo/classes/DBmanager.js";
 
 const routerUser = Router();
 
@@ -33,6 +33,7 @@ routerUser.post("/users", async (req, res) => {
   try {
     const newUser = req.body;
     const response = await UserFM.addUser(newUser);
+    console.log("RESPONSE SALIENDO: "+response);
     res.status(200).send(response);
   } catch (err) {
     res.status(500).json({ error: err });

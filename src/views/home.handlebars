@@ -1,54 +1,69 @@
 <div class="main__container--side col s1"></div>
 <div class="main__container__dinamic col s10">
-  <div class="static__tittle row"><h4>*Productos Disponibles:</h4></div>
-  <div class="static__container row">
-    <div class="container__grid col m12">
-      {{#if resProducts}}
-        {{#each resProducts}}
-          <div class="container__grid__card">
-            <div class="card">
-              <div class="card-header--filled"><h5
-                  class="card-title--filled"
-                >{{tittle}}</h5></div>
-              <img
-                class="card-img-top--filled"
-                src={{thumbnail}}
-                alt="Card image cap"
-              />
+  <div class="row">
+    <div class="static__tittle col S7"><h4>*Productos Disponibles:</h4></div>
+    <form action="api/products" method="GET">
+    <div class="static__tittle col s3">
+      <input id="inputLimit" type="text" name="limit" />
+    </div>
+    <div class="static__tittle col s1">
+      <button
+        type="submit"
+        class="btn btn-outline-warning btn-sm"
+        id="btnLimit"
+        value="A"
+      ></button>
+    </div>
+    </form>
+    <div class="static__container row">
+      <div class="container__grid col m12">
+        {{#if resProducts}}
+          {{#each resProducts}}
+            <div class="container__grid__card">
+              <div class="card">
+                <div class="card-header--filled"><h5
+                    class="card-title--filled"
+                  >{{tittle}}</h5></div>
+                <img
+                  class="card-img-top--filled"
+                  src={{thumbnail}}
+                  alt="Card image cap"
+                />
+                <div class="card-body">
+                  <b class="card-text--description">{{description}}</b>
+                  <u class="card-text--price">S/.{{price}}</u>
+                </div>
+                <div class="card-footer">
+                  <b class="card-text--code">Code:
+                    <b class="code">{{code}}</b></b>
+                </div>
+              </div>
+            </div>
+          {{/each}}
+        {{else}}
+          <div class="container__empty__card"><div class="card">
+              <div class="card-item">
+                <i class="fa-regular fa-rectangle-xmark"></i></div>
               <div class="card-body">
-                <b class="card-text--description">{{description}}</b>
-                <u class="card-text--price">S/.{{price}}</u>
+                <b class="card-text--empty">No Products Found</b>
+                <p class="card-text--empty">You have not added any product</p>
+                <p class="card-text--empty">Add first product now</p>
               </div>
               <div class="card-footer">
-                <b class="card-text--code">Code:
-                  <b class="code">{{code}}</b></b>
+                <button
+                  type="button"
+                  class="btn btn-outline-warning btn-sm btnAdd"
+                  id="btnAdd"
+                >
+                  <a type="button" href="../realtimeproducts"><i
+                      class="fa-regular fa-square-plus"
+                    ></i><b>Add New Product</b></a>
+                </button>
               </div>
             </div>
           </div>
-        {{/each}}
-      {{else}}
-        <div class="container__empty__card"><div class="card">
-            <div class="card-item">
-              <i class="fa-regular fa-rectangle-xmark"></i></div>
-            <div class="card-body">
-              <b class="card-text--empty">No Products Found</b>
-              <p class="card-text--empty">You have not added any product</p>
-              <p class="card-text--empty">Add first product now</p>
-            </div>
-            <div class="card-footer">
-              <button
-                type="button"
-                class="btn btn-outline-warning btn-sm btnAdd"
-                id="btnAdd"
-              >
-                <a type="button" href="../realtimeproducts"><i
-                    class="fa-regular fa-square-plus"
-                  ></i><b>Add New Product</b></a>
-              </button>
-            </div>
-          </div>
-        </div>
-      {{/if}}
+        {{/if}}
+      </div>
     </div>
   </div>
 </div>

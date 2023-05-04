@@ -5,7 +5,7 @@
 const socket = io();
 let URLdomain = window.location.host,
   protocol = window.location.protocol;
-let Url = protocol + "//" + URLdomain + "/api/products/";
+let Url = protocol + "//" + URLdomain + "/api/products";
 let opc = "update";
 let btnsDelete;
 let storeProducts = [],
@@ -26,6 +26,9 @@ const containDinamic = document.querySelector(".main__container__dinamic"),
   contain = document.querySelector(".container__grid"),
   btn_return = document.querySelector("#btn-return");
 
+/*  const btn_limit= document.querySelector("#btnLimit"),
+  input_limit= document.querySelector("#inputLimit");
+*/
 /*****************************************************************CLASES*************************************************************/
 
 class NewProduct {
@@ -456,7 +459,15 @@ formCancel.onclick = () => {
     form.reset();
   }
 };
-
+/*
+btn_limit.onclick=async() =>{
+  console.log("hola");
+  let limit=input_limit.value;
+  Url=Url+`?limit=${limit}`
+  storeProducts=await getData();
+  crearHtml();
+}
+*/
 inputThumbnail.addEventListener("click", () => {
   inputThumbnail.select();
 });

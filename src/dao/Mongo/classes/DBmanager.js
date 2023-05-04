@@ -6,6 +6,21 @@ import { userModel } from "../models/users.model.js";
 /*********************************************************PRODUCTS*************************************************************/
 
 class ProductFileManager {
+  async getProducts({ limit, page, sort, query }) {
+    try {
+      let products;
+      const skip = (page - 1) * limit;
+      products = await productsModel
+        .find({ tittle: { $regex: query, $options: "i" } })
+        .sort(sort)
+        .skip(skip)
+        .limit(limit);
+      return products;
+    } catch (err) {
+      throw err;
+    }
+  }
+  /*
   async getProducts() {
     try {
       const products = await productsModel.find();
@@ -13,7 +28,7 @@ class ProductFileManager {
     } catch (err) {
       throw err;
     }
-  }
+  }*/
   async getProductId(id) {
     try {
       const product = await productsModel.find({ _id: id });
@@ -152,10 +167,15 @@ class MessageFileManager {
 /*********************************************************USERS*************************************************************/
 
 class UserFileManager {
-  async getUsers() {
+  async getUsers(query) {
     try {
-      const Users = await userModel.find();
-      return Users;
+      if (query) {
+        const Users = await userModel.find(query);
+        return Users;
+      } else {
+        const Users = await userModel.find();
+        return Users;
+      }
     } catch (err) {
       throw err;
     }
@@ -170,15 +190,25 @@ class UserFileManager {
   }
   async addUser(newUser) {
     try {
-      const User = await userModel.create(newUser);
+      let User;
+      const { email } = newUser;
+      const existingUser = await userModel.findOne({ email });
+      if (existingUser && existingUser.email == email) {
+        User = await userModel.find({ email: email });
+        User = User[0];
+        console.log("El correo ya existe", User);
+      } else {
+        User = await userModel.create(newUser);
+        console.log("Correo nuevo creado", User);
+      }
       return User;
     } catch (err) {
       throw err;
     }
   }
   async updateUser(id, body) {
-    try { 
-      const User = await userModel.findOneAndUpdate({_id: id}, body, {
+    try {
+      const User = await userModel.findOneAndUpdate({ _id: id }, body, {
         new: true,
         upsert: true,
       });

@@ -1,6 +1,6 @@
 const express = require("express");
 const routerProducts = express.Router();
-const { productManager } = require("../dao/managersFS/ProductManager.js");
+const { productManager } = require("../dao/FileSystem/ProductManager.js");
 routerProducts.use(express.json());
 routerProducts.use(express.urlencoded({ extended: true }));
 
