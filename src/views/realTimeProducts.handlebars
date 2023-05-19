@@ -1,7 +1,7 @@
 <div class="main__container--side col s1"></div>
 <div class="main__container__dinamic col s10">
   <div class="dinamic row">
-    <div class="dinamic__container col s12 m6 l4">
+    <div class="dinamic__container--addProduct col s12 m6 l4">
       <div class="dinamic__tittle row">
         <h3 class="dinamic__tittle--h3">
           Ingresa un producto
@@ -61,8 +61,72 @@
         </form>
       </div>
     </div>
-    <div class="container__grid col s12 m6 l8">
-      <!--dinamic content-->
+    <div class="dinamic__container--listProduct col s12 m6 l8">
+      <div class="row noMargin">
+        <div class="dinav__container col s12">
+          <nav class="dinav__container--order col s4">
+            <label for="ordenamiento" class="dinav__order--label">Ordenar por:
+            </label>
+            <select
+              id="orderProducts"
+              name="select"
+              class="dinav__order--select"
+            >
+              <option class="dinav--option" value="">Sin Ordenamiento</option>
+              <option class="dinav--option" value="asc">Precio de menor a mayor</option>
+              <option class="dinav--option" value="desc">Precio de mayor a menor</option>
+            </select>
+          </nav>
+          <nav class="dinav__container--filter col s8">
+            <div class="dinav__filter">
+              <div class="row noMargin">
+                <label for="filtros" class="dinav__filter--label">Filtrar por:
+                </label>
+              </div>
+              <div class="row noMargin">
+                <select
+                  id="categoryProducts"
+                  name="select"
+                  class="dinav__order--select col s4 offset-s1"
+                >
+                  <option class="dinav--option" value="">Sin Categoria</option>
+                  <option class="dinav--option" value="Food">Food</option>
+                  <option class="dinav--option" value="Drink">Drink</option>
+                  <option class="dinav--option" value="Other">Other</option>
+                </select>
+                <select
+                  id="statusProducts"
+                  name="select"
+                  class="dinav__order--select col s4 offset-s1"
+                >
+                  <option
+                    class="dinav--option"
+                    value="success"
+                  >Disponible</option>
+                  <option class="dinav--option" value="error">No Disponible</option>
+                </select>
+              </div>
+
+            </div>
+          </nav>
+        </div>
+        <div class="container__grid col s12">
+
+          <!--dinamic content-->
+        </div>
+      </div>
+      <div class="row noMargin">
+        <nav class="dinav__container--pages">
+          <div></div>
+          <button class="dinav__pages--izq"><i
+              class="fa-solid fa-arrow-left"
+            ></i></button>
+          <label class="dinav__pages--center">Page<button>1</button>of 96</label>
+          <button class="dinav__pages--der"><i
+              class="fa-solid fa-arrow-right"
+            ></i></button>
+        </nav>
+      </div>
     </div>
   </div>
 </div>

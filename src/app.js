@@ -3,27 +3,18 @@ import { engine } from "express-handlebars";
 import mongoose from "mongoose";
 import { dirname } from "path";
 import { fileURLToPath } from "url";
-import routerProducts from "./routes/products.routes.js";
-import routerCarts from "./routes/carts.routes.js";
-import routerMessage from "./routes/chat.routes.js";
-import routerUser from "./routes/users.routes.js";
-import routerViews from "./routes/views.routes.js";
+import routerProducts from "./routes/api/products.routes.js";
+import routerCarts from "./routes/api/carts.routes.js";
+import routerMessage from "./routes/api/chat.routes.js";
+import routerUser from "./routes/api/users.routes.js";
+import routerViews from "./routes/mainRouter.js";
 import Handlebars from "handlebars";
 import { allowInsecurePrototypeAccess } from "@handlebars/allow-prototype-access";
 import config from "./config/config.js";
-import initSocketServer from "./socket.js";
-import http from "http";
 
 const __dirname = dirname(fileURLToPath(import.meta.url)); //Obtener la ruta absoluta del directorio actual
 
 const app = express(); //Crear una aplicacion express
-const server = http.createServer(app); //Crear un servidor a partir de la aplicacion express
-
-initSocketServer(server); //Inicializar el servidor de socket.io
-
-server.listen(config.mongo.port, () => {  //Levantar el servidor en el puerto configurado
-  console.log("Server up in port", config.mongo.port);
-});
 
 app.use(express.json());//Configurar el servidor para que pueda entender los formatos JSON
 app.use(express.urlencoded({ extended: true }));//Configurar el servidor para que pueda entender los formatos URL Encoded
@@ -63,3 +54,5 @@ const isValidStartDate = () => {
 };
 
 isValidStartDate() && environment();//Si las credenciales de la base de datos son validas, se inicia la aplicacion
+
+export default app;

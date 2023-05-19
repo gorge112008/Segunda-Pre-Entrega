@@ -6,29 +6,54 @@ const socket = io();
 let URLdomain = window.location.host,
   protocol = window.location.protocol;
 let Url = protocol + "//" + URLdomain + "/api/products";
-let opc = "update";
+let opc = "static";
 let btnsDelete;
 let storeProducts = [],
-  resExo = [];
+  resExo = [],
+  defaultStore = [];
+let opciones;
 
 const containDinamic = document.querySelector(".main__container__dinamic"),
   tittleDinamic = document.querySelector(".dinamic__tittle--h3"),
   form = document.querySelector("form"),
   formInput = document.querySelectorAll(".input-field label"),
   formCancel = document.querySelector(".form--btnCancel"),
-  validateProducts = document.querySelector("#validate"),
-  inputTittle = document.querySelector("#tittle"),
-  inputDescription = document.querySelector("#description"),
-  inputCode = document.querySelector("#code"),
-  inputPrice = document.querySelector("#price"),
-  inputStock = document.querySelector("#stock"),
-  inputThumbnail = document.querySelector("#thumbnail"),
-  contain = document.querySelector(".container__grid"),
-  btn_return = document.querySelector("#btn-return");
+  contain = document.querySelector(".container__grid");
+const navConteiner = document.querySelector(".dinav__container"),
+  navPages = document.querySelector(".dinav__container--pages");
+const dinamicPages = document.querySelector(".dinav__pageNumbers");
 
-/*  const btn_limit= document.querySelector("#btnLimit"),
-  input_limit= document.querySelector("#inputLimit");
-*/
+const validateProducts = document.getElementById("validate"),
+  inputTittle = document.getElementById("tittle"),
+  inputDescription = document.getElementById("description"),
+  inputCode = document.getElementById("code"),
+  inputPrice = document.getElementById("price"),
+  inputStock = document.getElementById("stock"),
+  inputThumbnail = document.getElementById("thumbnail"),
+  selectOrder = document.getElementById("orderProducts"),
+  selectCategory = document.getElementById("categoryProducts"),
+  selectStatus = document.getElementById("statusProducts");
+
+selectOrder.addEventListener("change", async (event) => {
+  const selectedValue = event.target.value;
+  opciones
+    ? (opciones.sort = selectedValue)
+    : (opciones = new NewParams(null, null, selectedValue, null));
+  sessionStorage.setItem("values", JSON.stringify(opciones));
+  filters();
+});
+
+selectCategory.addEventListener("change", async (event) => {
+  const selectedValue = event.target.value;
+  let query;
+  selectedValue == "" ? query == "" : (query = { category: selectedValue });
+  opciones
+    ? (opciones.query = query)
+    : (opciones = new NewParams(null, null, null, query));
+  sessionStorage.setItem("values", JSON.stringify(opciones));
+  filters();
+});
+
 /*****************************************************************CLASES*************************************************************/
 
 class NewProduct {
@@ -43,6 +68,15 @@ class NewProduct {
     this.thumbnail = validarUrl()
       ? inputThumbnail.value
       : "https://energiaypotencia.com/img/imagen-no-disponible.jpg";
+  }
+}
+
+class NewParams {
+  constructor(limit, page, sort, query) {
+    this.limit = limit ? limit : 10;
+    this.page = page ? page : 1;
+    this.sort = sort ? sort : "";
+    query ? (this.query = query) : "";
   }
 }
 
@@ -76,7 +110,7 @@ async function crearHtml() {
     contain.innerHTML = "";
     let html;
     for (const product of storeProducts) {
-      if (product.status == false && opc == "update") continue;
+      if (product.status == false && opc == "static") continue;
       html = `<div class="container__grid__card">
           <div class="card">
             <div class="card-header--filled">
@@ -135,6 +169,8 @@ function validarUrl() {
 
 async function selectAction() {
   if (storeProducts.length == 1) {
+    navConteiner.classList.add("hidden");
+    navPages.classList.add("hidden");
     tittleDinamic.innerHTML = "Update Product";
     inputTittle.value = storeProducts[0].tittle;
     inputDescription.value = storeProducts[0].description;
@@ -145,19 +181,21 @@ async function selectAction() {
     formInput.forEach((label) => {
       label.focus();
     });
-    if (opc == "update") {
-      updateData(Url, storeProducts[0]._id, { status: false });
+    if (opc == "static") {
+      updateData(storeProducts[0]._id, { status: false });
       socket.emit(
         "updatingProduct",
         storeProducts[0].tittle + " actualizandose..."
       );
-      opc = "reset";
+      opc = "updating";
     } else {
       selectDelete();
     }
   } else {
+    navConteiner.classList.remove("hidden");
+    navPages.classList.remove("hidden");
     tittleDinamic.innerHTML = "Ingresa un producto";
-    opc = "update";
+    opc = "static";
   }
 }
 
@@ -166,7 +204,7 @@ async function selectDelete() {
   btnsDelete.forEach((selectBtn) => {
     selectBtn.addEventListener("click", async (e) => {
       e.preventDefault();
-      const productoSelect = await getData(selectBtn.id);
+      const productoSelect = await getDatabyID(selectBtn.id);
       Swal.fire({
         title:
           "YOU WANT TO DELETE THE PRODUCT " +
@@ -178,7 +216,7 @@ async function selectDelete() {
         denyButtonText: "NOT",
       }).then((result) => {
         if (result.isConfirmed) {
-          deleteData(Url, selectBtn.id)
+          deleteData(selectBtn.id)
             .then(async (data) => {
               Swal.fire({
                 title: "Product Removed Successfully!!!",
@@ -200,6 +238,34 @@ async function selectDelete() {
       });
     });
   });
+}
+async function filters() {
+  let valores = JSON.parse(sessionStorage.getItem("values"));
+  let query;
+  let totalParams;
+  if (valores) {
+    valores.sort != null
+      ? (selectOrder.value = valores.sort)
+      : (selectOrder.value = "");
+    if (valores.query != null) {
+      query = { category: valores.query.category };
+    } else {
+      selectCategory.value = "";
+      query = "";
+    }
+    let Params = {
+      limit: valores.limit,
+      page: valores.page,
+      sort: valores.sort,
+    };
+    query == ""
+      ? (totalParams = Params)
+      : (totalParams = Object.assign(Params, query));
+    storeProducts = await getData(totalParams);
+  }else{
+    storeProducts = await getData();
+  }
+  selectDelete();
 }
 
 function saveUpdate(data) {
@@ -235,7 +301,7 @@ async function validarStatus(idExo) {
   for (const product of getProducts) {
     if (idExo.includes(product._id)) continue;
     if (product.status == false) {
-      updateData(Url, product._id, { status: true });
+      updateData(product._id, { status: true });
     }
   }
   const newProducts = await getData();
@@ -243,36 +309,37 @@ async function validarStatus(idExo) {
 }
 
 /*INICIO FUNCIONES CRUD*/
-async function getData(id) {
+async function getData(params) {
   try {
-    if (id) {
-      let key = Url + id;
-      let response = await fetch(key, {
-        method: "GET",
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Credentials": true,
-        mode: "cors",
-      });
-      const data = await response.json();
-      return data;
-    } else {
-      let response = await fetch(Url, {
-        method: "GET",
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Credentials": true,
-        mode: "cors",
-      });
-      const data = await response.json();
-      return data;
-    }
+    const queryParams = new URLSearchParams(params).toString();
+    console.log(queryParams);
+    let response = await fetch(`${Url}?${queryParams}`, {
+      method: "GET",
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Credentials": true,
+      mode: "cors",
+    });
+    const data = await response.json();
+    return data;
   } catch {
     console.log(Error);
   }
 }
 
-async function postData(url, data) {
+async function getDatabyID(id) {
+  let response = await fetch(`${Url}/${id}`, {
+    method: "GET",
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Credentials": true,
+    mode: "cors",
+  });
+  const data = await response.json();
+  return data;
+}
+
+async function postData(data) {
   try {
-    let response = await fetch(url, {
+    let response = await fetch(Url, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -293,10 +360,9 @@ async function postData(url, data) {
   }
 }
 
-async function updateData(url, id, data) {
+async function updateData(id, data) {
   try {
-    let key = url + id;
-    let response = await fetch(key, {
+    let response = await fetch(`${Url}/${id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -318,10 +384,9 @@ async function updateData(url, id, data) {
   }
 }
 
-async function deleteData(url, id) {
+async function deleteData(id) {
   try {
-    let key = url + id;
-    let response = await fetch(key, {
+    let response = await fetch(`${Url}/${id}`, {
       method: "DELETE",
       "Access-Control-Allow-Origin": "*",
       "Access-Control-Allow-Credentials": true,
@@ -336,10 +401,11 @@ async function deleteData(url, id) {
 
 /*****************************************************************SOCKETS*************************************************************/
 
-socket.on("backProducts", async (getProducts) => {
+socket.on("callProducts", async (getProducts) => {
   Object.assign(storeProducts, getProducts); //ASIGNAR PRODUCTOS AL STORE
-  selectAction(); //SELECCIONAR ACCIONES
-  selectDelete();
+  sessionStorage.removeItem("values");
+  selectAction(); 
+  filters();
 });
 
 socket.on("f5NewProduct", async (addMsj) => {
@@ -353,9 +419,9 @@ socket.on("f5NewProduct", async (addMsj) => {
 socket.on("f5deleteProduct", async (deletedMsj) => {
   console.log(deletedMsj);
   if (storeProducts.length != 1) {
-    storeProducts = await getData();
+    storeProducts = await getData({});
     selectDelete();
-  }else{
+  } else {
     setTimeout(() => {
       window.location.href = "../realtimeproducts";
     }, 1000),
@@ -372,7 +438,7 @@ socket.on("f5deleteProduct", async (deletedMsj) => {
 socket.on("f5updateProduct", async (updatedMsj) => {
   console.log(updatedMsj);
   if (storeProducts.length != 1) {
-    storeProducts = await getData();
+    storeProducts = await getData({});
     selectDelete();
   }
 });
@@ -380,7 +446,7 @@ socket.on("f5updateProduct", async (updatedMsj) => {
 socket.on("updatingProduct", async (updatingMsj) => {
   console.log(updatingMsj);
   if (storeProducts.length != 1) {
-    storeProducts = await getData();
+    storeProducts = await getData({});
     selectDelete();
   } else {
     validateProducts.classList.add("hidden");
@@ -452,22 +518,15 @@ validateProducts.onclick = async () => {
 
 formCancel.onclick = () => {
   if (storeProducts.length == 1) {
-    updateData(Url, storeProducts[0]._id, { status: true });
+    updateData(storeProducts[0]._id, { status: true });
+    opc = "static";
     socket.emit("updateproduct", "Productos Actualizados");
     window.location.href = "../realtimeproducts";
   } else {
     form.reset();
   }
 };
-/*
-btn_limit.onclick=async() =>{
-  console.log("hola");
-  let limit=input_limit.value;
-  Url=Url+`?limit=${limit}`
-  storeProducts=await getData();
-  crearHtml();
-}
-*/
+
 inputThumbnail.addEventListener("click", () => {
   inputThumbnail.select();
 });
@@ -476,7 +535,7 @@ form.addEventListener("submit", async (e) => {
   e.preventDefault();
   const product = new NewProduct();
   if (storeProducts.length == 1) {
-    updateData(Url, storeProducts[0]._id, product)
+    updateData(storeProducts[0]._id, product)
       .then((data) => {
         if (data == null) {
           Swal.fire({
@@ -493,7 +552,7 @@ form.addEventListener("submit", async (e) => {
       })
       .catch((error) => console.log("Error:" + error));
   } else {
-    postData(Url, product)
+    postData(product)
       .then(async (data) => {
         if (data == null) {
           Swal.fire({
@@ -505,16 +564,16 @@ form.addEventListener("submit", async (e) => {
           inputCode.value = "";
           inputCode.focus();
         } else {
-            storeProducts= await getData();
-            selectDelete();
-            Swal.fire({
-              title: "Product Added Successfully!",
-              text: "Registered Product: " + data.tittle,
-              icon: "success",
-              confirmButtonText: "Accept",
-            });
-            form.reset();
-            socket.emit("addproduct", "Nuevo Producto Agregado");
+          storeProducts = await getData();
+          selectDelete();
+          Swal.fire({
+            title: "Product Added Successfully!",
+            text: "Registered Product: " + data.tittle,
+            icon: "success",
+            confirmButtonText: "Accept",
+          });
+          form.reset();
+          socket.emit("addproduct", "Nuevo Producto Agregado");
         }
       })
       .catch((error) => console.log("Error:" + error));

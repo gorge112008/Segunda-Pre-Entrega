@@ -11,7 +11,7 @@ class ProductFileManager {
       let products;
       const skip = (page - 1) * limit;
       products = await productsModel
-        .find({ tittle: { $regex: query, $options: "i" } })
+        .find(query)
         .sort(sort)
         .skip(skip)
         .limit(limit);
@@ -20,15 +20,7 @@ class ProductFileManager {
       throw err;
     }
   }
-  /*
-  async getProducts() {
-    try {
-      const products = await productsModel.find();
-      return products;
-    } catch (err) {
-      throw err;
-    }
-  }*/
+
   async getProductId(id) {
     try {
       const product = await productsModel.find({ _id: id });

@@ -1,34 +1,19 @@
 import { Router } from "express";
-import { CartFM, ProductFM } from "../dao/Mongo/classes/DBmanager.js";
+import { ProductFM } from "../../dao/Mongo/classes/DBmanager.js";
+import middlewareGetProducts from "../../middlewares/getProductsMiddleware.js";
 
 const routerProducts = Router();
 
 /*****************************************************************GET*************************************************************/
 
-routerProducts.get("/products", async (req, res) => {
+routerProducts.get("/products", middlewareGetProducts, async (req, res) => {
   try {
-    const limit = parseInt(req.query.limit) || 10; // Valor predeterminado de 10
-    const page = parseInt(req.query.page) || 1; // Valor predeterminado de 1
-    const reqSort = req.query.sort; // Valor predeterminado de ''
-    const sort = {};
-    if (reqSort === "asc") {
-      sort.price = 1;
-    } else if (reqSort === "desc") {
-      sort.price = -1;
-    }
-    const query = req.query.query || "";
-    const products = await ProductFM.getProducts({
-      limit,
-      page,
-      sort,
-      query,
-    });
+    const products = res.locals.products;
     res.status(200).json(products);
-  } catch (err) {
+  } catch (error) {
     res.status(500).json({ error: err });
   }
 });
-
 routerProducts.get("/products/:pid", async (req, res) => {
   try {
     const pid = req.params.pid;

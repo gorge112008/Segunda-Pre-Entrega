@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { ProductFM, CartFM, MessageFM} from "../dao/Mongo/classes/DBmanager.js";
+import { MessageFM} from "../../dao/Mongo/classes/DBmanager.js";
 
 const routerMessage = Router();
 /*****************************************************************GET*************************************************************/

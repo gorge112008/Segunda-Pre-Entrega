@@ -1,5 +1,5 @@
 import { Server } from "socket.io";
-import { resProducts, resMessages } from "./routes/views.routes.js";
+import { resProducts, resMessages } from "./routes/mainRouter.js";
 
 async function initSocketServer(server) {
   const io = new Server(server);
@@ -7,7 +7,7 @@ async function initSocketServer(server) {
   io.on("connection", (socket) => {
     console.log("New client connected");
     socket.emit("backMessages", resMessages);
-    socket.emit("backProducts", resProducts);
+    socket.emit("callProducts", resProducts);
 
     socket.on("addproduct", async (newProduct) => {
       socket.broadcast.emit("f5NewProduct", newProduct);
