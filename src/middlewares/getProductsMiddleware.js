@@ -1,7 +1,7 @@
 import { ProductFM } from "../dao/Mongo/classes/DBmanager.js";
 
 class ListProducts {
-  constructor(payload,totalPages,prevPage,nextPage,page,hasPrevPage,hasNextPage,prevLink,nexLink) {
+  constructor(payload,totalPages,prevPage,nextPage,page,hasPrevPage,hasNextPage) {
     this.status = "success";
     this.payload = payload;
     this.totalPages = totalPages;

@@ -1,87 +1,91 @@
 <div class="main__container--side col s1"></div>
 <div class="main__container__dinamic col s10">
   <div class="dinamic row">
-    <div class="dinamic__container--addProduct col s12 m6 l4">
-      <div class="dinamic__tittle row">
-        <h3 class="dinamic__tittle--h3">
-          Ingresa un producto
-        </h3>
-      </div>
-      <div class="form row">
-        <form method="POST" action="#" name="form" class="col s12">
-          <div class="form__contain row">
-            <div class="input-field col s6">
-              <select
-                id="selectCategory"
-                name="select"
-                class="dinav__order--select"
-              >
-                <option class="dinav--option" value="Food">Categoria: Food</option>
-                <option class="dinav--option" value="Drink">Categoria: Drink</option>
-                <option class="dinav--option" value="Other">Categoria: Other</option>
-              </select>
-              <i class="arrowSelect"></i>
+    <div class="dinamic__container--addProduct">
+      <div class="col s12 m6 l4">
+        <div class="dinamic__tittle row">
+          <h3 class="dinamic__tittle--h3">
+            Ingresa un producto
+          </h3>
+        </div>
+        <div class="form row">
+          <form method="POST" action="#" name="form" class="col s12">
+            <div class="form__contain row">
+              <div class="input-field col s6">
+                <select
+                  id="selectCategory"
+                  name="select"
+                  class="dinav__order--select"
+                >
+                  <option class="dinav--option" value="Food">Categoria: Food</option>
+                  <option class="dinav--option" value="Drink">Categoria: Drink</option>
+                  <option class="dinav--option" value="Other">Categoria: Other</option>
+                </select>
+                <i class="arrowSelect"></i>
+              </div>
             </div>
-          </div>
-          <div class="form__contain row">
-            <div class="input-field col s6">
-              <input id="tittle" type="text" class="validate" required />
-              <label for="tittle">Tittle</label>
+            <div class="form__contain row">
+              <div class="input-field col s6">
+                <input id="tittle" type="text" class="validate" required />
+                <label for="tittle">Tittle</label>
+              </div>
             </div>
-          </div>
-          <div class="form__contain row">
-            <div class="input-field col s12">
-              <input id="description" type="text" class="validate" required />
-              <label for="description">Description</label>
+            <div class="form__contain row">
+              <div class="input-field col s12">
+                <input id="description" type="text" class="validate" required />
+                <label for="description">Description</label>
+              </div>
             </div>
-          </div>
-          <div class="form__contain row">
-            <div class="input-field col s12">
-              <input id="code" type="number" class="validate" required />
-              <label for="code">Code</label>
+            <div class="form__contain row">
+              <div class="input-field col s12">
+                <input id="code" type="number" class="validate" required />
+                <label for="code">Code</label>
+              </div>
             </div>
-          </div>
-          <div class="form__contain row">
-            <div class="input-field col s12">
-              <input id="price" type="number" class="validate" required />
-              <label for="price">Price</label>
+            <div class="form__contain row">
+              <div class="input-field col s12">
+                <input id="price" type="number" class="validate" required />
+                <label for="price">Price</label>
+              </div>
             </div>
-          </div>
-          <div class="form__contain row">
-            <div class="input-field col s12">
-              <input id="stock" type="number" class="validate" required />
-              <label for="stock">Stock</label>
+            <div class="form__contain row">
+              <div class="input-field col s12">
+                <input id="stock" type="number" class="validate" required />
+                <label for="stock">Stock</label>
+              </div>
             </div>
-          </div>
-          <div class="form__contain row">
-            <div class="input-field col s12">
-              <label for="thumbnail">Thumbnail</label>
-              <input id="thumbnail" type="text" class="validate" />
+            <div class="form__contain row">
+              <div class="input-field col s12">
+                <label for="thumbnail">Thumbnail</label>
+                <input id="thumbnail" type="text" class="validate" />
+              </div>
             </div>
-          </div>
-          <input
-            type="submit"
-            id="btnSave"
-            class="form--btnSave col s5"
-            value="Save"
-          />
-          <label class="col s2"></label>
-          <input
-            type="button"
-            id="btnCancel"
-            class="form--btnCancel col s5"
-            value="Cancel"
-          />
-        </form>
+            <input
+              type="submit"
+              id="btnSave"
+              class="form--btnSave col s5"
+              value="Save"
+            />
+            <label class="col s2"></label>
+            <input
+              type="button"
+              id="btnCancel"
+              class="form--btnCancel col s5"
+              value="Cancel"
+            />
+          </form>
+        </div>
       </div>
     </div>
     <div class="dinamic__container--listProduct col s12 m6 l8">
       <div class="row noMargin">
         <div class="dinav__container col s12">
           <nav class="dinav__container--order col s4">
-            <label for="ordenamiento" class="dinav__order--label">Ordenar por:
-            </label>
-            <div class="divorder">
+            <div class="row noMargin">
+              <label for="ordenamiento" class="dinav__order--label">Ordenar por:
+              </label>
+            </div>
+            <div class="dinav__order">
               <select
                 id="orderProducts"
                 name="select"
@@ -122,11 +126,15 @@
                     name="select"
                     class="dinav__order--select"
                   >
+                  <option
+                      class="dinav--option"
+                      value=""
+                    >Disponibilidad</option>
                     <option
                       class="dinav--option"
                       value="success"
-                    >Disponible</option>
-                    <option class="dinav--option" value="error">No Disponible</option>
+                    >Avaliable</option>
+                    <option class="dinav--option" value="error">Not Avaliable</option>
                   </select>
                   <i class="arrowSelect"></i>
                 </div>
@@ -140,16 +148,14 @@
             <!--dinamic content-->
           </div>
         </div>
-
       </div>
       <div class="row noMargin">
         <nav class="dinav__container--pages">
-          <div></div>
-          <button class="dinav__pages--izq"><i
+          <button id="page__btnIzq" class="dinav__pages--izq"><i
               class="fa-solid fa-arrow-left"
             ></i></button>
-          <label class="dinav__pages--center">Page<button>1</button>of 96</label>
-          <button class="dinav__pages--der"><i
+          <label class="dinav__pages--center"></label>
+          <button id="page__btnDer" class="dinav__pages--der"><i
               class="fa-solid fa-arrow-right"
             ></i></button>
         </nav>

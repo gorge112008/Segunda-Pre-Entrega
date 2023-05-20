@@ -8,6 +8,7 @@ btnDropdown= document.querySelector(".aside__dropdown--contain button"),
 asideMenu= document.querySelector(".aside__menu"),
 buttonKHMenu= document.querySelector(".aside__menu--keep-hide button"),
 buttonOptionsMenu=document.querySelector(".aside__menu--options button"),
+buttonAddProductMenu=document.querySelector(".asideAdd__dropdown--contain button"),
 menuOption=document.querySelector(".aside__menu--options-ul");
 
 /*****************************************************************FUNCIONES*************************************************************/
@@ -16,7 +17,11 @@ function hideNav() {
     if (window.location.pathname=="/") {
         nav.classList.add("hidden");
         asideDropdown.classList.add("hidden");
+        buttonAddProductMenu.classList.add("hidden");
     }  
+    if(window.location.pathname=="/home"){
+        buttonAddProductMenu.classList.add("hidden");
+    }
 }
 
 /*****************************************************************EVENTOS*************************************************************/

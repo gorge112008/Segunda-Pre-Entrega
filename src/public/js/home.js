@@ -13,16 +13,27 @@ let storeProducts = [],
   defaultStore = [];
 let opciones;
 let dataPagination;
+let querySelect={};
 
 const containDinamic = document.querySelector(".main__container__dinamic"),
   tittleDinamic = document.querySelector(".dinamic__tittle--h3"),
   form = document.querySelector("form"),
   formInput = document.querySelectorAll(".input-field label"),
   formCancel = document.querySelector(".form--btnCancel"),
-  contain = document.querySelector(".container__grid");
+  contain = document.querySelector(".container__grid"),
+  formAddProduct = document.querySelector(".dinamic__container--addProduct"),
+  asideAddProduct = document.querySelector(
+    ".asideAdd__dropdown--contain button"
+  ),
+  asideText = document.querySelector(".asideAdd__menu--addProduct button"),
+  asideButton = document.querySelector(".asideAdd__dropdown--button");
+
 const navConteiner = document.querySelector(".dinav__container"),
   navPages = document.querySelector(".dinav__container--pages");
-const dinamicPages = document.querySelector(".dinav__pageNumbers");
+
+const dinamicPages = document.querySelector(".dinav__pages--center"),
+  selectPrevPage = document.getElementById("page__btnIzq"),
+  selectNextPage = document.getElementById("page__btnDer");
 
 const validateProducts = document.getElementById("validate"),
   inputTittle = document.getElementById("tittle"),
@@ -34,7 +45,42 @@ const validateProducts = document.getElementById("validate"),
   selectOrder = document.getElementById("orderProducts"),
   selectCategory = document.getElementById("categoryProducts"),
   selectStatus = document.getElementById("statusProducts"),
-  categoryOption=document.getElementById("selectCategory");
+  categoryOption = document.getElementById("selectCategory");
+
+  selectStatus.addEventListener("change", async (event) => {
+  const selectedValue = event.target.value;
+  if (querySelect!={}) {
+    querySelect.value=""
+    querySelect=selectStatus;
+  }else{
+    querySelect=selectStatus;
+  }
+  let query;
+  let page = 1;
+  selectedValue == "" ? query == "" : (query = { status: selectedValue });
+  if (opciones) {
+    opciones.query = query;
+    opciones.page = page;
+  } else {
+    opciones = new NewParams(null, null, null, query);
+  }
+  sessionStorage.setItem("values", JSON.stringify(opciones));
+  filters();
+});
+  
+
+
+asideAddProduct.addEventListener("click", () => {
+  formAddProduct.className == "dinamic__container--addProduct dinamico"
+    ? formAddProduct.classList.remove("dinamico")
+    : formAddProduct.classList.add("dinamico");
+  asideText.innerHTML == "Add New Product"
+    ? (asideText.innerHTML = "Close")
+    : (asideText.innerHTML = "Add New Product");
+  asideButton.innerHTML == `<i class="fa-regular fa-square-plus fa-spin"></i>`
+    ? (asideButton.innerHTML = `<i class="fa-regular fa-square-plus fa-spin fa-spin-reverse"></i>`)
+    : (asideButton.innerHTML = `<i class="fa-regular fa-square-plus fa-spin" </i>`);
+});
 
 selectOrder.addEventListener("change", async (event) => {
   const selectedValue = event.target.value;
@@ -47,12 +93,38 @@ selectOrder.addEventListener("change", async (event) => {
 
 selectCategory.addEventListener("change", async (event) => {
   const selectedValue = event.target.value;
+  if (querySelect!={}) {
+    querySelect.value=""
+    querySelect=selectCategory;
+  }else{
+    querySelect=selectCategory;
+  }
   let query;
+  let page = 1;
   selectedValue == "" ? query == "" : (query = { category: selectedValue });
-  opciones
-    ? (opciones.query = query)
-    : (opciones = new NewParams(null, null, null, query));
+  if (opciones) {
+    opciones.query = query;
+    opciones.page = page;
+  } else {
+    opciones = new NewParams(null, null, null, query);
+  }
   sessionStorage.setItem("values", JSON.stringify(opciones));
+  filters();
+});
+
+selectPrevPage.addEventListener("click", () => {
+  const prevPage = dataPagination.prevPage;
+  console.log(prevPage);
+  opciones = new NewParams(null, prevPage, null, null);
+  sessionStorage.setItem("values", JSON.stringify(opciones));
+  pagination();
+  filters();
+});
+selectNextPage.addEventListener("click", () => {
+  const nextPage = dataPagination.nextPage;
+  opciones = new NewParams(null, nextPage, null, null);
+  sessionStorage.setItem("values", JSON.stringify(opciones));
+  pagination();
   filters();
 });
 
@@ -63,7 +135,7 @@ class NewProduct {
     this.tittle = inputTittle.value;
     this.description = inputDescription.value;
     this.code = +inputCode.value;
-    this.status = true;
+    this.status = "success";
     this.stock = +inputStock.value;
     this.category = categoryOption.value;
     this.price = +inputPrice.value;
@@ -112,7 +184,7 @@ async function crearHtml() {
     contain.innerHTML = "";
     let html;
     for (const product of storeProducts) {
-      if (product.status == false && opc == "static") continue;
+      //if (product.status == "error" && opc == "static")continue;
       html = `<div class="container__grid__card">
           <div class="card">
             <div class="card-header--filled">
@@ -173,6 +245,7 @@ async function selectAction() {
   if (storeProducts.length == 1) {
     navConteiner.classList.add("hidden");
     navPages.classList.add("hidden");
+    categoryOption.value = storeProducts[0].category;
     tittleDinamic.innerHTML = "Update Product";
     inputTittle.value = storeProducts[0].tittle;
     inputDescription.value = storeProducts[0].description;
@@ -184,7 +257,7 @@ async function selectAction() {
       label.focus();
     });
     if (opc == "static") {
-      updateData(storeProducts[0]._id, { status: false });
+      updateData(storeProducts[0]._id, { status: "error" });
       socket.emit(
         "updatingProduct",
         storeProducts[0].tittle + " actualizandose..."
@@ -245,12 +318,14 @@ async function filters() {
   let valores = JSON.parse(sessionStorage.getItem("values"));
   let query;
   let totalParams;
+  let valueQuery;
   if (valores) {
     valores.sort != null
       ? (selectOrder.value = valores.sort)
       : (selectOrder.value = "");
     if (valores.query != null) {
-      query = { category: valores.query.category };
+      valueQuery=Object.entries(valores.query)[0][0];
+      query =  {[valueQuery]: valores.query[valueQuery] } ;
     } else {
       selectCategory.value = "";
       query = "";
@@ -265,6 +340,7 @@ async function filters() {
       : (totalParams = Object.assign(Params, query));
     storeProducts = await getData(totalParams);
   }
+  pagination();
   selectDelete();
 }
 
@@ -300,16 +376,57 @@ async function validarStatus(idExo) {
   let getProducts = await getData();
   for (const product of getProducts) {
     if (idExo.includes(product._id)) continue;
-    if (product.status == false) {
-      updateData(product._id, { status: true });
+    if (product.status == "error") {
+      updateData(product._id, { status: "sucess" });
     }
   }
   const newProducts = await getData();
   return newProducts;
 }
 
-async function pagination(){
-  
+async function pagination() {
+  dataPagination ? (dataPagination = dataPagination) : await getData();
+  const {
+    payload,
+    totalPages,
+    prevPage,
+    nextPage,
+    page,
+    hasPrevPage,
+    hasNextPage,
+    prevLink,
+    nexLink,
+  } = dataPagination;
+  dinamicPages.innerHTML = "";
+  dinamicPages.innerHTML = `<p>Page<button>${page}</button>of ${totalPages}</p>`;
+  if (hasPrevPage == false) {
+    selectPrevPage.disabled = true;
+    selectPrevPage.classList.replace(
+      "dinav__pages--izq",
+      "dinav__pages--disabled"
+    );
+  } else {
+    selectPrevPage.disabled = false;
+    selectPrevPage.className != "dinav__pages--izq" &&
+      selectPrevPage.classList.replace(
+        "dinav__pages--disabled",
+        "dinav__pages--izq"
+      );
+  }
+  if (hasNextPage == false) {
+    selectNextPage.disabled = true;
+    selectNextPage.classList.replace(
+      "dinav__pages--der",
+      "dinav__pages--disabled"
+    );
+  } else {
+    selectNextPage.disabled = false;
+    selectNextPage.className != "dinav__pages--der" &&
+      selectNextPage.classList.replace(
+        "dinav__pages--disabled",
+        "dinav__pages--der"
+      );
+  }
 }
 
 /*INICIO FUNCIONES CRUD*/
@@ -324,8 +441,8 @@ async function getData(params) {
       mode: "cors",
     });
     const data = await response.json();
-    dataPagination=JSON.stringify(data);
-    const newData=data.payload;
+    dataPagination = data;
+    const newData = data.payload;
     return newData;
   } catch {
     console.log(Error);
@@ -410,7 +527,6 @@ async function deleteData(id) {
 socket.on("callProducts", async (getProducts) => {
   Object.assign(storeProducts, getProducts); //ASIGNAR PRODUCTOS AL STORE
   sessionStorage.removeItem("values");
-  //dataPagination=await getData();
   selectAction();
   filters();
 });
@@ -491,13 +607,13 @@ socket.on("finValidate", async (msj) => {
 
 //PROCESO DE VALIDACION DE PRODUCTOS OCULTOS//
 
-/*CUANDO UN USUARIO EDITA UN PRODUCTO, EL PRODUCTO ADQUIERE UNA PROPIEDAD DE STATUS FALSE, ESTO EVITARIA QUE OTRO USUARIO
-EDITE AL MISMO TIEMPO EL MISMO PRODUCTO. PERO SI EL USUARIO EDITOR NO GUARDA NI CANCELA LA EDICION, EL PRODUCTO QUEDA CON STATUS FALSE
+/*CUANDO UN USUARIO EDITA UN PRODUCTO, EL PRODUCTO ADQUIERE UNA PROPIEDAD DE STATUS ERROR, ESTO EVITARIA QUE OTRO USUARIO
+EDITE AL MISMO TIEMPO EL MISMO PRODUCTO. PERO SI EL USUARIO EDITOR NO GUARDA NI CANCELA LA EDICION, EL PRODUCTO QUEDA CON STATUS ERROR
 EVITANDO QUE EL PRODUCTO PUEDA SER MODIFICADO AUN CUANDO YA NADIE LO ESTA EDITANDO.
 ESTOS PRODUCTOS SERAN CONSIDERADOS COMO PRODUCTOS OCULTOS, ESTO SIGNIFICA QUE EL PRODUCTO NO SE MOSTRARA EN LA PAGINA DE PRODUCTOS.
 ENTONCES PARA QUE EL PRODUCTO VUELVA A MOSTRARSE EN LA PAGINA DE PRODUCTOS, SE DEBE VALIDAR EL PRODUCTO
 ESTO SE HACE CON EL BOTON DE VALIDAR PRODUCTOS (VALIDATE), EL CUAL LLAMA A LA FUNCION DE VALIDAR STATUS (validateStatus),
-ESTA FUNCION BUSCA LOS PRODUCTOS CON STATUS FALSE Y LOS DEVUELVE A TRUE MOSTRANDOLOS EN LA PAGINA DE PRODUCTOS Y PERMITIENDO SU MODIFICACION.
+ESTA FUNCION BUSCA LOS PRODUCTOS CON STATUS ERROR Y LOS DEVUELVE A TRUE MOSTRANDOLOS EN LA PAGINA DE PRODUCTOS Y PERMITIENDO SU MODIFICACION.
 UNA VEZ VALIDADOS LOS PRODUCTOS, SE ACTUALIZA LA PAGINA DE PRODUCTOS EN EL USUARIO ACTUAL Y TODOS LOS USUARIOS CONECTADOS EN TIEMPO REAL*/
 
 //*******************************PROCESO DE EXONERACION DE PRODUCTOS ACTUALIZANDOSE**************************************//
@@ -525,7 +641,7 @@ validateProducts.onclick = async () => {
 
 formCancel.onclick = () => {
   if (storeProducts.length == 1) {
-    updateData(storeProducts[0]._id, { status: true });
+    updateData(storeProducts[0]._id, { status: "success" });
     opc = "static";
     socket.emit("updateproduct", "Productos Actualizados");
     window.location.href = "../realtimeproducts";
