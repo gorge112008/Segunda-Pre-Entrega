@@ -9,12 +9,7 @@ class ProductFileManager {
   async getProducts({ limit, page, sort, query }) {
     try {
       let products;
-      const skip = (page - 1) * limit;
-      products = await productsModel
-        .find(query)
-        .sort(sort)
-        .skip(skip)
-        .limit(limit);
+      products=await productsModel.paginate(query,{limit,page,sort});
       return products;
     } catch (err) {
       throw err;

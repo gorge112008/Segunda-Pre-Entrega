@@ -1,5 +1,20 @@
 import { ProductFM } from "../dao/Mongo/classes/DBmanager.js";
 
+class ListProducts {
+  constructor(payload,totalPages,prevPage,nextPage,page,hasPrevPage,hasNextPage,prevLink,nexLink) {
+    this.status = "success";
+    this.payload = payload;
+    this.totalPages = totalPages;
+    this.prevPage = prevPage;
+    this.nextPage = nextPage;
+    this.page = page;
+    this.hasPrevPage = hasPrevPage;
+    this.hasNextPage = hasNextPage;
+    this.prevLink="/api/products?page="+prevPage;
+    this.nexLink="/api/products?page="+nextPage;
+  }
+}
+
 const middlewareGetProducts = async (req, res, next) => {
   try {
     const limit = parseInt(req.query.limit) || 10; // Valor predeterminado de 10
@@ -26,7 +41,8 @@ const middlewareGetProducts = async (req, res, next) => {
       sort,
       query,
     });
-    res.locals.products = products;
+    const resProducts=new ListProducts(products.docs,products.totalPages,products.prevPage,products.nextPage,products.page,products.hasPrevPage,products.hasNextPage,products.prevLink,products.nexLink);
+    res.locals.products = resProducts;
     next();
   } catch (error) {
     next(error);

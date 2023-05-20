@@ -1,21 +1,8 @@
 <div class="main__container--side col s1"></div>
 <div class="main__container__dinamic col s10">
   <div class="row">
-    <div class="static__tittle col S7"><h4>*Productos Disponibles:</h4></div>
-    <form action="#" method="GET">
-    <div class="static__tittle col s3">
-      <input id="inputLimit" type="text" name="limit" />
-    </div>
-    <div class="static__tittle col s1">
-      <button
-        type="submit"
-        class="btn btn-outline-warning btn-sm"
-        id="btnLimit"
-        value="A"
-      ></button>
-    </div>
-    </form>
-    <div class="static__container row">
+    <div class="static__tittle col s12"><h4>*Productos Disponibles:</h4></div>
+    <div class="static__container--grid row">
       <div class="container__grid col m12">
         {{#if resProducts}}
           {{#each resProducts}}

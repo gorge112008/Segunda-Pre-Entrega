@@ -19,12 +19,12 @@
   display: none !important;
 }
 
-.disabled{
+.disabled {
   pointer-events: none;
   cursor: default;
 }
 
-.noMargin{
+.noMargin {
   margin: 0;
 }
 /*INDEX BLOCK*/
@@ -134,26 +134,29 @@
   border-radius: 4px;
 }
 
+.container__grid::-webkit-scrollbar-button:active {
+  background-color: yellow;
+}
 
 .container__grid::-webkit-scrollbar-thumb {
   background-color: rgb(159, 255, 201);
   border: solid black 1px;
   border-radius: 4px;
   cursor: pointer;
-} 
+}
 
 .container__grid::-webkit-scrollbar-thumb:hover {
   cursor: pointer;
-  background-color: #8fdcfb;
+  background-color: #87f792;
   box-shadow: 0 0 2px 1px rgba(0, 0, 0, 0.2);
-} 
+}
 .container__grid::-webkit-scrollbar-track {
   background: #e1e1e1;
   border-radius: 4px;
 }
 
 .container__grid::-webkit-scrollbar-track:hover {
-background: #d4d4d4;
+  background: #d4d4d4;
 }
 
 .keep {
@@ -442,6 +445,10 @@ background: #d4d4d4;
 }
 
 /*DINAMIC BLOCK*/
+.dinamic__container--grid {
+  display: flex;
+  justify-content: center;
+}
 .dinamic__container--addProduct {
   margin: 0;
   padding-top: 10px;
@@ -528,15 +535,23 @@ background: #d4d4d4;
   font-family: "Sinami", sans-serif;
 }
 
+.static__container--grid {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  position: relative;
+  left: 0.625rem;
+}
+
 /*DINAMIC NAV BLOCK*/
-.dinav__container{
+.dinav__container {
   display: flex;
   justify-content: flex-start;
   display: block;
   height: auto;
 }
 
-.dinav__container--order{
+.dinav__container--order {
   position: sticky;
   display: flex;
   flex-direction: column;
@@ -544,26 +559,27 @@ background: #d4d4d4;
   background-color: white;
   z-index: 2;
   box-shadow: none;
-  transition: all 500ms ;
+  transition: all 500ms;
 }
 
-.dinav__container--filter{
+.dinav__container--filter {
   position: sticky;
   display: flex;
-  flex-direction: row;
   top: 0;
   background-color: white;
   z-index: 2;
   box-shadow: none;
-  transition: all 500ms ;
+  transition: all 500ms;
 }
 
-.dinav__container--order:hover,.dinav__container--filter:hover{
+.dinav__container--order:hover,
+.dinav__container--filter:hover {
   background-color: #efe;
   box-shadow: 2px 2px 4px #ddd;
 }
 
-.dinav__order--label, .dinav__filter--label{
+.dinav__order--label,
+.dinav__filter--label {
   font-size: 1rem;
   color: black;
   display: flex;
@@ -574,26 +590,51 @@ background: #d4d4d4;
   white-space: nowrap;
 }
 
-.dinav__order--select{
+.dinav__order--select {
   padding: 5px;
-  border: none;
-  border-radius: 5px;
-  border-bottom: 0.25rem solid #aaa;
+  padding-left: 25px;
   height: 30px;
-  width: auto;
+  width: 100%;
   display: flex;
   cursor: pointer;
+  appearance: none;
+  background: #39ff9c;
+  font-family: "Quicksand", sans-serif;
+  border: 2px solid rgba(2, 101, 35, 0.686);
+  border-radius: 12px;
+  position: relative;
+  transition: all 0.25s ease;
 }
 
-.dinav__filter{
+.dinav__order--select:hover {
+  background: #43ff66;
+}
+.dinav__option:focus{
+  outline: none;
+  background-color: none;
+}
+.arrowSelect{
+  display: block;
+  border-left: 4px double #000000;
+  border-bottom: 4px double #000000;
+  transform: rotate(-45deg); /* Giramos el cuadrado */
+  transition: all 0.25s ease;
+  width: 1.3vh;
+  height: 1.3vh;
+  position: relative;
+  top: -21px;
+  left: 10px;
+}
+
+.dinav__filter {
   width: 100%;
 }
-.dinav--option:checked{
+.dinav--option:checked {
   display: none;
 }
 
-.dinav__container--pages{
-  background:none ;
+.dinav__container--pages {
+  background: none;
   box-shadow: none;
   margin: 0;
   height: 6vh;
@@ -602,7 +643,8 @@ background: #d4d4d4;
   justify-content: center;
 }
 
-.dinav__pages--izq, .dinav__pages--der{
+.dinav__pages--izq,
+.dinav__pages--der {
   position: relative;
   background-color: transparent;
   display: inline-flex;
@@ -611,7 +653,8 @@ background: #d4d4d4;
   height: fit-content;
 }
 
-.dinav__pages--izq i, .dinav__pages--der i{
+.dinav__pages--izq i,
+.dinav__pages--der i {
   border: solid yellow 2px;
   position: relative;
   color: black;
@@ -622,14 +665,14 @@ background: #d4d4d4;
   height: fit-content;
 }
 
-.dinav__pages--center{
+.dinav__pages--center {
   color: black;
   font-size: 1rem;
   margin: 0 10px;
   font-weight: bold;
 }
 
-.dinav__pages--center button{
+.dinav__pages--center button {
   background-color: black;
   color: white;
   margin: 0 5px;
@@ -646,13 +689,13 @@ background: #d4d4d4;
   z-index: 1;
   background-color: rgb(255, 255, 255);
 }
-.container__grid__card:hover{
+.container__grid__card:hover {
   background-color: rgb(230, 230, 230);
 }
 .container__empty__card {
   position: absolute;
   top: 27vh;
-  width:38vw;
+  width: 38vw;
   height: 0;
   margin: 0;
   z-index: 2;
@@ -699,8 +742,8 @@ background: #d4d4d4;
 .card-img-top--filled {
   object-fit: cover;
   border-bottom: solid black 3px;
-  border-bottom-left-radius:10%;
-  border-bottom-right-radius:10%;
+  border-bottom-left-radius: 10%;
+  border-bottom-right-radius: 10%;
   height: 100%;
   width: 100%;
 }
@@ -712,7 +755,7 @@ background: #d4d4d4;
   justify-content: center;
 }
 
-.card-item i{
+.card-item i {
   font-size: 15vw;
 }
 
@@ -771,7 +814,7 @@ background: #d4d4d4;
   color: #6a00ff;
 }
 
-.card-text--empty{
+.card-text--empty {
   display: block;
   font-size: 1.5rem;
   text-align: center;
@@ -826,7 +869,7 @@ background: #d4d4d4;
   box-shadow: green 0 1px 5px 0;
 }
 
-.btnAdd{
+.btnAdd {
   display: block;
   margin-left: auto;
   margin-right: auto;
@@ -834,7 +877,7 @@ background: #d4d4d4;
   background-color: transparent;
 }
 
-.btnAdd a{
+.btnAdd a {
   color: black;
   font-size: 2rem;
   width: 100%;
@@ -842,11 +885,11 @@ background: #d4d4d4;
   height: 5vh;
 }
 
-.btnAdd i{
+.btnAdd i {
   font-size: 1.25rem;
 }
 
-.btnAdd b{
+.btnAdd b {
   font-size: 0.8125rem;
   padding-left: 5px;
 }
@@ -934,7 +977,7 @@ background: #d4d4d4;
 }
 
 /*CHAT LOGIN BLOCK*/
-.chat{
+.chat {
   position: relative;
   margin: 0;
   padding: 0;
@@ -952,12 +995,14 @@ background: #d4d4d4;
   font-size: 2rem;
 }
 
-.chat__login--confirm,.chat__login--exit {
+.chat__login--confirm,
+.chat__login--exit {
   font-family: "TT Marxiana Trial", sans-serif;
   font-size: 1.25rem;
   color: black;
 }
-.chat__login--confirm:hover,.chat__login--exit:hover {
+.chat__login--confirm:hover,
+.chat__login--exit:hover {
   color: white;
   font-size: 1.375rem;
 }
@@ -968,21 +1013,22 @@ background: #d4d4d4;
   font-family: "Gentium Plus", sans-serif;
 }
 
-.chat__footer--left{
+.chat__footer--left {
   position: absolute;
   left: 5px;
   bottom: 5px;
   color: black;
 }
 
-.chat__footer--right{
+.chat__footer--right {
   position: absolute;
   right: 5px;
   bottom: 5px;
   color: black;
 }
 
-.chat__footer--left:hover,.chat__footer--right:hover{
+.chat__footer--left:hover,
+.chat__footer--right:hover {
   color: blueviolet;
   cursor: pointer;
 }
@@ -1033,7 +1079,7 @@ background: #d4d4d4;
 
 .chat__container__dinamic {
   position: relative;
-  width:  100%;
+  width: 100%;
   margin: 0;
   height: 60vh;
   overflow: scroll;
@@ -1105,7 +1151,7 @@ background: #d4d4d4;
   display: flex;
 }
 
-#btnSend{
+#btnSend {
   width: 100%;
   font-size: 1.5rem;
   border-radius: 60px;
@@ -1119,13 +1165,12 @@ background: #d4d4d4;
 /*CSS DEVICE < 600px (37.5rem)(base 1rem=16px) (CEL)*/
 
 @media only screen and (max-width: 37.5rem) {
-
   /*DEVICE CEL MAIN BLOCK*/
   .dinamic__container--addProduct {
     display: none;
   }
   .dinamic__container--listProduct {
-    position: absolute;
+    position: relative;
   }
   .container__grid {
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
@@ -1162,10 +1207,6 @@ background: #d4d4d4;
   }
 
   /*DEVICE CEL STATIC BLOCK*/
-  .static__container {
-    display: flex;
-    justify-content: center;
-  }
 
   /*DEVICE CEL FORM BLOCK*/
   .form__contain div {
@@ -1183,7 +1224,6 @@ background: #d4d4d4;
     width: 77vw;
     top: 6vh;
   }
-
 }
 
 /*CSS DEVICE > 992px (62rem) (base 16px=1rem) (LAP)*/
@@ -1249,8 +1289,6 @@ background: #d4d4d4;
   #return b {
     bottom: 0.6vh;
   }
-
-  
 }
 
 /*FOOTER BLOCK*/
@@ -1266,5 +1304,12 @@ background: #d4d4d4;
   justify-content: center;
 }
 
+.input-field {
+  margin: 9px;
+}
 
-
+#nombres {
+  border: solid red 1px;
+  height: 25px;
+  width: 30px;
+}

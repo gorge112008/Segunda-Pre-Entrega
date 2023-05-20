@@ -12,6 +12,7 @@ let storeProducts = [],
   resExo = [],
   defaultStore = [];
 let opciones;
+let dataPagination;
 
 const containDinamic = document.querySelector(".main__container__dinamic"),
   tittleDinamic = document.querySelector(".dinamic__tittle--h3"),
@@ -32,7 +33,8 @@ const validateProducts = document.getElementById("validate"),
   inputThumbnail = document.getElementById("thumbnail"),
   selectOrder = document.getElementById("orderProducts"),
   selectCategory = document.getElementById("categoryProducts"),
-  selectStatus = document.getElementById("statusProducts");
+  selectStatus = document.getElementById("statusProducts"),
+  categoryOption=document.getElementById("selectCategory");
 
 selectOrder.addEventListener("change", async (event) => {
   const selectedValue = event.target.value;
@@ -63,7 +65,7 @@ class NewProduct {
     this.code = +inputCode.value;
     this.status = true;
     this.stock = +inputStock.value;
-    this.category = "Food";
+    this.category = categoryOption.value;
     this.price = +inputPrice.value;
     this.thumbnail = validarUrl()
       ? inputThumbnail.value
@@ -262,8 +264,6 @@ async function filters() {
       ? (totalParams = Params)
       : (totalParams = Object.assign(Params, query));
     storeProducts = await getData(totalParams);
-  }else{
-    storeProducts = await getData();
   }
   selectDelete();
 }
@@ -308,6 +308,10 @@ async function validarStatus(idExo) {
   return newProducts;
 }
 
+async function pagination(){
+  
+}
+
 /*INICIO FUNCIONES CRUD*/
 async function getData(params) {
   try {
@@ -320,7 +324,9 @@ async function getData(params) {
       mode: "cors",
     });
     const data = await response.json();
-    return data;
+    dataPagination=JSON.stringify(data);
+    const newData=data.payload;
+    return newData;
   } catch {
     console.log(Error);
   }
@@ -404,7 +410,8 @@ async function deleteData(id) {
 socket.on("callProducts", async (getProducts) => {
   Object.assign(storeProducts, getProducts); //ASIGNAR PRODUCTOS AL STORE
   sessionStorage.removeItem("values");
-  selectAction(); 
+  //dataPagination=await getData();
+  selectAction();
   filters();
 });
 
@@ -412,7 +419,7 @@ socket.on("f5NewProduct", async (addMsj) => {
   console.log(addMsj);
   if (storeProducts.length != 1) {
     storeProducts = await getData();
-    selectDelete();
+    filters();
   }
 });
 
@@ -420,7 +427,7 @@ socket.on("f5deleteProduct", async (deletedMsj) => {
   console.log(deletedMsj);
   if (storeProducts.length != 1) {
     storeProducts = await getData({});
-    selectDelete();
+    filters();
   } else {
     setTimeout(() => {
       window.location.href = "../realtimeproducts";
@@ -439,7 +446,7 @@ socket.on("f5updateProduct", async (updatedMsj) => {
   console.log(updatedMsj);
   if (storeProducts.length != 1) {
     storeProducts = await getData({});
-    selectDelete();
+    filters();
   }
 });
 
@@ -447,7 +454,7 @@ socket.on("updatingProduct", async (updatingMsj) => {
   console.log(updatingMsj);
   if (storeProducts.length != 1) {
     storeProducts = await getData({});
-    selectDelete();
+    filters();
   } else {
     validateProducts.classList.add("hidden");
   }
@@ -471,7 +478,7 @@ socket.on("actualizar", async (products) => {
   console.log("Validacion Exitosa");
   if (storeProducts.length != 1) {
     storeProducts = products;
-    selectDelete();
+    filters();
   }
 });
 

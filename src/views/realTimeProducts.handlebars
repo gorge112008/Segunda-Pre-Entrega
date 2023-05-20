@@ -11,6 +11,20 @@
         <form method="POST" action="#" name="form" class="col s12">
           <div class="form__contain row">
             <div class="input-field col s6">
+              <select
+                id="selectCategory"
+                name="select"
+                class="dinav__order--select"
+              >
+                <option class="dinav--option" value="Food">Categoria: Food</option>
+                <option class="dinav--option" value="Drink">Categoria: Drink</option>
+                <option class="dinav--option" value="Other">Categoria: Other</option>
+              </select>
+              <i class="arrowSelect"></i>
+            </div>
+          </div>
+          <div class="form__contain row">
+            <div class="input-field col s6">
               <input id="tittle" type="text" class="validate" required />
               <label for="tittle">Tittle</label>
             </div>
@@ -67,15 +81,20 @@
           <nav class="dinav__container--order col s4">
             <label for="ordenamiento" class="dinav__order--label">Ordenar por:
             </label>
-            <select
-              id="orderProducts"
-              name="select"
-              class="dinav__order--select"
-            >
-              <option class="dinav--option" value="">Sin Ordenamiento</option>
-              <option class="dinav--option" value="asc">Precio de menor a mayor</option>
-              <option class="dinav--option" value="desc">Precio de mayor a menor</option>
-            </select>
+            <div class="divorder">
+              <select
+                id="orderProducts"
+                name="select"
+                class="dinav__order--select"
+              >
+                <option class="dinav--option" value="">Sin Ordenamiento</option>
+                <option class="dinav--option" value="asc">Precio de menor a
+                  mayor</option>
+                <option class="dinav--option" value="desc">Precio de mayor a
+                  menor</option>
+              </select>
+              <i class="arrowSelect"></i>
+            </div>
           </nav>
           <nav class="dinav__container--filter col s8">
             <div class="dinav__filter">
@@ -84,36 +103,44 @@
                 </label>
               </div>
               <div class="row noMargin">
-                <select
-                  id="categoryProducts"
-                  name="select"
-                  class="dinav__order--select col s4 offset-s1"
-                >
-                  <option class="dinav--option" value="">Sin Categoria</option>
-                  <option class="dinav--option" value="Food">Food</option>
-                  <option class="dinav--option" value="Drink">Drink</option>
-                  <option class="dinav--option" value="Other">Other</option>
-                </select>
-                <select
-                  id="statusProducts"
-                  name="select"
-                  class="dinav__order--select col s4 offset-s1"
-                >
-                  <option
-                    class="dinav--option"
-                    value="success"
-                  >Disponible</option>
-                  <option class="dinav--option" value="error">No Disponible</option>
-                </select>
+                <div class="col s6">
+                  <select
+                    id="categoryProducts"
+                    name="select"
+                    class="dinav__order--select"
+                  >
+                    <option class="dinav--option" value="">Sin Categoria</option>
+                    <option class="dinav--option" value="Food">Food</option>
+                    <option class="dinav--option" value="Drink">Drink</option>
+                    <option class="dinav--option" value="Other">Other</option>
+                  </select>
+                  <i class="arrowSelect"></i>
+                </div>
+                <div class="col s6">
+                  <select
+                    id="statusProducts"
+                    name="select"
+                    class="dinav__order--select"
+                  >
+                    <option
+                      class="dinav--option"
+                      value="success"
+                    >Disponible</option>
+                    <option class="dinav--option" value="error">No Disponible</option>
+                  </select>
+                  <i class="arrowSelect"></i>
+                </div>
               </div>
-
             </div>
           </nav>
         </div>
-        <div class="container__grid col s12">
+        <div class="dinamic__container--grid row noMargin">
+          <div class="container__grid col m12">
 
-          <!--dinamic content-->
+            <!--dinamic content-->
+          </div>
         </div>
+
       </div>
       <div class="row noMargin">
         <nav class="dinav__container--pages">
