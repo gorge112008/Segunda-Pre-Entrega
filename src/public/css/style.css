@@ -24,9 +24,13 @@
   cursor: no-drop;
 }
 
-
 .noMargin {
   margin: 0;
+}
+
+.aquamarine{
+  background-color: rgb(0, 255, 195);
+  box-shadow: #2cfff1 0px 0px 15px 0px;
 }
 /*INDEX BLOCK*/
 .main__container__index {
@@ -218,9 +222,10 @@
   border: solid black 1px;
   color: black;
   position: relative;
+  right:  10px;
   margin-top: 5px;
   height: 85%;
-  width: 6vw;
+  width: 7.5vw;
   border-radius: 10px;
   text-align: center;
   overflow: hidden;
@@ -228,14 +233,40 @@
 .nav__container--a a:hover {
   cursor: pointer;
   background-color: rgb(0, 255, 195);
+  box-shadow: #dfff2c 0px 0px 15px 0px;
+}
+.nav__container--a a.active {
+  cursor: pointer;
+  background-color: rgb(219, 146, 255);
   box-shadow: #2cfff1 0px 0px 15px 0px;
 }
+.nav__container--a a.disabled {
+  background-color: rgb(238, 236, 236);
+  color: gray;
+}
+
 .nav__container--a i {
   position: relative;
-  top: 2vh;
+  top: 1vh;
 }
 .nav__container--a b {
-  position: relative;
+  position: absolute;
+  top: 1vh;
+  right:0;
+  left: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.nav__container--a:hover i {
+  font-size: 1.5rem;
+  overflow: visible;
+}
+
+.nav__container--a:hover b {
+  font-size: 0.75rem;
+  overflow: visible;
 }
 
 /*SIDEBAR BLOCK */
@@ -554,9 +585,10 @@
 .form--btnSave {
   /*SAVE BUTTON*/
   white-space: normal;
-  background: #250092;
-  border: solid black 2px;
-  border-radius: 20px;
+  background-color: #6a00ff;
+  border: solid rgb(16, 2, 109) 2px;
+  border-top-right-radius: 20px;
+  border-bottom-left-radius: 20px;
   color: #ffffff;
   font-family: "Sinami", sans-serif;
   font-size: 1.875rem;
@@ -565,17 +597,18 @@
 }
 .form--btnSave:hover {
   box-shadow: #9966cc 0px 0px 20px 0px;
-  background: rgb(0, 73, 189);
-  color: #ffff00;
+  background: linear-gradient(rgb(119, 137, 255),white);
+  color: #000000;
   cursor: pointer;
 }
 
 .form--btnCancel {
   /*CANCEL BUTTON*/
   white-space: normal;
-  background: rgb(0, 201, 151);
-  border: solid black 2px;
-  border-radius: 20px;
+  background: rgb(255, 0, 0);
+  border: solid rgb(114, 1, 1) 2px;
+  border-top-left-radius: 20px;
+  border-bottom-right-radius: 20px;
   color: #ffffff;
   font-family: "Sinami", sans-serif;
   font-size: 1.875rem;
@@ -584,8 +617,9 @@
 }
 .form--btnCancel:hover {
   box-shadow: #00befe 0px 0px 10px 0px;
-  background: rgb(48, 238, 175);
-  color: #ff8000;
+
+  background: linear-gradient(rgb(255, 119, 119),white);
+  color: #000000;
   cursor: pointer;
 }
 
@@ -1284,6 +1318,9 @@
     position: relative;
     top: 1.7vh;
   }
+  .nav__container--a b {
+    display: none;
+  }
   /*DEVICE CEL ASIDE BLOCK*/
   .aside__dropdown {
     height: 35vh;
@@ -1339,14 +1376,14 @@
     text-overflow: ellipsis;
   }
   .nav__container--a i {
-    position: relative;
-    right: 0.2vw;
-    top: 0.05vh;
+    top: 1vh;
   }
-  .nav__container--a b {
-    bottom: 0.6vh;
+  .nav__container--a:hover b {
+    font-size: 1rem;
   }
-
+  .nav__container--a:hover i {
+    font-size: 1.6rem;
+  }
   /*DEVICE LAP ASIDE BLOCK*/
   .aside__dropdown {
     height: 35vh;

@@ -3,7 +3,8 @@
 /**********************************************************CONSTANTES/VARIABLES*************************************************************/
 
 const socket = io();
-let URLdomain = window.location.host,
+let URLPathName = window.location.pathname,
+  URLdomain = window.location.host,
   protocol = window.location.protocol;
 let Url = protocol + "//" + URLdomain + "/api/products";
 let opc = "static";
@@ -13,7 +14,8 @@ let storeProducts = [],
   defaultStore = [];
 let opciones;
 let dataPagination;
-let querySelect={};
+let querySelect;
+let query = {};
 
 const containDinamic = document.querySelector(".main__container__dinamic"),
   tittleDinamic = document.querySelector(".dinamic__tittle--h3"),
@@ -47,28 +49,30 @@ const validateProducts = document.getElementById("validate"),
   selectStatus = document.getElementById("statusProducts"),
   categoryOption = document.getElementById("selectCategory");
 
-  selectStatus.addEventListener("change", async (event) => {
+selectStatus.addEventListener("change", async (event) => {
   const selectedValue = event.target.value;
-  if (querySelect!={}) {
-    querySelect.value=""
-    querySelect=selectStatus;
-  }else{
-    querySelect=selectStatus;
-  }
-  let query;
+  let query = { status: selectedValue };
   let page = 1;
-  selectedValue == "" ? query == "" : (query = { status: selectedValue });
   if (opciones) {
-    opciones.query = query;
-    opciones.page = page;
+    if (selectedValue == "") {
+      delete opciones.query.status;
+      if (JSON.stringify(opciones.query) == "{}") {
+        delete opciones.query;
+      } else {
+        query = opciones.query;
+      }
+      opciones.page = page;
+    } else {
+      opciones.query
+        ? (opciones.query = Object.assign(opciones.query, query))
+        : (opciones.query = query);
+    }
   } else {
     opciones = new NewParams(null, null, null, query);
   }
   sessionStorage.setItem("values", JSON.stringify(opciones));
   filters();
 });
-  
-
 
 asideAddProduct.addEventListener("click", () => {
   formAddProduct.className == "dinamic__container--addProduct dinamico"
@@ -93,18 +97,22 @@ selectOrder.addEventListener("change", async (event) => {
 
 selectCategory.addEventListener("change", async (event) => {
   const selectedValue = event.target.value;
-  if (querySelect!={}) {
-    querySelect.value=""
-    querySelect=selectCategory;
-  }else{
-    querySelect=selectCategory;
-  }
-  let query;
+  let query = { category: selectedValue };
   let page = 1;
-  selectedValue == "" ? query == "" : (query = { category: selectedValue });
   if (opciones) {
-    opciones.query = query;
-    opciones.page = page;
+    if (selectedValue == "") {
+      delete opciones.query.category;
+      if (JSON.stringify(opciones.query) == "{}") {
+        delete opciones.query;
+      } else {
+        query = opciones.query;
+      }
+      opciones.page = page;
+    } else {
+      opciones.query
+        ? (opciones.query = Object.assign(opciones.query, query))
+        : (opciones.query = query);
+    }
   } else {
     opciones = new NewParams(null, null, null, query);
   }
@@ -120,6 +128,7 @@ selectPrevPage.addEventListener("click", () => {
   pagination();
   filters();
 });
+
 selectNextPage.addEventListener("click", () => {
   const nextPage = dataPagination.nextPage;
   opciones = new NewParams(null, nextPage, null, null);
@@ -316,32 +325,43 @@ async function selectDelete() {
 }
 async function filters() {
   let valores = JSON.parse(sessionStorage.getItem("values"));
-  let query;
   let totalParams;
   let valueQuery;
+  let querys;
   if (valores) {
     valores.sort != null
       ? (selectOrder.value = valores.sort)
       : (selectOrder.value = "");
     if (valores.query != null) {
-      valueQuery=Object.entries(valores.query)[0][0];
-      query =  {[valueQuery]: valores.query[valueQuery] } ;
-    } else {
-      selectCategory.value = "";
-      query = "";
+      const conta = Object.keys(valores.query).length;
+      for (let i = 0; i < conta; i++) {
+        valueQuery = Object.entries(valores.query)[i][0];
+        querys = { [valueQuery]: valores.query[valueQuery] };
+        query = Object.assign(valores.query, querys);
+      }
     }
     let Params = {
       limit: valores.limit,
       page: valores.page,
       sort: valores.sort,
     };
-    query == ""
+    valores.query == null
       ? (totalParams = Params)
       : (totalParams = Object.assign(Params, query));
     storeProducts = await getData(totalParams);
   }
   pagination();
-  selectDelete();
+  if (storeProducts.length == 0) {
+    Swal.fire({
+      title: "NO PRODUCTS FOUND",
+      text: "No products found with the selected filters",
+      icon: "warning",
+      confirmButtonText: "Accept",
+    });
+    await crearHtml();
+  } else {
+    selectDelete();
+  }
 }
 
 function saveUpdate(data) {
@@ -429,6 +449,14 @@ async function pagination() {
   }
 }
 
+async function focusbtn() {
+  const buttons = document.querySelectorAll(".nav__container--a a");
+  buttons.forEach((button) => {
+    button.href == window.location.href
+      ? button.classList.add("active")
+      : button.classList.remove("active");
+  });
+}
 /*INICIO FUNCIONES CRUD*/
 async function getData(params) {
   try {
@@ -527,6 +555,7 @@ async function deleteData(id) {
 socket.on("callProducts", async (getProducts) => {
   Object.assign(storeProducts, getProducts); //ASIGNAR PRODUCTOS AL STORE
   sessionStorage.removeItem("values");
+  focusbtn();
   selectAction();
   filters();
 });

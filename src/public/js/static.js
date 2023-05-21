@@ -13,7 +13,8 @@ let storeProducts = [],
   defaultStore = [];
 let opciones;
 let dataPagination;
-let querySelect={};
+let querySelect;
+let query = {};
 
 const contain = document.querySelector(".container__grid"),
   asideAddProduct = document.querySelector(
@@ -34,26 +35,30 @@ const selectOrder = document.getElementById("orderProducts"),
   selectStatus = document.getElementById("statusProducts"),
   categoryOption = document.getElementById("selectCategory");
 
-  selectStatus.addEventListener("change", async (event) => {
-    const selectedValue = event.target.value;
-    if (querySelect!={}) {
-      querySelect.value=""
-      querySelect=selectStatus;
-    }else{
-      querySelect=selectStatus;
-    }
-    let query;
-    let page = 1;
-    selectedValue == "" ? query == "" : (query = { status: selectedValue });
-    if (opciones) {
-      opciones.query = query;
+selectStatus.addEventListener("change", async (event) => {
+  const selectedValue = event.target.value;
+  let query = { status: selectedValue };
+  let page = 1;
+  if (opciones) {
+    if (selectedValue == "") {
+      delete opciones.query.status;
+      if (JSON.stringify(opciones.query) == "{}") {
+        delete opciones.query;
+      } else {
+        query = opciones.query;
+      }
       opciones.page = page;
     } else {
-      opciones = new NewParams(null, null, null, query);
+      opciones.query
+        ? (opciones.query = Object.assign(opciones.query, query))
+        : (opciones.query = query);
     }
-    sessionStorage.setItem("values", JSON.stringify(opciones));
-    filters();
-  });
+  } else {
+    opciones = new NewParams(null, null, null, query);
+  }
+  sessionStorage.setItem("values", JSON.stringify(opciones));
+  filters();
+});
 
 asideAddProduct.addEventListener("click", () => {
   formAddProduct.className == "dinamic__container--addProduct dinamico"
@@ -77,25 +82,29 @@ selectOrder.addEventListener("change", async (event) => {
 });
 
 selectCategory.addEventListener("change", async (event) => {
-    const selectedValue = event.target.value;
-    if (querySelect!={}) {
-      querySelect.value=""
-      querySelect=selectCategory;
-    }else{
-      querySelect=selectCategory;
-    }
-    let query;
-    let page = 1;
-    selectedValue == "" ? query == "" : (query = { category: selectedValue });
-    if (opciones) {
-      opciones.query = query;
+  const selectedValue = event.target.value;
+  let query = { category: selectedValue };
+  let page = 1;
+  if (opciones) {
+    if (selectedValue == "") {
+      delete opciones.query.category;
+      if (JSON.stringify(opciones.query) == "{}") {
+        delete opciones.query;
+      } else {
+        query = opciones.query;
+      }
       opciones.page = page;
     } else {
-      opciones = new NewParams(null, null, null, query);
+      opciones.query
+        ? (opciones.query = Object.assign(opciones.query, query))
+        : (opciones.query = query);
     }
-    sessionStorage.setItem("values", JSON.stringify(opciones));
-    filters();
-  });
+  } else {
+    opciones = new NewParams(null, null, null, query);
+  }
+  sessionStorage.setItem("values", JSON.stringify(opciones));
+  filters();
+});
 
 selectPrevPage.addEventListener("click", () => {
   const prevPage = dataPagination.prevPage;
@@ -183,30 +192,41 @@ async function crearHtml() {
 
 async function filters() {
   let valores = JSON.parse(sessionStorage.getItem("values"));
-  let query;
   let totalParams;
+  let valueQuery;
+  let querys;
   if (valores) {
     valores.sort != null
       ? (selectOrder.value = valores.sort)
       : (selectOrder.value = "");
     if (valores.query != null) {
-        valueQuery=Object.entries(valores.query)[0][0];
-        query =  {[valueQuery]: valores.query[valueQuery] } ;
-    } else {
-      selectCategory.value = "";
-      query = "";
+      const conta = Object.keys(valores.query).length;
+      for (let i = 0; i < conta; i++) {
+        valueQuery = Object.entries(valores.query)[i][0];
+        querys = { [valueQuery]: valores.query[valueQuery] };
+        query = Object.assign(valores.query, querys);
+      }
     }
     let Params = {
       limit: valores.limit,
       page: valores.page,
       sort: valores.sort,
     };
-    query == ""
+    valores.query == null
       ? (totalParams = Params)
       : (totalParams = Object.assign(Params, query));
     storeProducts = await getData(totalParams);
   }
   pagination();
+  if (storeProducts.length == 0) {
+    Swal.fire({
+      title: "NO PRODUCTS FOUND",
+      text: "No products found with the selected filters",
+      icon: "warning",
+      confirmButtonText: "Accept",
+    });
+   
+  } 
   await crearHtml();
 }
 
@@ -255,6 +275,15 @@ async function pagination() {
   }
 }
 
+async function focusbtn() {
+  const buttons = document.querySelectorAll(".nav__container--a a");
+  buttons.forEach((button) => {
+    button.href == window.location.href
+      ? button.classList.add("active")
+      : button.classList.remove("active");
+  });
+}
+
 /*INICIO FUNCIONES CRUD*/
 async function getData(params) {
   try {
@@ -293,8 +322,6 @@ async function getDatabyID(id) {
 socket.on("callProducts", async (getProducts) => {
   Object.assign(storeProducts, getProducts); //ASIGNAR PRODUCTOS AL STORE
   sessionStorage.removeItem("values");
+  focusbtn();
   filters();
 });
-
-
-

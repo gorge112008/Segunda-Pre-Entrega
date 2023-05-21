@@ -148,6 +148,13 @@ function sendMessage(){
   }
 }
 
+async function focusbtn(){
+  const buttons = document.querySelectorAll('.nav__container--a a');
+  buttons.forEach(button => {
+  button.href==window.location.href? button.classList.add('active'):button.classList.remove('active');
+});
+}
+
 /*INICIO FUNCIONES CRUD*/
 async function getData(url) {
   try {
@@ -231,6 +238,7 @@ async function deleteData(url, id) {
 /*****************************************************************SOCKETS*************************************************************/
 socket.on("backMessages", (getMessages) => {
   Object.assign(backMessages, getMessages);
+  focusbtn();
   console.log("RESUMEN DE MENSAJES: " + backMessages.length);
 });
 
