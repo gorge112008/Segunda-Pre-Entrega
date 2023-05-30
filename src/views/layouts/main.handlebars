@@ -53,9 +53,8 @@
           <!--bloque de navegacion-->
           <nav class="header__nav nav">
             <div class="nav__container row">
-              <div class="nav__container--blank col s1"></div>
-              <div class="nav__container--email-logged col s4"></div>
-              <div class="nav__container--blank col s1"></div>
+              <div class="nav__container--blank col s2"></div>
+              <div class="nav__container--email-logged col s3"></div>
               <div class="nav__container--a col s1"><a
                   class=""
                   href="../home"
@@ -68,26 +67,27 @@
                   type="button"
                 ><i class="fas fa-arrows-spin"></i><b> Dinamic</b></a></div>
               <div class="nav__container--a col s1"><a
-                  class="disabled"
+                  class=""
                   href="../products"
                   type="button"
                 ><i class="fa light fa-utensils"></i><b> Products</b></a></div>
               <div class="nav__container--a col s1"><a
-                  class="disabled"
-                  href="../carts"
+                  class=""
+                  href="../cart"
                   type="button"
                 ><i class="fa light fa-cart-shopping"></i><b>
-                    Carts</b></a></div>
+                    Cart</b></a></div>
               <div class="nav__container--a col s1"><a
                   href="../chat"
                   type="button"
-                ><i class="far fa-comments"></i><b> Messages</b></a></div>
+                ><i class="far fa-comments"></i><b> Chat</b></a></div>
               <div class="nav__container--a col s1"><a
                   class="disabled"
                   href="../login"
                   type="button"
                 ><i class="far fa-face-smile"></i><b> Perfil</b></a></div>
             </div>
+            <div class="nav__container--blank col s1"></div>
           </nav>
           <!--fin bloque de navegacion-->
         </section>
@@ -98,7 +98,7 @@
       <aside class="aside">
         <div class="aside__dropdown row">
           <div class="aside__dropdown--contain"><button type="button"><i
-                class="fas fa-light fa-right-from-bracket"
+                class="fa-solid fa-ellipsis-vertical"
               ></i></button>
           </div>
           <div class="aside__menu">
@@ -108,59 +108,59 @@
                 src="https://png.pngtree.com/png-vector/20190329/ourlarge/pngtree-restaurant-logo-template-design-restaurant-logo-with-modern-frame-isolated-png-image_887423.jpg"
               />
             </div>
-            <div class="aside__menu--keep-hide">
-              <button type="button"><i
-                  class="fa-solid fa-arrows-to-eye"
-                ></i>Keep/Hide</button>
+            <div class="aside__menu--addProduct hidden">
+              <button type="button"><i class="fa-regular fa-square-plus"></i>Add
+                Product</button>
             </div>
             <div class="aside__menu--options">
-              <h6><button
-                  type="button"
-                  class="fas fa-bars"
-                ></button>OPTIONS</h6>
+
+              <h6><button type="button" class="fas fa-bars"></button>NAVIGATION
+                PANEL</h6>
               <div class="aside__menu--options-ul">
                 <ul>
-                  <div class="aside__menu--options-li">
-                    <li>
-                      <a href="../home" type="button"><i
-                          class="fas fa-arrows-to-dot"
-                        ></i><b> Static</b></a>
-                    </li>
-                  </div>
-                  <div class="aside__menu--options-li">
-                    <li>
-                      <a href="../realtimeproducts" type="button"><i
-                          class="fas fa-arrows-spin"
-                        ></i><b> Dinamic</b></a>
-                    </li>
-                  </div>
-                  <div class="aside__menu--options-li">
-                    <li>
-                      <a href="" type="button" class="disabled"><i
-                          class="fa light fa-utensils"
-                        ></i><b> Products</b></a>
-                    </li>
-                  </div>
-                  <div class="aside__menu--options-li">
-                    <li>
-                      <a href="" type="button" class="disabled"><i
-                          class="fa light fa-cart-shopping"
-                        ></i><b> Carts</b></a>
-                    </li>
-                  </div>
-                  <div class="aside__menu--options-li">
-                    <li>
-                      <a href="../chat" type="button"><i
-                          class="far fa-comments"
-                        ></i><b> Messages</b></a>
-                    </li>
-                  </div>
-                  <div class="aside__menu--options-li">
-                    <li>
-                      <a href="" type="button" class="disabled"><i
-                          class="far fa-face-smile"
-                        ></i><b> Perfil</b></a>
-                    </li>
+                  <div class="nav__container--a">
+                    <div class="aside__menu--options-li">
+                      <li>
+                        <a href="../home" type="button"><i
+                            class="fas fa-arrows-to-dot"
+                          ></i><b> Static</b></a>
+                      </li>
+                    </div>
+                    <div class="aside__menu--options-li">
+                      <li>
+                        <a href="../realtimeproducts" type="button"><i
+                            class="fas fa-arrows-spin"
+                          ></i><b> Dinamic</b></a>
+                      </li>
+                    </div>
+                    <div class="aside__menu--options-li">
+                      <li>
+                        <a href="../products" type="button" class=""><i
+                            class="fa light fa-utensils"
+                          ></i><b> Products</b></a>
+                      </li>
+                    </div>
+                    <div class="aside__menu--options-li">
+                      <li>
+                        <a href="../cart" type="button" class=""><i
+                            class="fa light fa-cart-shopping"
+                          ></i><b> Cart</b></a>
+                      </li>
+                    </div>
+                    <div class="aside__menu--options-li">
+                      <li>
+                        <a href="../chat" type="button"><i
+                            class="far fa-comments"
+                          ></i><b> Chat</b></a>
+                      </li>
+                    </div>
+                    <div class="aside__menu--options-li">
+                      <li>
+                        <a href="../perfil" type="button" class="disabled"><i
+                            class="far fa-face-smile"
+                          ></i><b> Perfil</b></a>
+                      </li>
+                    </div>
                   </div>
                 </ul>
               </div>
@@ -169,16 +169,54 @@
         </div>
       </aside>
       <aside class="asideAdd">
+         <div class="asideAdd__menu--logo">
+              <img
+                src="https://png.pngtree.com/png-vector/20190329/ourlarge/pngtree-restaurant-logo-template-design-restaurant-logo-with-modern-frame-isolated-png-image_887423.jpg"
+              />
+          </div>
         <div class="asideAdd__dropdown row">
-          <div class="asideAdd__dropdown--contain"><button
+          <div class="asideAdd__dropdown--addProduct hidden"><button
               class="asideAdd__dropdown--button"
               type="button"
-            ><i class="fa-regular fa-square-plus fa-spin"></i></button>
+            ><i class="fa-regular fa-square-plus fa-bounce"></i></button>
+            <b>Add New</b>
           </div>
-          <div class="asideAdd__menu">
-            <div class="asideAdd__menu--addProduct">
-              <button type="button">Add New Product</button>
-            </div>
+          <div class="asideAdd__dropdown--contain"><a
+              href="../home"
+              type="button"
+            ><i class="fas fa-arrows-to-dot fa-beat"></i></a>
+            <b>Static</b>
+          </div>
+          <div class="asideAdd__dropdown--contain"><a
+              href="../realtimeproducts"
+              type="button"
+            ><i class="fas fa-arrows-spin fa-spin"></i></a>
+            <b>Dinamic</b>
+          </div>
+          <div class="asideAdd__dropdown--contain"><a
+              href="../products"
+              type="button"
+            ><i class="fa light fa-utensils"></i></a>
+            <b>Products</b>
+          </div>
+          <div class="asideAdd__dropdown--contain"><a
+              href="../cart"
+              type="button"
+            ><i class="fa light fa-cart-shopping fa-fade"></i></a>
+            <b>Cart</b>
+          </div>
+          <div class="asideAdd__dropdown--contain"><a
+              href="../chat"
+              type="button"
+            ><i class="far fa-comments fa-flip"></i></a>
+            <b>Chat</b>
+          </div>
+          <div class="asideAdd__dropdown--contain"><a
+              class="disabled"
+              href="../perfil"
+              type="button"
+            ><i class="far fa-face-smile"></i></a>
+            <b>Perfil</b>
           </div>
         </div>
       </aside>

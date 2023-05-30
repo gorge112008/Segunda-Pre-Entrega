@@ -1,0 +1,70 @@
+<div class="main__container--side col s2"></div>
+<div class="main__container__dinamic col s9">
+  <div class="row">
+    <div class="static__tittle col s6"><h4>Cart ({{resProducts.length}}
+        products):</h4></div>
+    <div class="static__container--grid row noMargin">
+      <div class="container__grid col m12">
+        {{#if resProducts}}
+          {{#each resProducts}}
+            <div class="container__grid__card">
+              <div class="card">
+                <div class="card-header--filled"><h5
+                    class="card-title--filled"
+                  >{{product.tittle}}</h5></div>
+                <img
+                  class="card-img-top--filled"
+                  src={{product.thumbnail}}
+                  alt="Card image cap"
+                />
+                <div class="card-body">
+                  <b class="card-text--description">{{product.description}}</b>
+                  <u class="card-text--price">S/.{{product.price}}</u>
+                </div>
+                <div class="card-footer">
+                  <b class="card-text--code">Code:
+                    <b class="code">{{product.code}}</b></b>
+                </div>
+              </div>
+            </div>
+          {{/each}}
+        {{else}}
+          <div class="container__empty__card"><div class="card">
+              <div class="card-item">
+                <i class="fa-regular fa-rectangle-xmark"></i></div>
+              <div class="card-body">
+                <b class="card-text--empty">No Products Found</b>
+                <p class="card-text--empty">You have not added any product</p>
+                <p class="card-text--empty">Add first product now</p>
+              </div>
+              <div class="card-footer">
+                <button
+                  type="button"
+                  class="btn btn-outline-warning btn-sm btnAdd"
+                  id="btnAdd"
+                >
+                  <a type="button" href="../realtimeproducts"><i
+                      class="fa-regular fa-square-plus"
+                    ></i><b>Add New Product</b></a>
+                </button>
+              </div>
+            </div>
+          </div>
+        {{/if}}
+      </div>
+    </div>
+  </div>
+</div>
+<div class="main__container--side col s1"></div>
+<div id="return"><a href="/" type="button"><i
+      class="fas fa-light fa-reply-all"
+    ></i><b>RETURN</b></a></div>
+<script
+  src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.24/dist/sweetalert2.all.min.js"
+></script>
+<script
+  src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"
+></script>
+<script src="/socket.io/socket.io.js"></script>
+<script src="/js/index.js"></script>
+<script src="/js/cart.js"></script>

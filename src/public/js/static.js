@@ -18,7 +18,7 @@ let query = {};
 
 const contain = document.querySelector(".container__grid"),
   asideAddProduct = document.querySelector(
-    ".asideAdd__dropdown--contain button"
+    ".asideAdd__dropdown--addProduct button"
   ),
   asideText = document.querySelector(".asideAdd__menu--addProduct button"),
   asideButton = document.querySelector(".asideAdd__dropdown--button");
@@ -139,23 +139,23 @@ class NewParams {
 async function crearHtml() {
   if (storeProducts.length == 0) {
     contain.innerHTML = "";
-    contain.innerHTML = `<div class="container__empty__card">
+    contain.innerHTML = `
+    <div class="container__empty__card">
         <div class="card">
-          <div class="card-item">
-            <i class="fa-regular fa-rectangle-xmark"></i>
+          <div class="card-item--empty">
+          <i class="fa-solid fa-rectangle-xmark fa-beat-fade"></i>
           </div>
-          <div class="card-body">
-            <b class="card-text--empty">No Products Found</b>
-            <p class="card-text--empty">You have not added any product</p>
-            <p class="card-text--empty">Add first product now</p>
+          <div class="card-body--empty">
+            <b class="card-text--empty">Not Products Found</b>
+            <p class="card-text--empty">You have not added any product with this filters</p>
+            <p class="card-text--empty">Try adding a product first</p>
           </div>
-          <div class="card-footer">
+          <div class="card__footer--empty">
             <button
               type="button"
               class="btn btn-outline-warning btn-sm btnAdd"
               id="btnAdd"
-            >
-              <a class="fas fa-edit" href="../realtimeproducts"></a>
+            > <i class="fas fa-edit"></i>
             </button>
           </div>
         </div>
@@ -163,8 +163,10 @@ async function crearHtml() {
   } else {
     contain.innerHTML = "";
     let html;
+    let error;
     for (const product of storeProducts) {
-      html = `<div class="container__grid__card">
+      product.status == "error" && opc == "static"?error="error":error="";
+      html = `<div class="container__grid__card ${error}">
           <div class="card">
             <div class="card-header--filled">
               <h5 class="card-title--filled">${product.tittle}</h5>
@@ -276,8 +278,14 @@ async function pagination() {
 }
 
 async function focusbtn() {
-  const buttons = document.querySelectorAll(".nav__container--a a");
-  buttons.forEach((button) => {
+  const buttonsMax = document.querySelectorAll(".nav__container--a a");
+  const buttonsMin = document.querySelectorAll(".asideAdd__dropdown--contain a");
+  buttonsMax.forEach((button) => {
+    button.href == window.location.href
+      ? button.classList.add("active")
+      : button.classList.remove("active");
+  });
+  buttonsMin.forEach((button) => {
     button.href == window.location.href
       ? button.classList.add("active")
       : button.classList.remove("active");

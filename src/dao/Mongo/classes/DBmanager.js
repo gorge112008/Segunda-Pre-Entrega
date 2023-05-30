@@ -67,7 +67,7 @@ class CartFileManager {
   }
   async getCartId(id) {
     try {
-      const cart = await cartsModel.find({ _id: id });
+      const cart = await cartsModel.find({ _id: id }).populate('products.payload.product');
       return cart;
     } catch (err) {
       throw err;

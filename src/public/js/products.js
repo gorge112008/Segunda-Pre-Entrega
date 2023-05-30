@@ -1,7 +1,3 @@
-/*HOME -- REALTIMEPRODUCTS*/
-
-/**********************************************************CONSTANTES/VARIABLES*************************************************************/
-
 const socket = io();
 let URLPathName = window.location.pathname,
   URLdomain = window.location.host,
@@ -127,30 +123,33 @@ async function crearHtml() {
             <div class="card-img-overlay">
               <button
                 type="button"
-                class="btn btn-outline-danger btn-sm card__btnDelete"
-                id=${product._id}
-              >
-                <i class="fas fa-trash-alt"></i>
-              </button>
-              <button
-                type="button"
-                class="btn btn-outline-warning btn-sm btnUpdate"
-                id="btnUpdate"
+                class="btn btn-outline-warning btn-sm btnView"
+                id="btnView"
               >
                 <a
-                  class="fas fa-edit"
-                  href="/realtimeproducts/${product._id}"
+                  class="fa-regular fa-eye"
+                  href="/products/${product._id}"
                 ></a>
               </button>
             </div>
             <div class="card-body">
               <b class="card-text--description">${product.description}</b>
               <u class="card-text--price">S/.${product.price}</u>
+              
             </div>
             <div class="card-footer">
-              <b class="card-text--code">
-                Code: <b class="code">${product.code}</b>
+              <b class="card-text--stock">
+                Stock: <b> ${product.stock}</b>
               </b>
+              <button
+                type="button"
+                class="btn btn-outline-warning btn-sm btnAddCart"
+                id="btnAddCart"
+              >
+                <i
+                  class="fa light fa-cart-shopping"
+                ></i>
+              </button>
             </div>
           </div>
         </div>`;

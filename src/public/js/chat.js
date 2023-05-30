@@ -149,10 +149,18 @@ function sendMessage(){
 }
 
 async function focusbtn(){
-  const buttons = document.querySelectorAll('.nav__container--a a');
-  buttons.forEach(button => {
-  button.href==window.location.href? button.classList.add('active'):button.classList.remove('active');
-});
+  const buttonsMax = document.querySelectorAll(".nav__container--a a");
+  const buttonsMin = document.querySelectorAll(".asideAdd__dropdown--contain a");
+  buttonsMax.forEach((button) => {
+    button.href == window.location.href
+      ? button.classList.add("active")
+      : button.classList.remove("active");
+  });
+  buttonsMin.forEach((button) => {
+    button.href == window.location.href
+      ? button.classList.add("active")
+      : button.classList.remove("active");
+  });
 }
 
 /*INICIO FUNCIONES CRUD*/

@@ -10,8 +10,8 @@ class ListProducts {
     this.page = page;
     this.hasPrevPage = hasPrevPage;
     this.hasNextPage = hasNextPage;
-    this.prevLink="/api/products?page="+prevPage;
-    this.nexLink="/api/products?page="+nextPage;
+    this.prevLink=`/api/products?page=`+prevPage;
+    this.nexLink=`/api/productspage=`+nextPage;
   }
 }
 
