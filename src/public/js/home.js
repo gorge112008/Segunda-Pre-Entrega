@@ -17,20 +17,18 @@ let dataPagination;
 let querySelect;
 let query = {};
 
+let pat,
+  acum = [];
+
 const containDinamic = document.querySelector(".main__container__dinamic"),
   tittleDinamic = document.querySelector(".dinamic__tittle--h3"),
   form = document.querySelector("form"),
   formInput = document.querySelectorAll(".input-field label"),
   formCancel = document.querySelector(".form--btnCancel"),
   contain = document.querySelector(".container__grid"),
-  formAddProduct = document.querySelector(".dinamic__container--addProduct"),
-  asideAddProduct = document.querySelector(
-    ".asideAdd__dropdown--addProduct button"
-  ),
-  asideButton = document.querySelector(".asideAdd__dropdown--button");
+  asideButton = document.querySelector(".asideSD__dropdown--button");
 
-const navConteiner = document.querySelector(".dinav__container"),
-  navPages = document.querySelector(".dinav__container--pages");
+const navConteiner = document.querySelector(".dinav__container");
 
 const dinamicPages = document.querySelector(".dinav__pages--center"),
   selectPrevPage = document.getElementById("page__btnIzq"),
@@ -65,9 +63,9 @@ class NewProduct {
   }
 }
 
-class NewCart{
-  constructor(data){
-    this.products=data;
+class NewCart {
+  constructor(data) {
+    this.products = data;
   }
 }
 
@@ -99,21 +97,22 @@ async function crearHtml() {
           <div class="card__footer--empty">
             <button
               type="button"
-              class="btn btn-outline-warning btn-sm btnAdd"
-              id="btnAdd"
-            > <i class="fas fa-edit"></i>
+              class="btn fas fa-edit btnAddProduct"
+            > 
             </button>
           </div>
         </div>
       </div>`;
-    btnAdd = document.querySelector(".btnAdd i");
+    btnAdd = document.querySelector(".btnAddProduct");
     return btnAdd;
   } else {
     contain.innerHTML = "";
     let html;
     let error;
     for (const product of storeProducts) {
-      product.status == "error" && opc == "static"?error="error":error="";
+      product.status == "error" && opc == "static"
+        ? (error = "error")
+        : (error = "");
       html = `<div class="container__grid__card ${error}">
           <div class="card">
             <div class="card-header--filled">
@@ -127,15 +126,13 @@ async function crearHtml() {
             <div class="card-img-overlay">
               <button
                 type="button"
-                class="btn btn-outline-danger btn-sm card__btnDelete"
+                class="btn fas fa-trash-alt card__btnDelete"
                 id=${product._id}
               >
-                <i class="fas fa-trash-alt"></i>
               </button>
               <button
                 type="button"
                 class="btn btn-outline-warning btn-sm btnUpdate"
-                id="btnUpdate"
               >
                 <a
                   class="fas fa-edit"
@@ -172,14 +169,6 @@ function validarUrl() {
 
 async function selectAction() {
   if (storeProducts.length == 1) {
-    nav.classList.add("hidden");
-    asideDropdown.classList.add("hidden");
-    asideAddButton.classList.add("hidden");
-    formAddProduct.classList.remove("inactiveAdd");
-    listProduct.classList.remove("m12");
-    listProduct.classList.add("m7");
-    navConteiner.classList.add("hidden");
-    navPages.classList.add("hidden");
     categoryOption.value = storeProducts[0].category;
     tittleDinamic.innerHTML = "Update Product";
     inputTittle.value = storeProducts[0].tittle;
@@ -192,6 +181,7 @@ async function selectAction() {
       label.focus();
     });
     if (opc == "static") {
+      //let pru=getDatabyID
       updateData(storeProducts[0]._id, { status: "error" });
       socket.emit(
         "updatingProduct",
@@ -202,12 +192,6 @@ async function selectAction() {
       selectDelete();
     }
   } else {
-    formAddProduct.classList.add("inactiveAdd");
-    listProduct.classList.remove("m7");
-    listProduct.classList.add("m12");
-    navConteiner.classList.remove("hidden");
-    navPages.classList.remove("hidden");
-    tittleDinamic.innerHTML = "Ingresa un producto";
     opc = "static";
   }
 }
@@ -233,16 +217,20 @@ async function selectDelete() {
             if (result.isConfirmed) {
               deleteData(selectBtn.id)
                 .then(async (data) => {
+                  setTimeout(() => {
+                    window.location.href = "../realtimeproducts";
+                  }, 1000),
                   Swal.fire({
                     title: "Product Removed Successfully!!!",
                     text:
                       "Product Removed>> " +
                       "ID: " +
-                      data._id +
+                      data +
                       " --> " +
                       productoSelect[0].tittle,
                     icon: "success",
-                    confirmButtonText: "Accept",
+                    showConfirmButton: false,
+                    allowOutsideClick: false,
                   });
                   socket.emit("deleteproduct", "Producto Eliminado");
                 })
@@ -256,17 +244,24 @@ async function selectDelete() {
     } else if (storeProducts.length == 0) {
       btnAdd = await crearHtml();
       btnAdd.addEventListener("click", () => {
-        formAddProduct.className == "dinamic__container--addProduct dinamico"
-          ? formAddProduct.classList.add("dinamico")
-          : formAddProduct.classList.add("dinamico");
-        asideText.innerHTML == "Add New Product"
-          ? (asideText.innerHTML = "Close")
-          : (asideText.innerHTML = "Close");
-        asideButton.innerHTML ==
-        `<i class="fa-regular fa-square-plus fa-spin"></i>`
-          ? (asideButton.innerHTML = `<i class="fa-regular fa-square-plus fa-spin fa-spin-reverse" </i>`)
-          : (asideButton.innerHTML = `<i class="fa-regular fa-square-plus fa-spin fa-spin-reverse" </i>`);
-        inputTittle.focus();
+        if (
+          formAddProduct.className ==
+          "dinamic__container--addProduct inactiveAdd"
+        ) {
+          formAddProduct.classList.remove("inactiveAdd");
+          listProduct.classList.remove("m12");
+          listProduct.classList.add("m7");
+          selectCategory.value == ""
+            ? (categoryOption.value = "Food")
+            : (categoryOption.value = selectCategory.value);
+          inputTittle.focus();
+        } else if (
+          formAddProduct.className == "dinamic__container--addProduct"
+        ) {
+          formAddProduct.classList.add("inactiveAdd");
+          listProduct.classList.remove("m7");
+          listProduct.classList.add("m12");
+        }
       });
     }
   } catch (error) {
@@ -349,7 +344,7 @@ async function validarStatus(idExo) {
     console.log(JSON.stringify(product));
     if (idExo.includes(product._id)) continue;
     if (product.status == "error") {
-      updateData(product._id, { status: "success" });
+      await updateData(product._id, { status: "success" });
     }
   }
   const newProducts = await getData();
@@ -402,8 +397,8 @@ async function pagination() {
 }
 
 async function focusAction() {
-  const buttonsMax = document.querySelectorAll(".nav__container--a a");
-  const buttonsMin = document.querySelectorAll(".asideAdd__dropdown--contain a");
+  const buttonsMax = document.querySelectorAll(".div__container--focusBtn a");
+  const buttonsMin = document.querySelectorAll(".asideSD__dropdown--contain a");
   buttonsMax.forEach((button) => {
     button.href == window.location.href
       ? button.classList.add("active")
@@ -429,7 +424,7 @@ async function getData(params) {
     const data = await response.json();
     dataPagination = data;
     const newData = data.payload;
-    const cart= new NewCart(data);
+    const cart = new NewCart(data);
     return newData;
   } catch {
     console.log(Error);
@@ -510,9 +505,23 @@ async function deleteData(id) {
 /*FIN FUNCIONES CRUD*/
 
 /*****************************************************************SOCKETS*************************************************************/
-
 socket.on("callProducts", async (getProducts) => {
   Object.assign(storeProducts, getProducts); //ASIGNAR PRODUCTOS AL STORE
+  if (storeProducts.length == 1) {
+    sessionStorage.setItem("productUpdate", storeProducts[0]._id);
+    if (window.location.pathname == "/realtimeproducts") {
+      storeProducts = await getData();
+      filters();
+      validateProducts.click();
+      ;
+    }
+  }else if (storeProducts.length != 1) {
+    if ((window.location.pathname).startsWith('/realtimeproducts/') ) {
+      let idProduct=sessionStorage.getItem("productUpdate");
+      storeProducts = await getDatabyID(idProduct);
+      filters();
+    }
+  }
   sessionStorage.removeItem("values");
   focusAction();
   selectAction();
@@ -530,37 +539,55 @@ socket.on("f5NewProduct", async (addMsj) => {
 socket.on("f5deleteProduct", async (deletedMsj) => {
   console.log(deletedMsj);
   if (storeProducts.length != 1) {
-    storeProducts = await getData({});
+    storeProducts = await getData();
     filters();
-  } else {
-    setTimeout(() => {
-      window.location.href = "../realtimeproducts";
-    }, 1000),
-      Swal.fire({
-        position: "center",
-        icon: "success",
-        title: "Producto Eliminado Correctamente",
-        showConfirmButton: false,
-        allowOutsideClick: false,
-      });
-  }
+  } 
 });
 
 socket.on("f5updateProduct", async (updatedMsj) => {
   console.log(updatedMsj);
+  const btnDel = document.querySelector(".card__btnDelete");
+  btnDel.classList.remove("hidden");
   if (storeProducts.length != 1) {
     storeProducts = await getData({});
     filters();
+    const btnDel = document.querySelector(".card__btnDelete");
+    btnDel.classList.remove("hidden");
   }
 });
 
 socket.on("updatingProduct", async (updatingMsj) => {
   console.log(updatingMsj);
-  if (storeProducts.length != 1) {
+  if (storeProducts.length == 1) {
+    validateProducts.classList.add("hidden");
+    let productUpdate = await getDatabyID(storeProducts[0]._id);
+    storeProducts = productUpdate;
+    selectAction();
+  } else {
     storeProducts = await getData({});
     filters();
-  } else {
+  }
+});
+
+socket.on("viewingProduct", async (id) => {
+  if (storeProducts.length == 1) {
     validateProducts.classList.add("hidden");
+    let productView = await getDatabyID(storeProducts[0]._id);
+    storeProducts = productView;
+    selectAction();
+    const btnDel = document.querySelector(".card__btnDelete");
+    btnDel.classList.add("hidden");
+  } else {
+    let int = -1;
+    let btnDel = [];
+    selectAction();
+    btnDel = document.querySelectorAll(".card__btnDelete");
+    for (const product of storeProducts) {
+      int++;
+      if (product._id == id) {
+        btnDel[int].classList.add("hidden");
+      }
+    }
   }
 });
 
@@ -708,29 +735,14 @@ selectStatus.addEventListener("change", async (event) => {
       opciones.query
         ? (opciones.query = Object.assign(opciones.query, query))
         : (opciones.query = query);
-        query = opciones.query;
-        opciones.page = page;
+      query = opciones.query;
+      opciones.page = page;
     }
   } else {
     opciones = new NewParams(null, null, null, query);
   }
   sessionStorage.setItem("values", JSON.stringify(opciones));
   filters();
-});
-
-asideAddProduct.addEventListener("click", () => {
-  if (formAddProduct.className == "dinamic__container--addProduct inactiveAdd") {
-    formAddProduct.classList.remove("inactiveAdd");
-    listProduct.classList.remove("m12");
-    listProduct.classList.add("m7");
-  }else{
-    formAddProduct.classList.add("inactiveAdd");
-    listProduct.classList.remove("m7");
-    listProduct.classList.add("m12");
-  }
-  asideButton.innerHTML == `<i class="fa-regular fa-square-plus fa-spin"></i>`
-    ? (asideButton.innerHTML = `<i class="fa-regular fa-square-plus fa-spin fa-spin-reverse"></i>`)
-    : (asideButton.innerHTML = `<i class="fa-regular fa-square-plus fa-spin"></i>`);
 });
 
 selectOrder.addEventListener("change", async (event) => {
@@ -759,7 +771,7 @@ selectCategory.addEventListener("change", async (event) => {
       opciones.query
         ? (opciones.query = Object.assign(opciones.query, query))
         : (opciones.query = query);
-        opciones.page = page; 
+      opciones.page = page;
     }
   } else {
     opciones = new NewParams(null, null, null, query);
@@ -772,7 +784,7 @@ selectPrevPage.addEventListener("click", () => {
   const prevPage = dataPagination.prevPage;
   opciones
     ? (opciones.page = prevPage)
-    : opciones = new NewParams(null, prevPage, null, null);
+    : (opciones = new NewParams(null, prevPage, null, null));
   sessionStorage.setItem("values", JSON.stringify(opciones));
   pagination();
   filters();
@@ -782,7 +794,7 @@ selectNextPage.addEventListener("click", () => {
   const nextPage = dataPagination.nextPage;
   opciones
     ? (opciones.page = nextPage)
-    : opciones = new NewParams(null, nextPage, null, null);
+    : (opciones = new NewParams(null, nextPage, null, null));
   sessionStorage.setItem("values", JSON.stringify(opciones));
   pagination();
   filters();

@@ -4,7 +4,7 @@ import middlewareInitMessages from "../middlewares/initMessagesMiddleware.js";
 import middlewareInitCart from "../middlewares/initCartMiddleware.js";
 
 const routerViews = Router();
-let resProducts, resMessages;
+let resProducts, resMessages,resCarts;
 
 routerViews.get("/", (req, res) => {
   res.render("index", {});
@@ -36,8 +36,13 @@ routerViews.get("/products/:pid",middlewareInitProducts,async (req, res) => {
 });
 
 routerViews.get("/cart",middlewareInitCart,async (req, res) => {
-  resProducts = await res.locals.resProducts;
-  res.render("cart", {resProducts});
+  resCarts = await res.locals.resCarts;
+  res.render("cart", {resCarts});
+});
+
+routerViews.get("/cart/:cid",middlewareInitCart,async (req, res) => {
+  resCarts = await res.locals.resCarts;
+  res.render("cart", {resCarts});
 });
 
 routerViews.get("/chat",middlewareInitMessages, async (req, res) => {
@@ -46,4 +51,4 @@ routerViews.get("/chat",middlewareInitMessages, async (req, res) => {
 });
 
 export default routerViews;
-export { resProducts, resMessages };
+export { resProducts, resMessages, resCarts };

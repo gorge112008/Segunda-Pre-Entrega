@@ -149,8 +149,8 @@ function sendMessage(){
 }
 
 async function focusbtn(){
-  const buttonsMax = document.querySelectorAll(".nav__container--a a");
-  const buttonsMin = document.querySelectorAll(".asideAdd__dropdown--contain a");
+  const buttonsMax = document.querySelectorAll(".div__container--focusBtn a");
+  const buttonsMin = document.querySelectorAll(".asideSD__dropdown--contain a");
   buttonsMax.forEach((button) => {
     button.href == window.location.href
       ? button.classList.add("active")

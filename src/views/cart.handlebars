@@ -1,56 +1,44 @@
 <div class="main__container--side col s2"></div>
 <div class="main__container__dinamic col s9">
   <div class="row">
-    <div class="static__tittle col s6"><h4>Cart ({{resProducts.length}}
-        products):</h4></div>
-    <div class="static__container--grid row noMargin">
-      <div class="container__grid col m12">
-        {{#if resProducts}}
-          {{#each resProducts}}
-            <div class="container__grid__card">
-              <div class="card">
-                <div class="card-header--filled"><h5
-                    class="card-title--filled"
-                  >{{product.tittle}}</h5></div>
-                <img
-                  class="card-img-top--filled"
-                  src={{product.thumbnail}}
-                  alt="Card image cap"
-                />
-                <div class="card-body">
-                  <b class="card-text--description">{{product.description}}</b>
-                  <u class="card-text--price">S/.{{product.price}}</u>
-                </div>
-                <div class="card-footer">
-                  <b class="card-text--code">Code:
-                    <b class="code">{{product.code}}</b></b>
-                </div>
+    <div class="static__tittleCart col s7"><h5>Carts ({{resCarts.length}}):</h5></div>
+    <div class="static__newCart col s5"><button type="button" class="btnAddNewCart"><i
+          class="fa-regular fa-square-plus"
+        ></i>Add New Cart</button>
+      <button
+        type="button"
+        class="btnExitCart hidden"
+      >Close View</button></div>
+    <div class="static__container--cart row noMargin">
+      <div class="container__cart col m12">
+        {{#if resCarts}}
+              <!--Dinamic Contain-->
+              <div class="loading">
+                <b>
+                  LOADING CARTS...
+                </b>
               </div>
-            </div>
-          {{/each}}
         {{else}}
-          <div class="container__empty__card"><div class="card">
-              <div class="card-item">
-                <i class="fa-regular fa-rectangle-xmark"></i></div>
-              <div class="card-body">
-                <b class="card-text--empty">No Products Found</b>
-                <p class="card-text--empty">You have not added any product</p>
-                <p class="card-text--empty">Add first product now</p>
-              </div>
-              <div class="card-footer">
-                <button
-                  type="button"
-                  class="btn btn-outline-warning btn-sm btnAdd"
-                  id="btnAdd"
-                >
-                  <a type="button" href="../realtimeproducts"><i
-                      class="fa-regular fa-square-plus"
-                    ></i><b>Add New Product</b></a>
-                </button>
+          <div class="container__empty__card">
+            <div class="card">
+              <div class="card-item--empty">
+                <i class="fa-solid fa-cart-plus"></i></div>
+              <div class="card-body--empty">
+                <b class="card-text--empty">No Carts Found</b>
+                <p class="card-text--empty">You have not created any cart</p>
+                <p class="card-text--empty">Add first cart now</p>
               </div>
             </div>
           </div>
         {{/if}}
+      </div>
+    </div>
+    <div class="row noMargin">
+      <div class="container__clearBtn">
+        <button
+        type="button"
+        class="btnCleanCart hidden"
+      >Clean Cart</button>
       </div>
     </div>
   </div>

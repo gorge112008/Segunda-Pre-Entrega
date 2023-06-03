@@ -16,15 +16,9 @@ let dataPagination;
 let querySelect;
 let query = {};
 
-const contain = document.querySelector(".container__grid"),
-  asideAddProduct = document.querySelector(
-    ".asideAdd__dropdown--addProduct button"
-  ),
-  asideText = document.querySelector(".asideAdd__menu--addProduct button"),
-  asideButton = document.querySelector(".asideAdd__dropdown--button");
+const contain = document.querySelector(".container__grid");
 
-const navConteiner = document.querySelector(".dinav__container"),
-  navPages = document.querySelector(".dinav__container--pages");
+const navConteiner = document.querySelector(".dinav__container");
 
 const dinamicPages = document.querySelector(".dinav__pages--center"),
   selectPrevPage = document.getElementById("page__btnIzq"),
@@ -58,18 +52,6 @@ selectStatus.addEventListener("change", async (event) => {
   }
   sessionStorage.setItem("values", JSON.stringify(opciones));
   filters();
-});
-
-asideAddProduct.addEventListener("click", () => {
-  formAddProduct.className == "dinamic__container--addProduct dinamico"
-    ? formAddProduct.classList.remove("dinamico")
-    : formAddProduct.classList.add("dinamico");
-  asideText.innerHTML == "Add New Product"
-    ? (asideText.innerHTML = "Close")
-    : (asideText.innerHTML = "Add New Product");
-  asideButton.innerHTML == `<i class="fa-regular fa-square-plus fa-spin"></i>`
-    ? (asideButton.innerHTML = `<i class="fa-regular fa-square-plus fa-spin fa-spin-reverse"></i>`)
-    : (asideButton.innerHTML = `<i class="fa-regular fa-square-plus fa-spin" </i>`);
 });
 
 selectOrder.addEventListener("change", async (event) => {
@@ -278,8 +260,8 @@ async function pagination() {
 }
 
 async function focusbtn() {
-  const buttonsMax = document.querySelectorAll(".nav__container--a a");
-  const buttonsMin = document.querySelectorAll(".asideAdd__dropdown--contain a");
+  const buttonsMax = document.querySelectorAll(".div__container--focusBtn a");
+  const buttonsMin = document.querySelectorAll(".asideSD__dropdown--contain a");
   buttonsMax.forEach((button) => {
     button.href == window.location.href
       ? button.classList.add("active")

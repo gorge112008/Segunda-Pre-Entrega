@@ -25,19 +25,60 @@
   background-color: #dddddd !important;
 }
 
+.onlyView {
+  pointer-events: none;
+  background-color: #ffffff !important;
+}
 
 .noMargin {
   margin: 0;
 }
 
-.aquamarine{
+.aquamarine {
   background-color: rgb(0, 255, 195);
   box-shadow: #2cfff1 0px 0px 15px 0px;
 }
 
-.error{
+.quantityP {
+  font-size:1rem;
+  color: rgb(1, 1, 64);
+  border-radius: 5px;
+  background-color: transparent;
+  box-shadow: #482cff 0px 0px 15px 0px;
+}
+
+.error {
   pointer-events: none;
   opacity: 0.1;
+}
+
+.view {
+  pointer-events: none;
+  opacity: 0.1;
+}
+
+.loading,.loaded {
+  position: absolute;
+  margin: auto;
+  height: auto;
+  width: auto;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+
+.input-field {
+  margin: 7px;
+}
+
+.input-field select {
+  width: fit-content;
 }
 
 /*INDEX BLOCK*/
@@ -129,54 +170,73 @@
   margin: 0.5vh 0;
   overflow-x: hidden;
   margin-top: 10px;
-  width:100%;
+  width: 100%;
   justify-content: center;
 }
 
-.container__grid::-webkit-scrollbar {
+/*contenedor de los caroooooooooooooooooooooooooooooooooooooooooo*/
+.container__cart{
+  display: grid;
+  flex-wrap: wrap;
+  grid-template-columns: repeat(auto-fill,1fr);
+  grid-template-rows: repeat(auto-fill, 1fr);
+  grid-auto-flow: dense;
+  grid-auto-rows: 1fr;
+  grid-auto-columns: 1fr;
+  grid-gap: 15px;
+  height: 70vh;
+  overflow: auto;
+  margin: 0.5vh 0;
+  overflow-x: hidden;
+  margin-top: 10px;
+  width: 100%;
+  place-content: start;
+}
+
+.container__grid::-webkit-scrollbar,.container__cart::-webkit-scrollbar {
   width: 10px;
   background-color: #f5f5f5;
 }
 
-.container__grid::-webkit-scrollbar-button:decrement:start {
+.container__grid::-webkit-scrollbar-button:decrement:start,.container__cart::-webkit-scrollbar-button:decrement:start  {
   border: solid black 1px;
   height: 3vh;
   border-radius: 4px;
 }
 
-.container__grid::-webkit-scrollbar-button:increment:end {
+.container__grid::-webkit-scrollbar-button:increment:end,.container__cart::-webkit-scrollbar-button:increment:end {
   border: solid black 1px;
   height: 3vh;
   border-radius: 4px;
 }
 
-.container__grid::-webkit-scrollbar-button:active {
+.container__grid::-webkit-scrollbar-button:active,.container__cart::-webkit-scrollbar-button:active  {
   background-color: yellow;
 }
 
-.container__grid::-webkit-scrollbar-thumb {
+.container__grid::-webkit-scrollbar-thumb,.container__cart::-webkit-scrollbar-thumb  {
   background-color: rgb(159, 255, 201);
   border: solid black 1px;
   border-radius: 4px;
   cursor: pointer;
 }
 
-.container__grid::-webkit-scrollbar-thumb:hover {
+.container__grid::-webkit-scrollbar-thumb:hover,.container__cart::-webkit-scrollbar-thumb:hover  {
   cursor: pointer;
   background-color: #87f792;
   box-shadow: 0 0 2px 1px rgba(0, 0, 0, 0.2);
 }
 
-.container__grid::-webkit-scrollbar-track {
+.container__grid::-webkit-scrollbar-track,.container__cart::-webkit-scrollbar-track {
   background: #e1e1e1;
   border-radius: 4px;
 }
 
-.container__grid::-webkit-scrollbar-track:hover {
+.container__grid::-webkit-scrollbar-track:hover,.container__cart::-webkit-scrollbar-track:hover {
   background: #d4d4d4;
 }
 
-.list2{
+.list2 {
   border: solid yellow 3px;
   border-top-right-radius: 40px;
   border-bottom-right-radius: 40px;
@@ -229,7 +289,7 @@
 }
 
 /*NAVIGATION BLOCK REF*/
-.nav__container--a a {
+.div__container--focusBtn a {
   outline: solid black 1px;
   color: black;
   position: relative;
@@ -241,68 +301,68 @@
   overflow: hidden;
 }
 
-.nav__container--a a:hover {
+.div__container--focusBtn a:hover {
   cursor: pointer;
   background-color: rgb(0, 255, 195);
   box-shadow: #dfff2c 0px 0px 15px 0px;
 }
 
-.nav__container--a a.active {
+.div__container--focusBtn a.active {
   cursor: pointer;
   background-color: rgb(219, 146, 255);
   box-shadow: #2cfff1 0px 0px 15px 0px;
 }
 
-.nav__container--a a.disabled {
+.div__container--focusBtn a.disabled {
   background-color: rgb(238, 236, 236);
   color: gray;
 }
 
-.nav__container--a i {
+.div__container--focusBtn i {
   position: relative;
   top: 1vh;
 }
 
-.nav__container--a b {
+.div__container--focusBtn b {
   position: absolute;
   top: 1vh;
-  right:0;
+  right: 0;
   left: 0;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
 }
 
-.nav__container--a:hover i {
+.div__container--focusBtn:hover i {
   font-size: 1.5rem;
   overflow: visible;
 }
 
-.nav__container--a:hover b {
+.div__container--focusBtn:hover b {
   font-size: 0.75rem;
   overflow: visible;
 }
 
 /*SIDEBAR BLOCK */
-.aside__dropdown {
+.asideMLD__dropdown {
   height: 89vh;
-  width:16.5vw;
+  width: 16.5vw;
   position: fixed;
   top: 6vh;
   bottom: 0;
-  left:  0;
+  left: 0;
   z-index: 4;
   display: flex;
   align-items: start;
-  justify-content:center;
+  justify-content: center;
   background-color: transparent;
 }
 
-.aside__dropdown:hover > .aside__menu {
+.asideMLD__dropdown:hover > .asideMLD__menu {
   box-shadow: #bceca0 0px 0px 10px 0px;
 }
 
-.aside__dropdown--contain button {
+.asideMLD__dropdown--contain button {
   background-color: transparent;
   border: none;
   width: 50%;
@@ -314,7 +374,7 @@
   justify-content: end;
 }
 
-.aside__dropdown--contain i {
+.asideMLD__dropdown--contain i {
   display: flex;
   align-items: center;
   padding: 2px;
@@ -323,7 +383,7 @@
   z-index: 4;
 }
 
-.aside__menu {
+.asideMLD__dropdown--menu {
   position: absolute;
   overflow: hidden;
   z-index: 1;
@@ -334,7 +394,7 @@
   height: 90vh;
 }
 
-.aside__menu--logo {
+.asideMLD__menu--logo {
   background-color: transparent;
   position: relative;
   top: 0;
@@ -347,7 +407,7 @@
   overflow: hidden;
 }
 
-.aside__menu--logo img {
+.asideMLD__menu--logo img {
   object-fit: cover;
   height: 25vh;
   display: block;
@@ -355,7 +415,7 @@
   z-index: 0;
 }
 
-.aside__menu--addProduct {
+.asideMLD__menu--addProduct {
   position: relative;
   background-color: transparent;
   height: 10vh;
@@ -365,7 +425,7 @@
   z-index: 1;
 }
 
-.aside__menu--addProduct button {
+.asideMLD__menu--addProduct button {
   font-family: "Sinami", sans-serif;
   font-size: 2.8vh;
   width: 90%;
@@ -379,13 +439,13 @@
   z-index: 1;
 }
 
-.aside__menu--addProduct button:hover {
+.asideMLD__menu--addProduct button:hover {
   box-shadow: #00bfff 0px 0px 10px 0px;
   cursor: pointer;
   color: #02e30e;
 }
 
-.aside__menu--addProduct i {
+.asideMLD__menu--addProduct i {
   display: inline-block;
   height: 0;
   font-size: 2.5vh;
@@ -393,7 +453,7 @@
   margin-right: 4px;
 }
 
-.aside__menu--options {
+.asideMLD__menu--options {
   background-color: transparent;
   border-top: solid purple 5px;
   border-bottom: solid purple 5px;
@@ -402,20 +462,20 @@
   z-index: 1;
 }
 
-.aside__menu--options h6 {
+.asideMLD__menu--options h6 {
   background-color: transparent;
   color: #9d00ff;
   position: relative;
   display: block;
   text-align: center;
-  margin-left:auto ;
+  margin-left: auto;
   margin-right: auto;
   font-family: "thirty-seven", sans-serif;
   font-size: 2.3vw;
   margin: 0;
 }
 
-.aside__menu--options button {
+.asideMLD__menu--options button {
   position: relative;
   background: none;
   border: none;
@@ -425,14 +485,14 @@
   font-size: 0.8em;
 }
 
-.aside__menu--options button:hover {
+.asideMLD__menu--options button:hover {
   background-color: rgb(67, 223, 80);
   border: solid black 1px;
   cursor: pointer;
   border-radius: 3px;
 }
 
-.aside__menu--options ul {
+.asideMLD__menu--options ul {
   display: flex;
   align-self: center;
   justify-content: start;
@@ -442,25 +502,25 @@
   overflow: auto;
   overflow-x: hidden;
 }
-.aside__menu--options ul:hover b {
+.asideMLD__menu--options ul:hover b {
   font-size: 1rem;
 }
-.aside__menu--options ul:hover i {
+.asideMLD__menu--options ul:hover i {
   font-size: 1.3rem;
 }
 
-.aside__menu--options li {
+.asideMLD__menu--options li {
   position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
   width: 100%;
 }
-.aside__menu--options li:hover b {
+.asideMLD__menu--options li:hover b {
   font-size: 1.2rem;
 }
 
-.aside__menu--options a {
+.asideMLD__menu--options a {
   color: black;
   display: block;
   align-items: center;
@@ -471,23 +531,22 @@
   padding: 10px 0;
   margin: 10px;
   text-overflow: ellipsis;
-  
 }
 
-.aside__menu--options a:hover b{
+.asideMLD__menu--options a:hover b {
   font-size: 1.3rem;
   padding-left: 5px;
 }
 
-.aside__menu--options a:active {
+.asideMLD__menu--options a:active {
   cursor: wait;
 }
 
-.aside__menu--options a:hover i{
+.asideMLD__menu--options a:hover i {
   margin-right: 2px;
 }
 
-.aside__menu--options b {
+.asideMLD__menu--options b {
   display: inline-flex;
   align-self: start;
   font-size: 1.2em;
@@ -497,7 +556,7 @@
   width: fit-content;
 }
 
-.aside__menu--options i {
+.asideMLD__menu--options i {
   display: inline-flex;
   align-self: start;
   font-size: 1.2em;
@@ -507,19 +566,19 @@
   margin-left: 3px;
 }
 
-.asideAdd__dropdown {
+.asideSD__dropdown {
   height: 80vh;
-  width:16.5vw;
+  width: 16.5vw;
   position: fixed;
   top: 16vh;
   bottom: 0;
-  left:  0;
+  left: 0;
   z-index: 2;
   display: none;
   background-color: transparent;
 }
 
-.asideAdd__dropdown--addProduct{
+.asideSD__dropdown--addProduct {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -528,7 +587,7 @@
   width: 10vh;
   margin-bottom: 10px;
 }
-.asideAdd__dropdown--contain{
+.asideSD__dropdown--contain {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -537,7 +596,7 @@
   width: 10vh;
   margin-bottom: 10px;
 }
-.asideAdd__dropdown--button {
+.asideSD__dropdown--button {
   background-color: #bffcc6;
   font-size: 2rem;
   position: relative;
@@ -548,7 +607,7 @@
   z-index: 4;
 }
 
-.asideAdd__dropdown a{
+.asideSD__dropdown a {
   background-color: #bffcc6;
   border: solid 2px black;
   color: black;
@@ -563,8 +622,8 @@
   font-weight: bolder;
   z-index: 4;
 }
-.asideAdd__dropdown b{
-  font-family:'Times New Roman', Times, serif;
+.asideSD__dropdown b {
+  font-family: "Times New Roman", Times, serif;
   font-size: 1.1rem;
   font-weight: bolder;
   color: rgb(255, 0, 0);
@@ -572,29 +631,30 @@
   box-shadow: #79ebff 0px 0px 15px 0px;
 }
 
-.asideAdd__dropdown--contain a.active {
+.asideSD__dropdown--contain a.active {
   cursor: pointer;
   background-color: rgb(219, 146, 255);
   box-shadow: #2cfff1 0px 0px 15px 0px;
   color: black;
 }
 
-.asideAdd__dropdown--contain a.disabled {
+.asideSD__dropdown--contain a.disabled {
   background-color: rgb(238, 236, 236);
   color: gray;
 }
 
-.asideAdd__dropdown--i{
+.asideSD__dropdown--i {
   display: block;
 }
 
-.asideAdd__dropdown--button:hover,.asideAdd__dropdown--contain a:hover{
+.asideSD__dropdown--button:hover,
+.asideSD__dropdown--contain a:hover {
   background: linear-gradient(rgb(60, 255, 0), white);
   cursor: pointer;
   z-index: 4;
 }
 
-.asideAdd__menu--logo{
+.asideSD__menu--logo {
   display: flex;
   align-self: center;
   justify-content: center;
@@ -604,7 +664,7 @@
   z-index: 2;
 }
 
-.asideAdd__menu--logo img {
+.asideSD__menu--logo img {
   object-fit: cover;
   height: 10vh;
   display: block;
@@ -612,8 +672,6 @@
   top: 6vh;
   z-index: 0;
 }
-
-
 
 /*MAIN BLOCK*/
 .main__container {
@@ -655,16 +713,15 @@
   padding-top: 10px;
 }
 
-.dinamic__container--addProduct{
+.dinamic__container--addProduct {
   position: relative;
   left: 0;
 }
 
-.inactiveAdd{
+.inactiveAdd {
   position: absolute;
   left: -50vw;
 }
-
 
 .dinamic__tittle {
   margin: 0;
@@ -696,12 +753,13 @@
   margin: 7px;
 }
 
-.input-field select{
+.input-field select {
   width: fit-content;
 }
 
+/*SAVE BUTTON*/
+
 .form--btnSave {
-  /*SAVE BUTTON*/
   white-space: normal;
   background-color: #6a00ff;
   border: solid rgb(16, 2, 109) 2px;
@@ -716,13 +774,14 @@
 
 .form--btnSave:hover {
   box-shadow: #9966cc 0px 0px 20px 0px;
-  background: linear-gradient(rgb(119, 137, 255),white);
+  background: linear-gradient(rgb(119, 137, 255), white);
   color: #000000;
   cursor: pointer;
 }
 
+/*CANCEL BUTTON*/
+
 .form--btnCancel {
-  /*CANCEL BUTTON*/
   white-space: normal;
   background: rgb(255, 0, 0);
   border: solid rgb(114, 1, 1) 2px;
@@ -737,7 +796,30 @@
 
 .form--btnCancel:hover {
   box-shadow: #00befe 0px 0px 10px 0px;
-  background: linear-gradient(rgb(255, 119, 119),white);
+  background: linear-gradient(rgb(255, 119, 119), white);
+  color: #000000;
+  cursor: pointer;
+}
+
+/*CLOSE BUTTON */
+
+.form--btnClose {
+  /*CANCEL BUTTON*/
+  white-space: normal;
+  background: rgb(255, 0, 0);
+  border: solid rgb(114, 1, 1) 2px;
+  border-top-left-radius: 20px;
+  border-bottom-right-radius: 20px;
+  color: #ffffff;
+  font-family: "Sinami", sans-serif;
+  font-size: 1.875rem;
+  padding-top: 10px !important;
+  transition: all 500ms ease;
+}
+
+.form--btnClose:hover {
+  box-shadow: #00befe 0px 0px 10px 0px;
+  background: linear-gradient(rgb(255, 119, 119), white);
   color: #000000;
   cursor: pointer;
 }
@@ -759,16 +841,47 @@
   font-family: "Sinami", sans-serif;
 }
 
+.static__tittleCart{
+  background-color: transparent;
+  position: sticky;
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  top: 6vh;
+  height: 9vh;
+  z-index: 2;
+}
+
+.static__tittleCart h5 {
+  margin: 0;
+  padding-top: 1vh;
+  position: relative;
+  display: flex;
+  font-size: 2.1rem;
+  font-family: "Sinami", sans-serif;
+}
+
+
 .static__container--grid {
   display: flex;
   justify-content: center;
   width: 100%;
   position: relative;
   left: 0.625rem;
+  height: 67vh;
+}
+
+.static__container--cart {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  position: relative;
+  left: 0.625rem;
+  height: 75vh;
 }
 
 /*DINAMIC NAV BLOCK*/
-.dinav__container {
+.dinav__container--filters {
   display: flex;
   justify-content: flex-start;
   display: block;
@@ -786,7 +899,7 @@
   transition: all 500ms;
 }
 
-.dinav__container--filter {
+.dinav__container--option {
   position: sticky;
   display: flex;
   top: 0;
@@ -797,7 +910,7 @@
 }
 
 .dinav__container--order:hover,
-.dinav__container--filter:hover {
+.dinav__container--option:hover {
   background-color: #efe;
   box-shadow: 2px 2px 4px #ddd;
 }
@@ -835,12 +948,12 @@
   background: #43ff66;
 }
 
-.dinav__option:focus{
+.dinav__option:focus {
   outline: none;
   background-color: none;
 }
 
-.arrowSelect{
+.arrowSelect {
   display: block;
   border-left: 4px double #000000;
   border-bottom: 4px double #000000;
@@ -893,7 +1006,7 @@
   height: fit-content;
 }
 
-.dinav__pages--disabled i{
+.dinav__pages--disabled i {
   border: solid #ccc 2px;
   position: relative;
   color: #ccc;
@@ -933,15 +1046,23 @@
   background-color: rgb(230, 230, 230);
 }
 
-.container__empty__card{
+.container__cart__card{
+  height: 20vw;
+  width: auto;
+  margin: 0;
+  z-index: 1;
+  background-color: rgb(255, 255, 255);
+}
+
+.container__empty__card {
   position: relative;
-  height: 100%; 
-  width: 100%; 
+  height: 100%;
+  width: 100%;
   z-index: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  grid-column: 1/3;
+  grid-column: 1/4;
   background-image: url("https://img.freepik.com/free-vector/abstract-colorful-waves-transparent-background_1055-2093.jpg");
 }
 
@@ -950,10 +1071,21 @@
   height: 15vh;
 }
 
+.container__cart__card .card {
+  position: relative;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  border: solid orange 2px;
+}
+
 .container__empty__card .card {
   margin: 0;
   height: 50vh;
-  width: 50vw;
+  width: 100%;
   position: absolute;
   flex-direction: column;
   background-color: transparent;
@@ -999,7 +1131,7 @@
   align-items: center;
   justify-content: center;
 }
-.card-item--empty{
+.card-item--empty {
   position: relative;
   display: flex;
   align-items: center;
@@ -1007,7 +1139,7 @@
   height: 40%;
 }
 
-.card-item--empty i{
+.card-item--empty i {
   font-size: 14vh;
   color: rgb(255, 43, 96);
 }
@@ -1023,9 +1155,9 @@
   text-align: center;
   font-size: large;
   justify-content: center;
-  height: 13vh;
+  height: 16vh;
   overflow: hidden;
-  z-index: 2;
+  z-index: 1;
 }
 
 .card-body--empty {
@@ -1078,7 +1210,8 @@
 .card-text--price {
   font-size: 1.25rem;
   position: relative;
-  top: 4vh;
+  top: 2vh;
+  display: block;
   font-family: "TT Marxiana Trial", sans-serif;
   z-index: 1;
 }
@@ -1089,20 +1222,39 @@
   cursor: pointer;
 }
 
-.card-footer{
+.card-text--total {
+  font-size: 1.25rem;
   position: relative;
   display: block;
+  top: 2vh;
+  font-family: "TT Marxiana Trial", sans-serif;
   z-index: 1;
+}
+
+.card-text--total:hover {
+  filter: drop-shadow(0 0 20px #9900ff);
+  color: #a200ff;
+  font-size: 1.325rem;
+  cursor: pointer;
+}
+
+.card-footer {
+  position: relative;
+  display: block;
+  bottom: 5vh;
+  z-index: 2;
   background-color: transparent;
 }
 
-.card__footer--empty{
+.card__footer--empty {
   height: 20%;
   display: flex;
+  justify-content: center;
   align-items: center;
 }
 
-.card-text--code,.card-text--stock {
+
+.card-text--code {
   display: block;
   font-size: 1rem;
   text-align: start;
@@ -1111,7 +1263,28 @@
   width: fit-content;
 }
 
-.card__btnDelete {
+.card-text--stock {
+  display: inline-flex;
+  font-size: 1rem;
+  text-align: start;
+  padding-top: 10px;
+  margin-left: 5px;
+  color: #6a00ff;
+  width: fit-content;
+}
+
+.card-text--quantity {
+  display: inline-flex;
+  font-size: 1rem;
+  text-align: start;
+  padding-top: 10px;
+  margin-left: 5px;
+  color: #6a00ff;
+  width: fit-content;
+}
+
+.card__btnDelete,.card__btnDelete:focus {
+  font-size: 1.3rem;
   background-color: transparent;
   color: black;
   position: absolute;
@@ -1129,6 +1302,104 @@
   box-shadow: rgb(249, 0, 0) 1px 1px 5px 0px;
 }
 
+/*CART BLOCK*/
+.card_cart--header {
+  display: flex;
+  width:100%;
+  align-items: center;
+  justify-content: center;
+}
+
+.cart-title--filled {
+  font-size: 2vw;
+  margin: 0;
+  margin-top: 5px;
+  opacity: 0.8;
+  color: black;
+  background: #ffbb77;
+  position: sticky;
+  display: block;
+  font-family: "TT Marxiana Trial", sans-serif;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  z-index: 2;
+  transition: all 500ms ease;
+}
+
+.cart-title--filled:hover {
+  cursor: pointer;
+  width: 100%;
+  height: auto;
+  line-height: auto;
+  white-space: normal;
+  word-wrap: break-word;
+  box-shadow: #2cff37 0px 0px 15px 0px;
+}
+
+.card_cart--body {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+.card_imgCart {
+  position: relative;
+  height: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  object-fit: cover;
+  overflow: hidden;
+  border-bottom: solid black 3px;
+  border-bottom-left-radius: 10%;
+  border-bottom-right-radius: 10%;
+  background: rgb(179, 204, 246);
+}
+
+.card_imgCart img {
+  font-size: 0.5rem;
+  width: 18vw;
+  height: 9vw;
+  border: solid rgb(3, 11, 125) 4px;
+}
+.card_imgCart--overlay{
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.card_imgCart--overlay b{
+  font-size: 4.7vw;
+  top: -6px;
+  left: 2px;
+  position: relative;
+  color: rgb(255, 0, 119);
+}
+
+.card_containCart {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  height: 100%;
+  width: 100%;
+}	
+
+.card-footer--cart {
+  position: relative;
+  bottom: 0;
+  border: solid red 1px;
+  height: 5vh;
+}
+
 /*BUTTONS BLOCK*/
 .btnUpdate {
   background-color: transparent;
@@ -1138,100 +1409,310 @@
   right: 0;
   top: 0;
   margin-top: 3.5vh;
-  width: 3rem;
+  width: 3.5rem;
+}
+
+.btnUpdate:hover{
+  background-color: transparent;
+  color: black;
 }
 
 .btnUpdate a {
-  position: relative;
+  width: 100%;
+  height: 100%;
+  position: absolute;
   color: black;
   font-size: 1.375rem;
   z-index: 2;
+  top: 0;
   padding: 8px;
-  right: 1rem;
+  right: 0;
+  transition: all ease-in-out 500ms;
 }
 
 .btnUpdate a:hover {
   background-color: rgb(188, 255, 220);
   cursor: pointer;
   color: green;
-  padding: 8px 10px;
   box-shadow: green 0 1px 5px 0;
 }
 
-.btnView{
+.btnView {
   background-color: transparent;
   position: absolute;
   display: block;
   z-index: 1;
-  right:  0;
+  right: 0;
   top: 0;
   margin-top: 3.5vh;
-  width: 3rem;
+  width: 3.5rem;
+}
+
+.btnView:hover{
+  background-color: transparent;
+  color: black;
 }
 
 .btnView a {
-  position: relative;
+  width: 100%;
+  height: 100%;
+  position: absolute;
   color: black;
   font-size: 1.375rem;
   z-index: 2;
+  top: 0;
   padding: 8px;
-  right: 1rem;
+  right: 0;
+  transition: all ease-in-out 500ms;
 }
 
 .btnView a:hover {
   background-color: rgb(188, 255, 220);
   cursor: pointer;
   color: green;
-  padding: 8px 10px;
   box-shadow: green 0 1px 5px 0;
 }
 
-.btnAddCart{
-  background-color: transparent;
+.btnViewCart{
+  background-color: rgb(252, 252, 171);
+  position: absolute;
+  z-index: 1;
+  right: 0;
+  bottom: 4px;
+  height: 2rem;
+  width: 2rem;
+}
+
+.btnViewCart:hover{
+  background-color: rgb(230, 149, 255);
+  color: black;
+}
+
+.btnViewCart a {
+  width: 100%;
+  height: 100%;
   position: absolute;
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 1;
+  color: black;
+  font-size: 1.375rem;
+  z-index: 2;
+  top: 0;
+  padding: 8px;
   right: 0;
-  bottom: 0;
-  width: 3rem;
+  transition: all ease-in-out 500ms;
 }
 
-.btnAddCart i {
-  width: 3rem;
-  position: absolute;
+.btnViewCart a:hover {
+  background-color: rgb(225, 188, 255);
   cursor: pointer;
+  color: rgb(81, 2, 92);
+  
+  box-shadow: rgb(253, 70, 247) 0 1px 5px 0;
+}
+
+.btnAddProduct{
+  position: absolute;
+  font-size: 1.5rem;
+  z-index: 5;
+  width: 20vw;
+  color: black;
+  background-color: rgb(92, 236, 130);
+  box-shadow: rgb(0, 0, 0) 1px 1px 5px 0px;
+  cursor: pointer;
+}
+
+.btnAddProduct:hover{
+  color: green;
+  background-color: rgb(196, 255, 247);
+  box-shadow: rgb(0, 249, 124) 1px 1px 5px 0px;
+  cursor: pointer;
+}
+
+.btnAccessCart {
+  border: solid blue 2px;
+  background-color: transparent;
+  position: absolute;
+  display: flex;
+  align-self: center;
+  justify-self: center;
+  font-size: 1.3rem;
+  right: 0;
+  z-index: 5;
+  width: fit-content;
   color: red;
   background-color: rgb(255, 196, 196);
   box-shadow: rgb(249, 0, 0) 1px 1px 5px 0px;
+  cursor: pointer;
 }
 
-.btnAdd {
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-  width: 15vw;
-  background-color: rgb(192, 254, 222);
-  box-shadow: rgb(0, 255, 72) 1px 1px 5px 0px;
-}
-
-.btnAdd:hover {
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-  width: 15vw;
-  background-color: rgb(0, 255, 34);
-  box-shadow: rgb(3, 109, 24) 1px 1px 5px 0px;
-}
-
-.btnAdd i{
-  color: rgb(95, 64, 251);
-  font-size: 2rem;
-  width: fit-content;
+.btnExitCart{
   width: 100%;
+  height: 50%;
   position: relative;
+  padding-bottom: 3px;
+  background: rgb(21, 3, 123);
+  border: solid rgb(14, 1, 114) 2px;
+  border-top-left-radius: 20px;
+  border-bottom-right-radius: 20px;
+  color: #ffffff;
+  font-family: "Sinami", sans-serif;
+  font-size: 1.875rem;
+  padding-top: 10px !important;
+  transition: all 500ms ease;
+  cursor: pointer;
 }
+
+.btnExitCart:focus,.btnExitCart:hover{
+  background: rgb(21, 3, 123);
+  border: solid rgb(14, 1, 114) 2px;
+  color: rgb(242, 255, 0);
+  box-shadow: rgb(72, 0, 255) 1px 1px 5px 0px;
+}
+
+.container__clearBtn{
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: transparent;
+  width: 100%;
+  height: 10vh;
+}
+
+.btnCleanCart{
+  width: 50%;
+  height: 5vh;
+  position: relative;
+  padding-bottom: 3px;
+  background: rgb(255, 0, 0);
+  border: solid rgb(114, 1, 1) 2px;
+  border-radius: 20px;
+  color: #ffffff;
+  font-family: "Sinami", sans-serif;
+  font-size: 1.875rem;
+  transition: all 500ms ease;
+  cursor: pointer;
+}
+
+.btnCleanCart:focus,.btnCleanCart:hover{
+  background: rgb(255, 0, 0);
+  border: solid rgb(255, 0, 0) 2px;
+  color: rgb(0, 0, 0);
+  box-shadow: rgb(0, 0, 0) 1px 1px 5px 0px;
+}
+
+.btnAddtoCart {
+  background-color: transparent;
+  position: absolute;
+  display: flex;
+  align-self: center;
+  justify-self: center;
+  font-size: 1.3rem;
+  right: 3px;
+  z-index: 5;
+  width: fit-content;
+  color: red;
+  background-color: rgb(255, 196, 196);
+  box-shadow: rgb(249, 0, 0) 1px 1px 5px 0px;
+  cursor: pointer;
+}
+
+.btnAddtoCart:hover {
+  color: green;
+  background-color: rgb(196, 255, 247);
+  box-shadow: rgb(0, 249, 124) 1px 1px 5px 0px;
+  cursor: pointer;
+}
+
+.btnAddtoCart:focus {
+  background-color: rgb(228, 255, 196);
+}
+
+.btnAddNewCart,.btnAddNewCart:focus{
+  font-family: "Sinami", sans-serif;
+  font-size: 2.8vh;
+  width: 90%;
+  border-radius: 15px;
+  color: rgb(4, 167, 4);
+  background-color: transparent;
+  box-shadow: #9ce3fa 0px 0px 10px 0px;
+  border: none;
+  border-bottom: solid red 2px;
+  height: fit-content;
+  z-index: 1;
+}
+
+.btnAddNewCart:hover {
+  box-shadow: #00bfff 0px 0px 10px 0px;
+  cursor: pointer;
+  color: #02e30e;
+}
+
+.btnRemoveCart {
+  background-color: transparent;
+  position: absolute;
+  justify-content: center;
+  font-size: 2vw;
+  z-index: 5;
+  left: 4px;
+ bottom: 4px;
+  width: fit-content;
+  height: fit-content;
+  padding: 8px;
+  color: red;
+  border: none;
+  background-color: rgb(255, 196, 196);
+  box-shadow: rgb(249, 0, 0) 1px 1px 5px 0px;
+  cursor: pointer;
+}
+
+.btnRemoveCart:hover,.btnRemoveCart:focus {
+  background-color: red;
+  box-shadow: #e46464 0px 0px 10px 0px;
+  cursor: pointer;
+  color: #000000;
+}
+
+.btnUpdate--min,.btnUpdate--min:focus {
+  background-color: transparent;
+  color: black;
+  position: absolute;
+  display: block;
+  z-index: 1;
+  right: 0;
+  bottom: 0;
+  border-radius: 50px;
+}
+
+.btnUpdate--min:hover{
+  background-color: transparent;
+  color: orange;
+  background-color: rgb(249, 255, 203);
+  box-shadow: #ff9900 0px 0px 10px 0px;
+}
+
+.btnUpdate--max,.btnUpdate--max:focus {
+  background-color: transparent;
+  color: black;
+  position: absolute;
+  display: block;
+  z-index: 1;
+  right: 0;
+  top: 0;
+  margin-top: 3.5vh;
+  border-radius: 50px;
+}
+
+.btnUpdate--max:hover{
+  background-color: transparent;
+  color: green;
+  background-color: rgb(165, 241, 188);
+  box-shadow: #37ff00 0px 0px 10px 0px;
+}
+
+
 
 /*VALIDATE BLOCK*/
 #validate {
@@ -1514,7 +1995,7 @@
     left: 0;
   }
 
-  .inactiveAdd{
+  .inactiveAdd {
     display: none;
     position: absolute;
   }
@@ -1528,6 +2009,11 @@
     grid-column-gap: 5px;
     margin-top: 10px;
   }
+  .container__cart {
+    grid-template-columns: repeat(auto-fit,  minmax(10rem,27rem));
+    grid-gap: 5px;
+    width: 95%;
+  }
 
   /*DEVICE CEL HEAD BLOCK*/
   .head__h2 {
@@ -1536,24 +2022,24 @@
   }
 
   /*DEVICE CEL NAV BLOCK*/
-  .nav__container--a i {
+  .div__container--focusBtn i {
     position: relative;
     top: 1.7vh;
   }
 
-  .nav__container--a b {
+  .div__container--focusBtn b {
     display: none;
   }
 
   /*DEVICE CEL ASIDE BLOCK*/
-  .asideAdd__dropdown{
+  .asideSD__dropdown {
     display: flex;
     align-items: center;
-    justify-content:center;
+    justify-content: center;
     flex-direction: column;
   }
 
-  .aside__dropdown{
+  .asideMLD__dropdown {
     display: none;
   }
 
@@ -1570,6 +2056,24 @@
     margin: 4px;
   }
 
+  /*DEVICE CEL CART BLOCK*/
+  .container__cart__card{
+    height: 17vh;
+    width: auto;
+    margin: 0;
+    z-index: 1;
+    background-color: rgb(255, 255, 255);
+  }
+
+  .cart-title--filled {
+    font-size: 3vw;
+  }
+
+  .card_imgCart--overlay b{
+    top: -4px;
+    left: 2px;
+  }
+
   /*DEVICE CEL CHAT BLOCK*/
   .chat__tittle u {
     font-size: 5vh;
@@ -1579,6 +2083,15 @@
 /*CSS DEVICE > 992px (62rem) (base 16px=1rem) (LAP)*/
 
 @media only screen and (min-width: 69rem) {
+  /*ALL*/
+  .quantityP {
+    font-size:1.5rem;
+    color: rgb(1, 1, 64);
+    border-radius: 5px;
+    background-color: transparent;
+    box-shadow: #482cff 0px 0px 15px 0px;
+  }
+  
   /*DEVICE LAP MAIN BLOCK*/
   .container__grid {
     grid-template-columns: repeat(auto-fit, minmax(12.5rem, 1fr));
@@ -1586,36 +2099,43 @@
     width: 95%;
   }
 
+  .container__cart {
+    grid-template-columns: repeat(auto-fit, 1fr);
+    grid-gap: 5px;
+    width: 95%;
+  }
+
+
   /*DEVICE LAP NAV BLOCK*/
-  .nav__container--a a {
+  .div__container--focusBtn a {
     width: 7.5vw;
     align-items: start;
     white-space: nowrap;
     text-overflow: ellipsis;
   }
 
-  .nav__container--a i {
+  .div__container--focusBtn i {
     top: 1vh;
   }
 
-  .nav__container--a:hover b {
+  .div__container--focusBtn:hover b {
     font-size: 1rem;
   }
 
-  .nav__container--a:hover i {
+  .div__container--focusBtn:hover i {
     font-size: 1.6rem;
   }
 
   /*DEVICE LAP ASIDE BLOCK*/
-  .aside__menu--addProduct button {
+  .asideMLD__menu--addProduct button {
     font-size: 4vh;
   }
 
-  .aside__menu--options h6 {
+  .asideMLD__menu--options h6 {
     font-size: 3vh;
   }
 
-  .aside__menu--options i {
+  .asideMLD__menu--options i {
     display: inline-flex;
     align-self: start;
     font-size: 1.2em;
@@ -1625,31 +2145,55 @@
     margin-left: 3px;
   }
 
-  .aside__menu--options b {
-  display: inline-flex;
-  align-self: start;
-  font-size: 1.2em;
-  position: relative;
-  top: 0;
-  margin-left: 3px;
-  width: fit-content;
+  .asideMLD__menu--options b {
+    display: inline-flex;
+    align-self: start;
+    font-size: 1.2em;
+    position: relative;
+    top: 0;
+    margin-left: 3px;
+    width: fit-content;
   }
 
-  .aside__menu--options a{
+  .asideMLD__menu--options a {
     color: black;
-  display: block;
-  align-items: center;
-  justify-content: start;
-  font-family: "Sinami", sans-serif;
-  font-size: 1rem;
-  width: 85%;
-  padding: 10px 0;
-  margin: 10px;
-  text-overflow: ellipsis;
+    display: block;
+    align-items: center;
+    justify-content: start;
+    font-family: "Sinami", sans-serif;
+    font-size: 1rem;
+    width: 85%;
+    padding: 10px 0;
+    margin: 10px;
+    text-overflow: ellipsis;
   }
-  
-  /*DEVIDE LAP CARD BLOCK*/
 
+  /*DEVICE LAP CART BLOCK*/
+    .container__cart__card{
+      height: 27vh;
+      width: auto;
+      margin: 0;
+      z-index: 1;
+      background-color: rgb(255, 255, 255);
+    }
+
+    .cart-title--filled {
+      font-size: 1.5vw;
+    }
+
+    .card_imgCart--overlay b{
+      top: -11px;
+      left: 4px;
+    }
+
+    .btnViewCart {
+      height: 3rem ;
+      width: 3rem;
+    }
+
+    .btnViewCart a{
+      font-size: 2rem;
+    }
 
   /*DEVICE LAP CHAT BLOCK*/
   .chat__tittle u {
@@ -1686,10 +2230,17 @@
   justify-content: center;
 }
 
-.input-field {
-  margin: 7px;
+.static__newCart{
+  display: flex;
+  align-items: center;
+  justify-content: end;
+  height: 9vh;
+  margin: 0;
 }
 
-.input-field select{
+.swal2-select{
+  display: flex;
+  align-self: center;
+  justify-self: center;
   width: fit-content;
 }

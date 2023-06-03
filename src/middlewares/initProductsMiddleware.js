@@ -12,7 +12,9 @@ const middlewareInitProducts = async (req, res, next) => {
     req.params.pid
       ? (res.locals.resProducts = resProducts)
       : (res.locals.resProducts = resProducts.payload);
-    next();
+    /*PRUEBA SIN PRODUCTOS*/
+    //res.locals.resProducts=[];
+      next();
   } catch (error) {
     next(error);
   }

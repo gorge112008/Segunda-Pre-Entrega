@@ -1,14 +1,14 @@
 <div class="main__container--side col s2"></div>
 <div class="main__container__dinamic col s9">
   <div class="dinamic row">
-    <div class="dinamic__container--addProduct inactiveAdd">
-      <div class="col s12 m5 l4">
+    <div class="dinamic__container--addProduct inactiveAdd"> <!--CAMBIAR AQUIII A inactiveAdd-->
+      <div class="col s12 m5 l5">
         <div class="dinamic__tittle row">
           <h3 class="dinamic__tittle--h3">
-            Ingresa un producto
+            View Product
           </h3>
         </div>
-        <div class="form row">
+        <div class="form onlyView row">
           <form method="POST" action="#" name="form" class="col s12">
             <div class="form__contain row">
               <div class="input-field">
@@ -54,35 +54,34 @@
                 <label for="stock">Stock</label>
               </div>
             </div>
-            <div class="form__contain row">
+            <div class="form__contain hidden row">
               <div class="input-field col s12">
                 <label for="thumbnail">Thumbnail</label>
                 <input id="thumbnail" type="text" class="validate" />
               </div>
             </div>
-            <input
-              type="submit"
-              id="btnSave"
-              class="form--btnSave col s5"
-              value="Save"
-            />
-            <label class="col s2"></label>
-            <input
-              type="button"
-              id="btnCancel"
-              class="form--btnCancel col s5"
-              value="Cancel"
-            />
+            <div class="form__contain row">
+              <div class="input-field col s12">
+                <label for="status">Status</label>
+                <input id="status" type="text" class="validate" />
+              </div>
+            </div>
           </form>
         </div>
+        <input
+              type="button"
+              id="btnClose"
+              class="form--btnClose col s12"
+              value="Close"
+            />
       </div>
     </div>
-    <div class="dinamic__container--listProduct col m12">
+    <div class="dinamic__container--listProduct col s12 m12"> <!--CAMBIAR AQUIII M12-->
       <div class="row noMargin">
-        <div class="dinav__container col s12">
+        <div class="dinav__container--filters col s12">
           <nav class="dinav__container--order col s4">
             <div class="row noMargin">
-              <label for="ordenamiento" class="dinav__order--label">Ordenar por:
+              <label class="dinav__order--label">Ordenar por:
               </label>
             </div>
             <div class="dinav__order">
@@ -100,10 +99,10 @@
               <i class="arrowSelect"></i>
             </div>
           </nav>
-          <nav class="dinav__container--filter col s8">
+          <nav class="dinav__container--option col s8">
             <div class="dinav__filter">
               <div class="row noMargin">
-                <label for="filtros" class="dinav__filter--label">Filtrar por:
+                <label class="dinav__filter--label">Filtrar por:
                 </label>
               </div>
               <div class="row noMargin">
@@ -149,7 +148,7 @@
         </div>
       </div>
       <div class="row noMargin">
-        <nav class="dinav__container--pages">
+        <nav class="dinav__container--pages nav">
           <button id="page__btnIzq" class="dinav__pages--izq"><i
               class="fa-solid fa-arrow-left"
             ></i></button>
