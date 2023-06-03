@@ -130,15 +130,7 @@ async function crearHtml() {
           <div class="card-body--empty">
             <b class="card-text--empty">Not Products Found</b>
             <p class="card-text--empty">You have not added any product with this filters</p>
-            <p class="card-text--empty">Try adding a product first</p>
-          </div>
-          <div class="card__footer--empty">
-            <button
-              type="button"
-              class="btn btn-outline-warning btn-sm btnAdd"
-              id="btnAdd"
-            > <i class="fas fa-edit"></i>
-            </button>
+            <p class="card-text--empty">Please, select other filters</p>
           </div>
         </div>
       </div>`;

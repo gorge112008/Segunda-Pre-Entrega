@@ -42,7 +42,6 @@ routerProducts.put("/products/:pid", async (req, res) => {
   try {
     const pid = req.params.pid;
     const body = req.body;
-    console.log("LLEGA"+pid+"STOCK"+JSON.stringify(body));
     let response = await ProductFM.updateProduct(pid, body);
     res.status(200).send(response);
   } catch (err) {

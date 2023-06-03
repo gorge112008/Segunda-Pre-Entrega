@@ -338,6 +338,31 @@ async function updateData(idCart, idProduct, data) {
   }
 }
 
+async function updateOneProductbyID(idProduct, data) {
+  try {
+    let response = await fetch(`${UrlP}/${idProduct}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Credentials": true,
+      mode: "cors",
+      body: JSON.stringify(data),
+    });
+    if (response.status == 400) {
+      console.warn("Error en el cliente");
+      return;
+    } else if (response.status == 200) {
+      datos = await response.json();
+      msj = datos.msj;
+      return msj;
+    }
+  } catch {
+    console.log(Error);
+  }
+}
+
 async function deletedProductCart(idCart, idProduct) {
   try {
     let response = await fetch(`${UrlC}/${idCart}/products/${idProduct}`, {
@@ -421,11 +446,13 @@ async function selectBtnCartProducts() {
             showCancelButton: false,
             confirmButtonText: "YES",
             denyButtonText: "NOT",
-          }).then((result) => {
+          }).then(async (result) => {
             if (result.isConfirmed) {
               const idCart = storeCarts[0]._id;
               const selectValue = Swal.getPopup().querySelector("select").value;
               const quantity = { stock: selectValue };
+              const newStock = pStock - +selectValue;
+              updateOneProductbyID(pId, { stock: newStock });
               updateData(idCart, pId, quantity)
                 .then(async (data) => {
                   Swal.fire({
@@ -438,6 +465,7 @@ async function selectBtnCartProducts() {
                     icon: "success",
                     confirmButtonText: "Accept",
                   });
+                  socket.emit("updateproduct", "Productos Actualizados");
                   socket.emit(
                     "addingCart",
                     `Se ha añadido ${selectValue} ${productoSelect[0].tittle} al carrito.`
@@ -461,9 +489,9 @@ async function selectBtnCartProducts() {
               ? (selectProduct = listProduct)
               : (selectProduct = selectProduct);
           }
-          const cStock = selectProduct.quantity;
+          const quantity = selectProduct.quantity;
           const pId = btnUpd.id;
-          const optStock = await crearListStock(cStock);
+          const optStock = await crearListStock(quantity);
           Swal.fire({
             html: `How many ${selectProduct.product.tittle} do you want to delete to the cart?`,
             input: "select",
@@ -472,11 +500,14 @@ async function selectBtnCartProducts() {
             showCancelButton: false,
             confirmButtonText: "YES",
             denyButtonText: "NOT",
-          }).then((result) => {
+          }).then(async (result) => {
             if (result.isConfirmed) {
               const idCart = storeCarts[0]._id;
               const selectValue = Swal.getPopup().querySelector("select").value;
               const quantity = { quantity: selectValue };
+              const product = await getDataOneProductbyID(pId);
+              const newStock = product[0].stock + +selectValue;
+              updateOneProductbyID(pId, { stock: newStock });
               updateData(idCart, pId, quantity)
                 .then(async (data) => {
                   Swal.fire({
@@ -489,6 +520,7 @@ async function selectBtnCartProducts() {
                     icon: "success",
                     confirmButtonText: "Accept",
                   });
+                  socket.emit("updateproduct", "Productos Actualizados");
                   socket.emit(
                     "deletingCart",
                     `Se ha eliminado ${selectValue} ${selectProduct.product.tittle} del carrito.`
@@ -504,6 +536,15 @@ async function selectBtnCartProducts() {
       btnAllDel.forEach((btnDel) => {
         btnDel.addEventListener("click", async (e) => {
           e.preventDefault();
+          let Product;
+          let products = storeCarts[0].products[0].payload;
+          for (const listProduct of products) {
+            let product = listProduct.product;
+            product._id == btnDel.id
+              ? (Product = listProduct)
+              : (Product = Product);
+          }
+          const quantity = Product.quantity;
           const productoSelect = await getDataOneProductbyID(btnDel.id);
           Swal.fire({
             html:
@@ -514,10 +555,12 @@ async function selectBtnCartProducts() {
             showCancelButton: false,
             confirmButtonText: "YES",
             denyButtonText: "NOT",
-          }).then((result) => {
+          }).then(async (result) => {
             if (result.isConfirmed) {
               const idCart = storeCarts[0]._id;
               const idProduct = btnDel.id;
+              const newStock = productoSelect[0].stock + +quantity;
+              updateOneProductbyID(btnDel.id, { stock: newStock });
               deletedProductCart(idCart, idProduct)
                 .then(async (data) => {
                   Swal.fire({
@@ -526,6 +569,7 @@ async function selectBtnCartProducts() {
                     icon: "success",
                     confirmButtonText: "Accept",
                   });
+                  socket.emit("updateproduct", "Productos Actualizados");
                   socket.emit(
                     "removeProduct",
                     `Producto ${productoSelect.tittle} Eliminado del Carrito`
