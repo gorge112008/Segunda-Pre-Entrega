@@ -34,12 +34,12 @@ async function initSocketServer(server) {
       io.emit("viewingProduct", id);
     });
     
-    socket.on("addingCart", async (msj) => {
-      io.emit("addingCart", msj);
+    socket.on("addingProductCart", async (msj) => {
+      io.emit("addingProductCart", msj);
     });
 
-    socket.on("deletingCart", async (msj) => {
-      io.emit("deletingCart", msj);
+    socket.on("deletingProductCart", async (msj) => {
+      io.emit("deletingProductCart", msj);
     });
 
     socket.on("removeProduct", async (msj) => {
@@ -56,6 +56,10 @@ async function initSocketServer(server) {
 
     socket.on("NewCart", async (msj) => {
       io.emit("NewCart", msj);
+    });
+
+    socket.on("transferCart", async (msj) => {
+      io.emit("transferCart", msj);
     });
 
     socket.on("exonerarStatus", async (msj) => {

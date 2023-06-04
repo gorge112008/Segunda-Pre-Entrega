@@ -1,7 +1,7 @@
 <div class="main__container--side col s2"></div>
 <div class="main__container__dinamic col s9">
   <div class="dinamic row">
-    <div class="dinamic__container--addProduct inactiveAdd"> <!--CAMBIAR AQUIII A inactiveAdd-->
+    <div class="dinamic__container--addProduct inactiveAdd">
       <div class="col s12 m5 l5">
         <div class="dinamic__tittle row">
           <h3 class="dinamic__tittle--h3">
@@ -68,15 +68,11 @@
             </div>
           </form>
         </div>
-        <input
-              type="button"
-              id="btnClose"
-              class="form--btnClose col s12"
-              value="Close"
-            />
+        <button type="button" class="btnViewClose col s12">Close View</button>
       </div>
+
     </div>
-    <div class="dinamic__container--listProduct col s12 m12"> <!--CAMBIAR AQUIII M12-->
+    <div class="dinamic__container--listProduct col s12 m12">
       <div class="row noMargin">
         <div class="dinav__container--filters col s12">
           <nav class="dinav__container--order col s4">
@@ -125,10 +121,7 @@
                     name="select"
                     class="dinav__order--select"
                   >
-                  <option
-                      class="dinav--option"
-                      value=""
-                    >All</option>
+                    <option class="dinav--option" value="">All</option>
                     <option
                       class="dinav--option"
                       value="success"
@@ -143,7 +136,11 @@
         </div>
         <div class="dinamic__container--grid row noMargin">
           <div class="container__grid col m12">
-            <!--dinamic content-->
+            <div class="loading">
+                <b>
+                  LOADING PRODUCTS...
+                </b>
+              </div>
           </div>
         </div>
       </div>

@@ -2,6 +2,7 @@
 
 /*******************************************************CONSTANTES/VARIABLES*************************************************************/
 /*ALL*/
+let RouteIndex="";
 const navHeader = document.querySelector(".header__nav"),
   navFilters = document.querySelector(".dinav__container--filters"),
   navPages = document.querySelector(".dinav__container--pages"),
@@ -38,22 +39,35 @@ function actionRoute() {
   const regex= /^\/[^/]+/;
   const routeName=route.match(regex);
     if (route == "/") {
+      RouteIndex="index";
       navHeader.classList.add("hidden");
       asideMLD.classList.add("hidden");
       asideSD.classList.add("hidden");
     }
+
+    if (routeName == "/home") {
+      RouteIndex="home";
+    }
+
     if (routeName == "/realtimeproducts") {
-      validID(route);
+      const single=validID(route);
+      single==1?RouteIndex="realTP/":RouteIndex="realTP";
       mldasideAddProduct.classList.remove("hidden");
       sdasideAddProduct.classList.remove("hidden");
     }
 
     if (routeName == "/products") {
-      validID(route);
+      const single=validID(route);
+      single==1?RouteIndex="productP/":RouteIndex="productP";
     }
 
     if (routeName == "/cart") {
-      validID(route);
+      const single=validID(route);
+      single==1?RouteIndex="cartP/":RouteIndex="cartP";
+    }
+
+    if (routeName == "/chat") {
+      RouteIndex="chat";
     }
   }
 
@@ -77,6 +91,9 @@ function validID(route){
       listProduct&&listProduct.classList.remove("m12");
       listProduct&&listProduct.classList.add("m7");
       btnReturn.classList.add("hidden");
+      return 1;
+    }else{
+      return 2;
     }
 }
 

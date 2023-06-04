@@ -116,30 +116,10 @@ routerCarts.put("/carts/:cid", async (req, res) => {
   try {
     const cid = req.params.cid;
     const reqProducts = req.body;
-    const newProducts = reqProducts.products;
-    let productsFind = [];
-    if (newProducts[0].payload) {
-      newProducts[0].payload.forEach((productItem) => {
-        if (productItem._id) {
-          let find = 0;
-          productsFind.forEach((findItem) => {
-            if (productItem._id == findItem.product) {
-              findItem.quantity++;
-              find = 1;
-            }
-          });
-          if (find == 0) {
-            productsFind.push({ product: productItem._id, quantity: 1 });
-          }
-        }
-      });
-      newProducts[0].payload = productsFind;
-      reqProducts.products = newProducts[0];
-      const response = await CartFM.updateCart(cid, reqProducts);
-      res.status(200).send(response);
-    } else {
-      res.status(400).send("Bad Request--> The cart is not valid");
-    }
+    let cart = await CartFM.getCartId(cid);
+    cart[0].products = [{ status: "sucess", payload: reqProducts }];
+    const response = await CartFM.updateCart(cid, cart[0]);
+    res.status(200).send(response);
   } catch (err) {
     res.status(500).json({ error: err });
   }

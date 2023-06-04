@@ -10,25 +10,17 @@ let Url = protocol + "//" + URLdomain + "/api/products";
 let opc = "static";
 let btnsDelete, btnAdd;
 let storeProducts = [],
-  resExo = [],
-  defaultStore = [];
+  resExo = [];
 let opciones;
 let dataPagination;
 let querySelect;
 let query = {};
 
-let pat,
-  acum = [];
-
-const containDinamic = document.querySelector(".main__container__dinamic"),
+const contain = document.querySelector(".container__grid"),
   tittleDinamic = document.querySelector(".dinamic__tittle--h3"),
   form = document.querySelector("form"),
   formInput = document.querySelectorAll(".input-field label"),
-  formCancel = document.querySelector(".form--btnCancel"),
-  contain = document.querySelector(".container__grid"),
-  asideButton = document.querySelector(".asideSD__dropdown--button");
-
-const navConteiner = document.querySelector(".dinav__container");
+  formCancel = document.querySelector(".form--btnCancel");
 
 const dinamicPages = document.querySelector(".dinav__pages--center"),
   selectPrevPage = document.getElementById("page__btnIzq"),
@@ -60,12 +52,6 @@ class NewProduct {
     this.thumbnail = validarUrl()
       ? inputThumbnail.value
       : "https://energiaypotencia.com/img/imagen-no-disponible.jpg";
-  }
-}
-
-class NewCart {
-  constructor(data) {
-    this.products = data;
   }
 }
 
@@ -108,9 +94,10 @@ async function crearHtml() {
   } else {
     contain.innerHTML = "";
     let html;
-    let error;
+    let error, empty;
     for (const product of storeProducts) {
-      product.status == "error" && opc == "static"
+      (product.stock)==0?empty="empty":empty="";
+      product.status == "error" && opc == "static" && product.stock!=0
         ? (error = "error")
         : (error = "");
       html = `<div class="container__grid__card ${error}">
@@ -148,6 +135,9 @@ async function crearHtml() {
               <b class="card-text--code">
                 Code: <b class="code">${product.code}</b>
               </b>
+              <b class="card-text--stock ${empty}">
+                Stock: <b> ${product.stock}</b>
+              </b>
             </div>
           </div>
         </div>`;
@@ -168,7 +158,7 @@ function validarUrl() {
 }
 
 async function selectAction() {
-  if (storeProducts.length == 1) {
+  if (RouteIndex==="realTP/") {
     categoryOption.value = storeProducts[0].category;
     tittleDinamic.innerHTML = "Update Product";
     inputTittle.value = storeProducts[0].tittle;
@@ -181,7 +171,6 @@ async function selectAction() {
       label.focus();
     });
     if (opc == "static") {
-      //let pru=getDatabyID
       updateData(storeProducts[0]._id, { status: "error" });
       socket.emit(
         "updatingProduct",
@@ -217,9 +206,6 @@ async function selectDelete() {
             if (result.isConfirmed) {
               deleteData(selectBtn.id)
                 .then(async (data) => {
-                  setTimeout(() => {
-                    window.location.href = "../realtimeproducts";
-                  }, 1000),
                   Swal.fire({
                     title: "Product Removed Successfully!!!",
                     text:
@@ -229,9 +215,10 @@ async function selectDelete() {
                       " --> " +
                       productoSelect[0].tittle,
                     icon: "success",
-                    showConfirmButton: false,
+                    showConfirmButton: true,
                     allowOutsideClick: false,
                   });
+                  filters();
                   socket.emit("deleteproduct", "Producto Eliminado");
                 })
                 .catch((error) => console.log("Error:" + error));
@@ -286,6 +273,8 @@ async function filters() {
         query = Object.assign(valores.query, querys);
       }
     }
+    storeProducts.length==1?valores.page=(valores.page)-1:valores.page=valores.page;
+    valores.page==0?valores.page=1:valores.page=valores.page;
     let Params = {
       limit: valores.limit,
       page: valores.page,
@@ -341,7 +330,6 @@ function saveUpdate(data) {
 async function validarStatus(idExo) {
   let getProducts = await getData();
   for (const product of getProducts) {
-    console.log(JSON.stringify(product));
     if (idExo.includes(product._id)) continue;
     if (product.status == "error") {
       await updateData(product._id, { status: "success" });
@@ -424,7 +412,6 @@ async function getData(params) {
     const data = await response.json();
     dataPagination = data;
     const newData = data.payload;
-    const cart = new NewCart(data);
     return newData;
   } catch {
     console.log(Error);
@@ -509,14 +496,14 @@ socket.on("callProducts", async (getProducts) => {
   Object.assign(storeProducts, getProducts); //ASIGNAR PRODUCTOS AL STORE
   if (storeProducts.length == 1) {
     sessionStorage.setItem("productUpdate", storeProducts[0]._id);
-    if (window.location.pathname == "/realtimeproducts") {
+    if (RouteIndex==="realTP") {
       storeProducts = await getData();
       filters();
       validateProducts.click();
       ;
     }
   }else if (storeProducts.length != 1) {
-    if ((window.location.pathname).startsWith('/realtimeproducts/') ) {
+    if (RouteIndex==="realTP/" ) {
       let idProduct=sessionStorage.getItem("productUpdate");
       storeProducts = await getDatabyID(idProduct);
       filters();
@@ -530,7 +517,7 @@ socket.on("callProducts", async (getProducts) => {
 
 socket.on("f5NewProduct", async (addMsj) => {
   console.log(addMsj);
-  if (storeProducts.length != 1) {
+  if (RouteIndex==="realTP") {
     storeProducts = await getData();
     filters();
   }
@@ -538,7 +525,7 @@ socket.on("f5NewProduct", async (addMsj) => {
 
 socket.on("f5deleteProduct", async (deletedMsj) => {
   console.log(deletedMsj);
-  if (storeProducts.length != 1) {
+  if (RouteIndex==="realTP") {
     storeProducts = await getData();
     filters();
   } 
@@ -548,7 +535,7 @@ socket.on("f5updateProduct", async (updatedMsj) => {
   console.log(updatedMsj);
   const btnDel = document.querySelector(".card__btnDelete");
   btnDel.classList.remove("hidden");
-  if (storeProducts.length != 1) {
+  if (RouteIndex==="realTP") {
     storeProducts = await getData({});
     filters();
     const btnDel = document.querySelector(".card__btnDelete");
@@ -558,7 +545,7 @@ socket.on("f5updateProduct", async (updatedMsj) => {
 
 socket.on("updatingProduct", async (updatingMsj) => {
   console.log(updatingMsj);
-  if (storeProducts.length == 1) {
+  if (RouteIndex==="realTP/") {
     validateProducts.classList.add("hidden");
     let productUpdate = await getDatabyID(storeProducts[0]._id);
     storeProducts = productUpdate;
@@ -570,7 +557,7 @@ socket.on("updatingProduct", async (updatingMsj) => {
 });
 
 socket.on("viewingProduct", async (id) => {
-  if (storeProducts.length == 1) {
+  if (RouteIndex==="realTP/") {
     validateProducts.classList.add("hidden");
     let productView = await getDatabyID(storeProducts[0]._id);
     storeProducts = productView;
@@ -593,7 +580,7 @@ socket.on("viewingProduct", async (id) => {
 
 socket.on("ordenExonerar", async (msj) => {
   console.log(msj);
-  if (storeProducts.length == 1) {
+  if (RouteIndex==="realTP/") {
     socket.emit("responseExonerar", storeProducts[0]._id);
     //console.log("Response de producto a exonerar emitido");
   }
@@ -607,7 +594,7 @@ socket.on("idExonerar", async (id) => {
 
 socket.on("actualizar", async (products) => {
   console.log("Validacion Exitosa");
-  if (storeProducts.length != 1) {
+  if (RouteIndex==="realTP") {
     storeProducts = products;
     filters();
   }
@@ -655,7 +642,7 @@ validateProducts.onclick = async () => {
 };
 
 formCancel.onclick = () => {
-  if (storeProducts.length == 1) {
+  if (RouteIndex==="realTP/") {
     updateData(storeProducts[0]._id, { status: "success" });
     opc = "static";
     socket.emit("updateproduct", "Productos Actualizados");
@@ -672,7 +659,8 @@ inputThumbnail.addEventListener("click", () => {
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
   const product = new NewProduct();
-  if (storeProducts.length == 1) {
+  console.log("MUESTRAME"+RouteIndex);
+  if (RouteIndex==="realTP/") {
     updateData(storeProducts[0]._id, product)
       .then((data) => {
         if (data == null) {
@@ -689,7 +677,7 @@ form.addEventListener("submit", async (e) => {
         }
       })
       .catch((error) => console.log("Error:" + error));
-  } else {
+  } else if(RouteIndex==="realTP"){
     postData(product)
       .then(async (data) => {
         if (data == null) {
@@ -703,7 +691,7 @@ form.addEventListener("submit", async (e) => {
           inputCode.focus();
         } else {
           storeProducts = await getData();
-          selectDelete();
+          filters();
           Swal.fire({
             title: "Product Added Successfully!",
             text: "Registered Product: " + data.tittle,

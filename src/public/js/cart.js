@@ -5,7 +5,7 @@ let URLPathName = window.location.pathname,
 let UrlP = protocol + "//" + URLdomain + "/api/products";
 let UrlC = protocol + "//" + URLdomain + "/api/carts";
 let opc = "static";
-let btnRemove, btnCloseView, btnRemoveCart;
+let btnRemove, btnCloseView, btnRemoveCart, btnTransferCart;
 let storeCarts = [],
   storeProducts = [],
   resExo = [],
@@ -13,7 +13,8 @@ let storeCarts = [],
 let opciones;
 let dataProducts = [];
 let querySelect;
-let query = {};
+let query = {},
+  ListCarts = [];
 
 const staticContain = document.querySelector(".static__container--cart"),
   titleCart = document.querySelector(".static__tittleCart"),
@@ -27,6 +28,12 @@ class NewCart {
   }
 }
 
+class NewDataCart {
+  constructor() {
+    this.payload = [];
+  }
+}
+
 /*****************************************************************FUNCIONES*************************************************************/
 async function crearListStock(stock) {
   let optListStock = [];
@@ -36,14 +43,35 @@ async function crearListStock(stock) {
   return optListStock;
 }
 
+async function crearListCarts(idCart) {
+  let carts = await getDataCarts();
+  let optListCarts = [];
+  ListCarts = [];
+  for (let i = 1; i <= carts.length; i++) {
+    if (idCart != carts[i - 1]._id) {
+      optListCarts[i] = `Cart (${i.toString()}): ${carts[i - 1]._id}`;
+      ListCarts.push(carts[i - 1]._id);
+    } else {
+      ListCarts.push(carts[i - 1]._id);
+    }
+  }
+  return optListCarts;
+}
+
 async function crearHTMLCarts() {
   if (storeCarts.length == 0) {
-    Swal.fire({
-      title: "NO CARTS FOUND",
-      text: "No carts found, create a New Cart",
-      icon: "warning",
-      confirmButtonText: "Accept",
-    });
+    titleCart.innerHTML = `<h5>Carts (${storeCarts.length}):</h5>`;
+    containCart.innerHTML = `<div class="container__empty__card">
+            <div class="card">
+              <div class="card-item--empty">
+                <i class="fa-solid fa-cart-plus"></i></div>
+              <div class="card-body--empty">
+                <b class="card-text--empty">No Carts Found</b>
+                <p class="card-text--empty">You have not created any cart</p>
+                <p class="card-text--empty">Add first cart now</p>
+              </div>
+            </div>
+          </div>`;
   } else {
     titleCart.innerHTML = "";
     containCart.innerHTML = "";
@@ -53,8 +81,10 @@ async function crearHTMLCarts() {
       let countQuantity = 0;
       let cartDetails = cart.products;
       let productsCart = cartDetails[0].payload;
-      if (productsCart == []) {
-        console.log("CART " + int + " EMPTY");
+      const unique =
+        storeCarts.length == 1 || productsCart.length == [] ? "unique" : "";
+      if (productsCart.length == 0) {
+        //console.log("CART " + (int+1) + " EMPTY");
       } else {
         for (const product of productsCart) {
           if (product.quantity) {
@@ -64,55 +94,62 @@ async function crearHTMLCarts() {
       }
       int++;
       html = `<div class="container__cart__card">
-    <div class="card col s12">
-      <div class="card_cart--header row noMargin">
-        <div class="cart-header--filled col s12">
-          <h5 class="cart-title--filled">ID CART:
-            ${cart._id}	
-          </h5>
-        </div>
-      </div>
-      <div class="card_cart--body row noMargin">
-        <div class="card_imgCart col s3 m3 l3">
-          <img
-            src="https://w7.pngwing.com/pngs/225/984/png-transparent-computer-icons-shopping-cart-encapsulated-postscript-shopping-cart-angle-black-shopping.png"
-            class="img-fluid rounded-start"
-            alt="..."
-          />
-          <div class="card_imgCart--overlay">
-            <b>${int + 1}</b>
-          </div>
-        </div>
-        <button
-        type="button"
-        class="btn fas fa-trash-alt btnRemoveCart"
-        id=${cart._id}
-      >
-    </button>
-        <div class="card_containCart col s8 m8 l8">
-          <div class="loaded">
-          <b>STATUS CARD:<u class="aquamarine">***${cartDetails[0].status.toUpperCase()}***</u></b>
-          <b>QUANTITY OF PRODUCTS: <b class="quantityP">${countQuantity}</b></b>
-          </div>
-          <button
+          <div class="card col s12">
+            <div class="card_cart--header row noMargin">
+              <div class="cart-header--filled col s12">
+                <h5 class="cart-title--filled">ID CART: ${cart._id}</h5>
+              </div>
+            </div>
+            <div class="card_cart--body row noMargin">
+              <div class="card_imgCart col s3 m3 l3">
+                <img
+                  src="https://w7.pngwing.com/pngs/225/984/png-transparent-computer-icons-shopping-cart-encapsulated-postscript-shopping-cart-angle-black-shopping.png"
+                  class="img-fluid rounded-start"
+                  alt="..."
+                />
+                <div class="card_imgCart--overlay">
+                  <b>${int + 1}</b>
+                </div>
+              </div>
+              <button
                 type="button"
-                class="btn btn-outline-warning btn-sm btnViewCart"
-              >
-                <a
-                  class="fa-regular fa-eye"
-                  href="/cart/${cart._id}"
-                ></a>
-            </button>
+                class="btn fas fa-trash-alt btnRemoveCart"
+                id=${cart._id}
+              ></button>
+              <button
+                type="button"
+                class="btn fa-solid fa-arrow-right-arrow-left btnTransferCart ${unique}"
+                id=${cart._id}
+              ></button>
+              <div class="card_containCart col s8 m8 l8">
+                <div class="loaded">
+                  <b>
+                    STATUS CARD:
+                    <u class="aquamarine">
+                      ***${cartDetails[0].status.toUpperCase()}***
+                    </u>
+                  </b>
+                  <b>
+                    QUANTITY OF PRODUCTS:
+                    <b class="quantityP">${countQuantity}</b>
+                  </b>
+                </div>
+                <button
+                  type="button"
+                  class="btn btn-outline-warning btn-sm btnViewCart"
+                >
+                  <a class="fa-regular fa-eye" href="/cart/${cart._id}"></a>
+                </button>
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
-    </div>
-  </div>`;
+        </div>`;
       containCart.innerHTML += html;
     }
     titleCart.innerHTML = `<h5>Carts (${storeCarts.length}):</h5>`;
+    btnTransferCart = document.querySelectorAll(".btnTransferCart");
     btnRemoveCart = document.querySelectorAll(".btnRemoveCart");
-    return btnRemoveCart;
+    return [btnRemoveCart, btnTransferCart];
   }
 }
 
@@ -120,23 +157,23 @@ async function crearHTMLProductsCarts() {
   if (storeProducts.length == 0) {
     titleCart.innerHTML = `<h5>Cart Empty</h5>`;
     containCart.innerHTML = "";
-    containCart.innerHTML = `
-    <div class="container__empty__card">
+    containCart.innerHTML = `<div class="container__empty__card">
         <div class="card">
           <div class="card-item--empty">
-          <i class="fa-solid fa-rectangle-xmark fa-beat-fade"></i>
+            <i class="fa-solid fa-rectangle-xmark fa-beat-fade"></i>
           </div>
           <div class="card-body--empty">
             <b class="card-text--empty">Not Products Found</b>
-            <p class="card-text--empty">You have not added any product in this cart</p>
+            <p class="card-text--empty">
+              You have not added any product in this cart
+            </p>
             <p class="card-text--empty">Try adding a product first</p>
           </div>
           <div class="card__footer--empty">
-          <button
-          type="button"
-          class="btn fas fa-edit btnAddProduct"
-        > 
-        </button>
+            <button
+              type="button"
+              class="btn fas fa-edit btnAddProduct"
+            ></button>
           </div>
         </div>
       </div>`;
@@ -145,10 +182,11 @@ async function crearHTMLProductsCarts() {
     return btnAdd;
   } else {
     containCart.innerHTML = "";
-    let html;
+    let html, error;
     let count = 0;
     for (const listProduct of storeProducts) {
       const product = listProduct.product;
+      product.stock == 0 ? (error = "error") : (error = "");
       if (product == null || listProduct.quantity == 0) {
         deletedProductCart(storeCarts[0]._id, product._id);
         continue;
@@ -166,30 +204,31 @@ async function crearHTMLProductsCarts() {
               alt="Card image cap"
             />
             <div class="card-img-overlay">
-            <button
-              type="button"
-              class="btn fas fa-trash-alt card__btnDelete"
-              id=${product._id}
-            >
-            </button>
-            <button
-              type="button"
-              class="btn btn-outline-warning btn-sm btnUpdate--Min"
-              id=${product._id}
-            >
-            <i class="fa-regular fa-square-minus"></i>
-            </button>
-            <button
-              type="button"
-              class="btn btn-outline-warning btn-sm btnUpdate--Max"
-              id=${product._id}
-            >
-            <i class="fa-regular fa-square-plus"></i>
-            </button>
-          </div>
+              <button
+                type="button"
+                class="btn fas fa-trash-alt card__btnDelete"
+                id=${product._id}
+              ></button>
+              <button
+                type="button"
+                class="btn btn-outline-warning btn-sm btnUpdate--Min"
+                id=${product._id}
+              >
+                <i class="fa-regular fa-square-minus"></i>
+              </button>
+              <button
+                type="button"
+                class="btn btn-outline-warning btn-sm btnUpdate--Max ${error}"
+                id=${product._id}
+              >
+                <i class="fa-regular fa-square-plus"></i>
+              </button>
+            </div>
             <div class="card-body">
               <b class="card-text--description">${product.description}</b>
-              <u class="card-text--price">Precio Unitario: S/.${product.price}</u>
+              <u class="card-text--price">
+                Precio Unitario: S/.${product.price}
+              </u>
               <b class="card-text--total">Precio Total: S/.${total}</b>
             </div>
             <div class="card-footer">
@@ -198,7 +237,6 @@ async function crearHTMLProductsCarts() {
               </b>
             </div>
           </div>
-        </div>
         </div>`;
       containCart.innerHTML += html;
     }
@@ -405,6 +443,30 @@ async function deleteAllProductsCart(idCart) {
   }
 }
 
+async function putTransfCart(idCart, data) {
+  try {
+    let response = await fetch(`${UrlC}/${idCart}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Credentials": true,
+      mode: "cors",
+      body: JSON.stringify(data),
+    });
+    if (response.status == 400) {
+      console.warn("Error en el cliente");
+      return;
+    } else if (response.status == 200) {
+      data = await response.json();
+      return data;
+    }
+  } catch {
+    console.log(Error);
+  }
+}
+
 async function deleteCart(idCart) {
   try {
     let response = await fetch(`${UrlC}/${idCart}/delete`, {
@@ -427,16 +489,61 @@ async function deleteCart(idCart) {
 }
 /*FIN FUNCIONES CRUD*/
 
+async function validarStock(idProduct, stockModif, action) {
+  const product = await getDataOneProductbyID(idProduct);
+  const newStock =
+    action == 1 ? product[0].stock + stockModif : product[0].stock - stockModif;
+  await updateOneProductbyID(idProduct, { stock: newStock });
+}
+
+async function validarCartStock(idCart) {
+  const listProducts = await getDataProductsbyID(idCart);
+  for (const product of listProducts) {
+    const idProduct = product.product._id;
+    const stockModif = product.quantity;
+    const action = 1;
+    await validarStock(idProduct, stockModif, action);
+  }
+}
+
+async function validarPayload(payload, listProducts) {
+  for (const resproduct of listProducts) {
+    const { quantity, ...rest } = resproduct;
+    const { _id } = resproduct.product;
+    const existingProduct = payload.find((p) => {
+      return p.product._id == _id;
+    });
+    if (existingProduct) {
+      existingProduct.quantity += quantity;
+    } else {
+      payload.push({ ...rest, quantity });
+    }
+  }
+  return payload;
+}
+async function TransferCart(idCartTransfer, idCartReceptor) {
+  const listProduct1 = await getDataProductsbyID(idCartTransfer);
+  const listProduct2 = await getDataProductsbyID(idCartReceptor);
+  const newArrCart = new NewDataCart();
+  let payload = newArrCart.payload;
+  await validarPayload(payload, listProduct1).then(async (data) => {
+    payload = await validarPayload(data, listProduct2);
+  });
+  const newListProduct = await putTransfCart(idCartReceptor, payload);
+  return newListProduct;
+}
+
 async function selectBtnCartProducts() {
   try {
     if (storeProducts != 0) {
       [bnUpdateAdd, btnUpdateDel, btnAllDel] = await crearHTMLProductsCarts();
       bnUpdateAdd.forEach((btnAdd) => {
+        //ACTUALIZA SOLO LA CANTIDAD DEL PRODUCTO SELECCIONADO (SOLO AUMENTA)
         btnAdd.addEventListener("click", async (e) => {
           e.preventDefault();
-          const productoSelect = await getDataOneProductbyID(btnAdd.id);
+          const idProduct = btnAdd.id;
+          const productoSelect = await getDataOneProductbyID(idProduct);
           const pStock = productoSelect[0].stock;
-          const pId = btnAdd.id;
           const optStock = await crearListStock(pStock);
           Swal.fire({
             html: `How many ${productoSelect[0].tittle} do you want to add to the cart?`,
@@ -451,9 +558,8 @@ async function selectBtnCartProducts() {
               const idCart = storeCarts[0]._id;
               const selectValue = Swal.getPopup().querySelector("select").value;
               const quantity = { stock: selectValue };
-              const newStock = pStock - +selectValue;
-              updateOneProductbyID(pId, { stock: newStock });
-              updateData(idCart, pId, quantity)
+              validarStock(idProduct, +selectValue, 2);
+              updateData(idCart, idProduct, quantity)
                 .then(async (data) => {
                   Swal.fire({
                     title: "Product(s) Added Successfully!!!",
@@ -467,7 +573,7 @@ async function selectBtnCartProducts() {
                   });
                   socket.emit("updateproduct", "Productos Actualizados");
                   socket.emit(
-                    "addingCart",
+                    "addingProductCart",
                     `Se ha añadido ${selectValue} ${productoSelect[0].tittle} al carrito.`
                   );
                 })
@@ -479,8 +585,10 @@ async function selectBtnCartProducts() {
         });
       });
       btnUpdateDel.forEach((btnUpd) => {
+        //ACTUALIZA SOLO LA CANTIDAD DEL PRODUCTO SELECCIONADO (SOLO DISMINUYE)
         btnUpd.addEventListener("click", async (e) => {
           e.preventDefault();
+          storeCarts = await getDataCartsbyID(storeCarts[0]._id);
           let selectProduct;
           let products = storeCarts[0].products[0].payload;
           for (const listProduct of products) {
@@ -490,7 +598,7 @@ async function selectBtnCartProducts() {
               : (selectProduct = selectProduct);
           }
           const quantity = selectProduct.quantity;
-          const pId = btnUpd.id;
+          const idProduct = btnUpd.id;
           const optStock = await crearListStock(quantity);
           Swal.fire({
             html: `How many ${selectProduct.product.tittle} do you want to delete to the cart?`,
@@ -503,12 +611,15 @@ async function selectBtnCartProducts() {
           }).then(async (result) => {
             if (result.isConfirmed) {
               const idCart = storeCarts[0]._id;
+              const lastValue = Object.keys(optStock).pop();
               const selectValue = Swal.getPopup().querySelector("select").value;
               const quantity = { quantity: selectValue };
-              const product = await getDataOneProductbyID(pId);
-              const newStock = product[0].stock + +selectValue;
-              updateOneProductbyID(pId, { stock: newStock });
-              updateData(idCart, pId, quantity)
+              validarStock(idProduct, +selectValue, 1);
+              const action =
+                lastValue == selectValue
+                  ? deletedProductCart(idCart, idProduct)
+                  : updateData(idCart, idProduct, quantity);
+              action
                 .then(async (data) => {
                   Swal.fire({
                     title: "Product(s) Deleted Successfully!!!",
@@ -522,7 +633,7 @@ async function selectBtnCartProducts() {
                   });
                   socket.emit("updateproduct", "Productos Actualizados");
                   socket.emit(
-                    "deletingCart",
+                    "deletingProductCart",
                     `Se ha eliminado ${selectValue} ${selectProduct.product.tittle} del carrito.`
                   );
                 })
@@ -534,8 +645,10 @@ async function selectBtnCartProducts() {
         });
       });
       btnAllDel.forEach((btnDel) => {
+        //ELIMINA DEL CARRITO EL PRODUCTO SELECCIONADO
         btnDel.addEventListener("click", async (e) => {
           e.preventDefault();
+          storeCarts = await getDataCartsbyID(storeCarts[0]._id);
           let Product;
           let products = storeCarts[0].products[0].payload;
           for (const listProduct of products) {
@@ -545,7 +658,8 @@ async function selectBtnCartProducts() {
               : (Product = Product);
           }
           const quantity = Product.quantity;
-          const productoSelect = await getDataOneProductbyID(btnDel.id);
+          const idProduct = btnDel.id;
+          const productoSelect = await getDataOneProductbyID(idProduct);
           Swal.fire({
             html:
               `<h4>Are you sure to delete the product?<h4>` +
@@ -558,9 +672,7 @@ async function selectBtnCartProducts() {
           }).then(async (result) => {
             if (result.isConfirmed) {
               const idCart = storeCarts[0]._id;
-              const idProduct = btnDel.id;
-              const newStock = productoSelect[0].stock + +quantity;
-              updateOneProductbyID(btnDel.id, { stock: newStock });
+              validarStock(idProduct, +quantity, 1);
               deletedProductCart(idCart, idProduct)
                 .then(async (data) => {
                   Swal.fire({
@@ -572,7 +684,7 @@ async function selectBtnCartProducts() {
                   socket.emit("updateproduct", "Productos Actualizados");
                   socket.emit(
                     "removeProduct",
-                    `Producto ${productoSelect.tittle} Eliminado del Carrito`
+                    `El Producto ${productoSelect[0].tittle} se ha Eliminado del Carrito`
                   );
                 })
                 .catch((error) => console.log("Error:" + error));
@@ -595,42 +707,102 @@ async function selectBtnCartProducts() {
 
 async function selectRemoveCart() {
   try {
-    btnRemoveCart = await crearHTMLCarts();
-    btnRemoveCart.forEach((selectBtn) => {
-      selectBtn.addEventListener("click", async (e) => {
-        e.preventDefault();
-        const cardSelect = await getDataCartsbyID(selectBtn.id);
-        Swal.fire({
-          html:
-            `<h4>Are you sure to delete the cart?<h4>` +
-            `\n` +
-            `<h6><b>(Remember that you will not be able to recover it!!!)<b><h6>`,
-          showDenyButton: true,
-          showCancelButton: false,
-          confirmButtonText: "YES",
-          denyButtonText: "NOT",
-        }).then((result) => {
-          if (result.isConfirmed) {
-            deleteCart(cardSelect[0]._id)
-              .then(async (data) => {
-                Swal.fire({
-                  title: "Cart Removed Successfully!!!",
-                  text: "Cart Removed>> " + "ID: " + cardSelect[0]._id,
-                  icon: "success",
-                  confirmButtonText: "Accept",
-                });
-                socket.emit(
-                  "removeCart",
-                  `Carrito ${cardSelect[0]._id} Eliminado`
-                );
-              })
-              .catch((error) => console.log("Error:" + error));
-          } else if (result.isDenied) {
-            Swal.fire("ACTION CANCELED", "", "info");
-          }
+    if (storeCarts != 0) {
+      [btnRemoveCart, btnTransferCart] = await crearHTMLCarts();
+      btnRemoveCart.forEach((selectBtn) => {
+        selectBtn.addEventListener("click", async (e) => {
+          e.preventDefault();
+          const cardSelect = await getDataCartsbyID(selectBtn.id);
+          Swal.fire({
+            html:
+              `<h4>Are you sure to delete the cart?<h4>` +
+              `\n` +
+              `<h6><b>(Remember that you will not be able to recover it!!!)<b><h6>`,
+            showDenyButton: true,
+            showCancelButton: false,
+            confirmButtonText: "YES",
+            denyButtonText: "NOT",
+          }).then(async (result) => {
+            if (result.isConfirmed) {
+              await validarCartStock(cardSelect[0]._id);
+              deleteCart(cardSelect[0]._id)
+                .then(async (data) => {
+                  Swal.fire({
+                    title: "Cart Removed Successfully!!!",
+                    text: "Cart Removed>> " + "ID: " + cardSelect[0]._id,
+                    icon: "success",
+                    confirmButtonText: "Accept",
+                  });
+                  socket.emit("updateproduct", "Productos Actualizados");
+                  socket.emit(
+                    "removeCart",
+                    `Carrito ${cardSelect[0]._id} Eliminado`
+                  );
+                })
+                .catch((error) => console.log("Error:" + error));
+            } else if (result.isDenied) {
+              Swal.fire("ACTION CANCELED", "", "info");
+            }
+          });
         });
       });
-    });
+      btnTransferCart.forEach((selectBtn) => {
+        selectBtn.addEventListener("click", async (e) => {
+          e.preventDefault();
+          const btnTransfer = selectBtn.id;
+          const optCarts = await crearListCarts(btnTransfer);
+          Swal.fire({
+            text: "Which cart do you want to add products?",
+            input: "select",
+            inputOptions: optCarts,
+            showDenyButton: true,
+            showCancelButton: false,
+            confirmButtonText: "YES",
+            denyButtonText: "NOT",
+          }).then(async (result) => {
+            if (result.isConfirmed) {
+              const numCart = Swal.getPopup().querySelector("select").value;
+              const selectedCartId = ListCarts[numCart - 1];
+              Swal.fire({
+                html:
+                  `<h4>Are you sure to transfer the cart?<h4>` +
+                  `\n` +
+                  `<h6><b>(Remember that the transferred cart will be deleted and cannot be recovered!!!)<b><h6>`,
+                showDenyButton: true,
+                showCancelButton: false,
+                confirmButtonText: "YES",
+                denyButtonText: "NOT",
+              }).then(async (result) => {
+                if (result.isConfirmed) {
+                  TransferCart(btnTransfer, selectedCartId)
+                    .then(async (data) => {
+                      Swal.fire({
+                        title: "Cart Transferred Successfully!!!",
+                        text: "Cart Transferred>> " + "ID: " + btnTransfer,
+                        icon: "success",
+                        confirmButtonText: "Accept",
+                      });
+                      await deleteCart(btnTransfer);
+                      socket.emit("updateproduct", "Productos Actualizados");
+                      socket.emit(
+                        "transferCart",
+                        `El carrito ${btnTransfer} se ha Transferido al carrito ${data._id}`
+                      );
+                    })
+                    .catch((error) => console.log("Error:" + error));
+                } else if (result.isDenied) {
+                  Swal.fire("ACTION CANCELED", "", "info");
+                }
+              });
+            } else if (result.isDenied) {
+              Swal.fire("ACTION CANCELED", "", "info");
+            }
+          });
+        });
+      });
+    } else {
+      crearHTMLCarts();
+    }
   } catch (error) {
     console.log(error + ": No existen carritos para ser removidos.");
   }
@@ -640,49 +812,51 @@ async function selectRemoveCart() {
 
 socket.on("callCarts", async (getCarts) => {
   Object.assign(storeCarts, getCarts);
-  storeCarts.length == 1
-    ? (storeProducts = await getDataProductsbyID(storeCarts[0]._id))
-    : (storeProducts = []);
-  //ASIGNAR PRODUCTOS AL STORE
-  /*if (storeCarts.length == 1) {
-    sessionStorage.setItem("cartUpdate", storeCarts[0]._id);
-    if (window.location.pathname == "/cart") {
+  if (storeCarts.length == 1) {
+    sessionStorage.setItem("cartView", storeCarts[0]._id);
+    if (RouteIndex === "cartP") {
       storeCarts = await getDataCarts();
-      crearHTMLCarts();
-      ;
+      storeProducts = [];
+      focusAction();
+      selectRemoveCart();
     }
-  }else if (storeCarts.length != 1) {
-    if ((window.location.pathname).startsWith('/cart/') ) {
-      let idCart=sessionStorage.getItem("cartUpdate");
-      storeProducts = await getDataCartsbyID(idCart);
-      crearHTMLProductsCarts();
+  } else if (storeCarts.length != 1) {
+    if (RouteIndex === "cartP/") {
+      let idCart = sessionStorage.getItem("cartView");
+      storeProducts = await getDataProductsbyID(idCart);
+      focusAction();
+      selectBtnCartProducts();
     }
-  }*/
-  focusAction();
-  storeCarts.length == 1 ? selectBtnCartProducts() : selectRemoveCart();
-  //await getDataCarts();
-  //selectBtnCartProducts()
-  //console.log("llega primero "+JSON.stringify(storeProducts));
+  }
+  if (RouteIndex === "cartP") {
+    storeProducts = [];
+    focusAction();
+    selectRemoveCart();
+  } else if (RouteIndex === "cartP/") {
+    storeProducts = await getDataProductsbyID(storeCarts[0]._id);
+    focusAction();
+    selectBtnCartProducts();
+  }
 });
 
-socket.on("addingCart", async (msj) => {
+socket.on("addingProductCart", async (msj) => {
   console.log(msj);
-  if (storeCarts.length == 1) {
+  if (RouteIndex === "cartP/") {
     storeProducts = await getDataProductsbyID(storeCarts[0]._id);
     selectBtnCartProducts();
-  } else {
+  } else if (RouteIndex === "cartP") {
     storeProducts = [];
     storeCarts = await getDataCarts();
     selectRemoveCart();
   }
 });
 
-socket.on("deletingCart", async (msj) => {
+socket.on("deletingProductCart", async (msj) => {
   console.log(msj);
-  if (storeCarts.length == 1) {
+  if (RouteIndex === "cartP/") {
     storeProducts = await getDataProductsbyID(storeCarts[0]._id);
     selectBtnCartProducts();
-  } else {
+  } else if (RouteIndex === "cartP") {
     storeProducts = [];
     storeCarts = await getDataCarts();
     selectRemoveCart();
@@ -691,10 +865,10 @@ socket.on("deletingCart", async (msj) => {
 
 socket.on("removeProduct", async (msj) => {
   console.log(msj);
-  if (storeCarts.length == 1) {
+  if (RouteIndex === "cartP/") {
     storeProducts = await getDataProductsbyID(storeCarts[0]._id);
     selectBtnCartProducts();
-  } else {
+  } else if (RouteIndex === "cartP") {
     storeProducts = [];
     storeCarts = await getDataCarts();
     selectRemoveCart();
@@ -703,10 +877,10 @@ socket.on("removeProduct", async (msj) => {
 
 socket.on("emptyCart", async (msj) => {
   console.log(msj);
-  if (storeCarts.length == 1) {
+  if (RouteIndex === "cartP/") {
     storeProducts = await getDataProductsbyID(storeCarts[0]._id);
     selectBtnCartProducts();
-  } else {
+  } else if (RouteIndex === "cartP") {
     storeProducts = [];
     storeCarts = await getDataCarts();
     selectRemoveCart();
@@ -715,10 +889,10 @@ socket.on("emptyCart", async (msj) => {
 
 socket.on("removeCart", async (msj) => {
   console.log(msj);
-  if (storeCarts.length == 1) {
+  if (RouteIndex === "cartP/") {
     storeProducts = await getDataProductsbyID(storeCarts[0]._id);
     selectBtnCartProducts();
-  } else {
+  } else if (RouteIndex === "cartP") {
     storeProducts = [];
     storeCarts = await getDataCarts();
     selectRemoveCart();
@@ -727,10 +901,22 @@ socket.on("removeCart", async (msj) => {
 
 socket.on("NewCart", async (msj) => {
   console.log(msj);
-  if (storeCarts.length == 1) {
+  if (RouteIndex === "cartP/") {
     storeProducts = await getDataProductsbyID(storeCarts[0]._id);
     selectBtnCartProducts();
-  } else {
+  } else if (RouteIndex === "cartP") {
+    storeProducts = [];
+    storeCarts = await getDataCarts();
+    selectRemoveCart();
+  }
+});
+
+socket.on("transferCart", async (msj) => {
+  console.log(msj);
+  if (RouteIndex === "cartP/") {
+    storeProducts = await getDataProductsbyID(storeCarts[0]._id);
+    selectBtnCartProducts();
+  } else if (RouteIndex === "cartP") {
     storeProducts = [];
     storeCarts = await getDataCarts();
     selectRemoveCart();

@@ -46,8 +46,10 @@
   background-color: transparent;
   box-shadow: #482cff 0px 0px 15px 0px;
 }
-
-.error {
+.empty{
+  color: rgb(255, 0, 0) !important;
+}
+.error, .unique {
   pointer-events: none;
   opacity: 0.1;
 }
@@ -85,21 +87,22 @@
 .main__container__index {
   height: 90vh;
   display: flex;
-  align-items: center;
+  align-items:center;
+  justify-content: center;
   flex-direction: column;
   position: sticky;
 }
 
 .index__route--static a {
   /*STATIC BUTTON*/
+  position: relative;
+  left: 0;
   background-color: aquamarine;
   color: black;
-  margin-top: 100px;
-  white-space: normal;
   border: solid black 2px;
   border-radius: 20px;
   font-family: "Sinami", sans-serif;
-  font-size: 3.125rem;
+  font-size: 2.5rem;
   padding: 15px;
   padding-bottom: 5px;
   transition: all 500ms ease;
@@ -115,12 +118,11 @@
   /*DINAMIC BUTTON*/
   background-color: rgb(96, 104, 255);
   color: black;
-  margin-top: 50px;
   white-space: normal;
   border: solid black 2px;
   border-radius: 20px;
   font-family: "Sinami", sans-serif;
-  font-size: 3.125rem;
+  font-size: 2.5rem;
   padding: 15px;
   padding-bottom: 5px;
   transition: all 500ms ease;
@@ -133,16 +135,56 @@
   cursor: pointer;
 }
 
-.index__route--chat a {
-  /*CHAT BUTTON*/
-  background-color: pink;
+.index__route--products a {
+  /*PRODUCTS BUTTON*/
+  background-color: rgb(210, 96, 255);
   color: black;
-  margin-top: 50px;
   white-space: normal;
   border: solid black 2px;
   border-radius: 20px;
   font-family: "Sinami", sans-serif;
-  font-size: 3.125rem;
+  font-size: 2.5rem;
+  padding: 15px;
+  padding-bottom: 5px;
+  transition: all 500ms ease;
+}
+
+.index__route--products a:hover {
+  border: solid black 2px;
+  color: rgb(0, 242, 255);
+  box-shadow: #ffd16e 0px 0px 20px 0px;
+  cursor: pointer;
+}
+.index__route--carts a {
+  /*CARTS BUTTON*/
+  background-color: rgb(255, 96, 120);
+  color: black;
+  white-space: normal;
+  border: solid black 2px;
+  border-radius: 20px;
+  font-family: "Sinami", sans-serif;
+  font-size: 2.5rem;
+  padding: 15px;
+  padding-bottom: 5px;
+  transition: all 500ms ease;
+}
+
+.index__route--carts a:hover {
+  border: solid black 2px;
+  color: greenyellow;
+  box-shadow: #6677cc 0px 0px 20px 0px;
+  cursor: pointer;
+}
+
+.index__route--chat a {
+  /*CHAT BUTTON*/
+  background-color: rgb(255, 253, 192);
+  color: black;
+  white-space: normal;
+  border: solid black 2px;
+  border-radius: 20px;
+  font-family: "Sinami", sans-serif;
+  font-size: 2.5rem;
   padding: 15px;
   padding-bottom: 5px;
   transition: all 500ms ease;
@@ -174,7 +216,6 @@
   justify-content: center;
 }
 
-/*contenedor de los caroooooooooooooooooooooooooooooooooooooooooo*/
 .container__cart{
   display: grid;
   flex-wrap: wrap;
@@ -824,6 +865,26 @@
   cursor: pointer;
 }
 
+.btnViewClose{
+  white-space: normal;
+  background: rgb(255, 0, 0);
+  border: solid rgb(114, 1, 1) 2px;
+  border-top-left-radius: 20px;
+  border-bottom-right-radius: 20px;
+  color: #ffffff;
+  font-family: "Sinami", sans-serif;
+  font-size: 1.875rem;
+  padding-top: 10px !important;
+  transition: all 500ms ease;
+}
+
+.btnViewClose:hover, .btnViewClose:focus{
+  box-shadow: #00befe 0px 0px 10px 0px;
+  background: linear-gradient(rgb(255, 119, 119), white);
+  color: #000000;
+  cursor: pointer;
+}
+
 /*STATIC BLOCK*/
 .static__tittle {
   background-color: transparent;
@@ -1241,10 +1302,23 @@
 .card-footer {
   position: relative;
   display: block;
+  bottom: 6vh;
+  z-index: 2;
+  background-color: transparent;
+}
+.card-footer--products{
+  position: relative;
+  display: block;
   bottom: 5vh;
   z-index: 2;
   background-color: transparent;
 }
+.card-footer--products p{
+  position: relative;
+  bottom: -10px;
+  font-weight: bold;
+}
+
 
 .card__footer--empty {
   height: 20%;
@@ -1267,9 +1341,8 @@
   display: inline-flex;
   font-size: 1rem;
   text-align: start;
-  padding-top: 10px;
   margin-left: 5px;
-  color: #6a00ff;
+  color: #06a279;
   width: fit-content;
 }
 
@@ -1673,6 +1746,29 @@
   box-shadow: #e46464 0px 0px 10px 0px;
   cursor: pointer;
   color: #000000;
+}
+
+.btnTransferCart,.btnTransferCart:focus{
+  background-color: transparent;
+  position: absolute;
+  justify-content: center;
+  font-size: 2vw;
+  z-index: 5;
+  right:  4px;
+  top: 4px;
+  width: fit-content;
+  height: fit-content;
+  padding: 4px;
+  color: rgb(30, 0, 255);
+  border: none;
+  background-color: rgb(196, 214, 255);
+  box-shadow: rgb(0, 41, 249) 1px 1px 5px 0px;
+  cursor: pointer;
+}
+
+.btnTransferCart:hover{
+  background-color: rgb(0, 249, 153);
+  box-shadow: rgb(3, 130, 69) 1px 1px 5px 0px;
 }
 
 .btnUpdate--min,.btnUpdate--min:focus {
