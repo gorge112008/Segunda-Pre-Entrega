@@ -67,7 +67,7 @@ async function crearListStock(stock) {
 
 async function defaultCart() {
   const cart = new NewCart();
-  createCart(cart);
+  await createCart(cart);
   socket.emit("NewCart", `Nuevo carrito por defecto Creado`);
 }
 
@@ -203,6 +203,11 @@ async function selectAddCart() {
         e.preventDefault();
         const idProduct = selectBtn.id;
         const optCarts = await crearListCarts();
+        const productoSelect = await getDatabyID(selectBtn.id);
+        const pStock = productoSelect[0].stock;
+        const optStock = await crearListStock(pStock);
+        let numCart;
+        let selectedCardId;
         Swal.fire({
           text: "Which cart do you want to add products?",
           input: "select",
@@ -213,11 +218,9 @@ async function selectAddCart() {
           denyButtonText: "NOT",
         }).then(async (result) => {
           if (result.isConfirmed) {
-            const productoSelect = await getDatabyID(selectBtn.id);
-            const pStock = productoSelect[0].stock;
-            const optStock = await crearListStock(pStock);
-            const numCart = Swal.getPopup().querySelector("select").value;
-            const selectedCartId = ListCarts[numCart - 1];
+            numCart = Swal.getPopup().querySelector("select").value;
+            selectedCartId = ListCarts[numCart - 1];
+            console.log("Carrito "+numCart+" Seleccionado");
             Swal.fire({
               html: `How many ${productoSelect[0].tittle} do you want to add to the cart?`,
               input: "select",

@@ -1,4 +1,5 @@
 import config from "../config/config.js";
+import axios from "axios";
 
 const middlewareInitCart = async (req, res, next) => {
   try {
@@ -6,10 +7,13 @@ const middlewareInitCart = async (req, res, next) => {
     const route = req.params.cid
       ? `/api/carts/${req.params.cid}`
       : `/api/carts`;
-      const resCarts = await fetch(`${Url}${route}`).then(function (response) {
-        return response.json();
+      const resCarts = await axios.get(`${Url}${route}`, {
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Credentials": true,
+        },
       });
-    res.locals.resCarts = resCarts;
+    res.locals.resCarts = resCarts.data;
     /*PRUEBA SIN CARTS*/
     //res.locals.resCarts=[];
     next();

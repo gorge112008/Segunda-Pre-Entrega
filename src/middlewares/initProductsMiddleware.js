@@ -1,4 +1,5 @@
 import config from "../config/config.js";
+import axios from "axios";
 
 const middlewareInitProducts = async (req, res, next) => {
   try {
@@ -6,12 +7,15 @@ const middlewareInitProducts = async (req, res, next) => {
     const route = req.params.pid
       ? `/api/products/${req.params.pid}`
       : `/api/products`;
-    const resProducts = await fetch(`${Url}${route}`).then(function (response) {
-      return response.json();
+    const resProducts = await axios.get(`${Url}${route}`, {
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Credentials": true,
+      },
     });
     req.params.pid
-      ? (res.locals.resProducts = resProducts)
-      : (res.locals.resProducts = resProducts.payload);
+      ? (res.locals.resProducts = resProducts.data)
+      : (res.locals.resProducts = resProducts.data.payload);
     /*PRUEBA SIN PRODUCTOS*/
     //res.locals.resProducts=[];
       next();
