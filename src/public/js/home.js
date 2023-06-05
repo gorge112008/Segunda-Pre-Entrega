@@ -328,12 +328,10 @@ function saveUpdate(data) {
 }
 
 async function validarStatus(idExo) {
-  let getProducts = await getData();
+  let getProducts = await getData({ limit:100,status: "error" });
   for (const product of getProducts) {
     if (idExo.includes(product._id)) continue;
-    if (product.status == "error") {
-      await updateData(product._id, { status: "success" });
-    }
+    await updateData(product._id, { status: "success" })
   }
   const newProducts = await getData();
   return newProducts;
