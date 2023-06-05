@@ -209,11 +209,11 @@ async function selectAddCart() {
           denyButtonText: "NOT",
         }).then(async (result) => {
           if (result.isConfirmed) {
+            const numCart = Swal.getPopup().querySelector("select").value;
+            const selectedCartId = ListCarts[numCart - 1];
             const productSelect = await getDatabyID(selectBtn.id);
             const pStock = productSelect[0].stock;
             const optStock = await createListStock(pStock);
-            const numCart = Swal.getPopup().querySelector("select").value;
-            const selectedCartId = ListCarts[numCart - 1];
             Swal.fire({
               html: `How many ${productSelect[0].tittle} do you want to add to the cart?`,
               input: "select",
