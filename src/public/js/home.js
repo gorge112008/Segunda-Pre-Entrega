@@ -338,7 +338,7 @@ async function validateProduct(product) {
   const codeProduct = await getData({ code: product.code });
   const inputError = [];
   let result = "Success";
-  if (inputStock.value <= 0) {
+  if (inputStock.value < 0) {
     inputStock.value = "";
     inputStock.focus();
     inputError.unshift("The entered stock cannot be negative");
@@ -715,10 +715,11 @@ form.addEventListener("submit", async (e) => {
         }
       } else if (result == "Error") {
         let i = 1;
+        let action=(RouteIndex==="realTP")?"Invalid New Product":"Invalid Product Update";
         const errorMsj = inputError.reduce(
           (acum, ele) =>
             acum + `<ul><li><b>Error ${i++}>></b> ${ele}...</li></ul>`,
-          `<b>Invalid Product</b>`
+          `<b>${action}</b>`
         );
         Swal.fire({
           html: `<ul>${errorMsj}</ul>`,
