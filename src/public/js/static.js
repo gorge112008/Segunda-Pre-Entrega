@@ -9,16 +9,12 @@ let Url = protocol + "//" + URLdomain + "/api/products";
 let opc = "static";
 let btnsDelete;
 let storeProducts = [],
-  resExo = [],
-  defaultStore = [];
-let opciones;
+  resExo = [];
+let options;
 let dataPagination;
-let querySelect;
 let query = {};
 
 const contain = document.querySelector(".container__grid");
-
-const navConteiner = document.querySelector(".dinav__container");
 
 const dinamicPages = document.querySelector(".dinav__pages--center"),
   selectPrevPage = document.getElementById("page__btnIzq"),
@@ -28,82 +24,6 @@ const selectOrder = document.getElementById("orderProducts"),
   selectCategory = document.getElementById("categoryProducts"),
   selectStatus = document.getElementById("statusProducts"),
   categoryOption = document.getElementById("selectCategory");
-
-selectStatus.addEventListener("change", async (event) => {
-  const selectedValue = event.target.value;
-  let query = { status: selectedValue };
-  let page = 1;
-  if (opciones) {
-    if (selectedValue == "") {
-      delete opciones.query.status;
-      if (JSON.stringify(opciones.query) == "{}") {
-        delete opciones.query;
-      } else {
-        query = opciones.query;
-      }
-      opciones.page = page;
-    } else {
-      opciones.query
-        ? (opciones.query = Object.assign(opciones.query, query))
-        : (opciones.query = query);
-    }
-  } else {
-    opciones = new NewParams(null, null, null, query);
-  }
-  sessionStorage.setItem("values", JSON.stringify(opciones));
-  filters();
-});
-
-selectOrder.addEventListener("change", async (event) => {
-  const selectedValue = event.target.value;
-  opciones
-    ? (opciones.sort = selectedValue)
-    : (opciones = new NewParams(null, null, selectedValue, null));
-  sessionStorage.setItem("values", JSON.stringify(opciones));
-  filters();
-});
-
-selectCategory.addEventListener("change", async (event) => {
-  const selectedValue = event.target.value;
-  let query = { category: selectedValue };
-  let page = 1;
-  if (opciones) {
-    if (selectedValue == "") {
-      delete opciones.query.category;
-      if (JSON.stringify(opciones.query) == "{}") {
-        delete opciones.query;
-      } else {
-        query = opciones.query;
-      }
-      opciones.page = page;
-    } else {
-      opciones.query
-        ? (opciones.query = Object.assign(opciones.query, query))
-        : (opciones.query = query);
-    }
-  } else {
-    opciones = new NewParams(null, null, null, query);
-  }
-  sessionStorage.setItem("values", JSON.stringify(opciones));
-  filters();
-});
-
-selectPrevPage.addEventListener("click", () => {
-  const prevPage = dataPagination.prevPage;
-  console.log(prevPage);
-  opciones = new NewParams(null, prevPage, null, null);
-  sessionStorage.setItem("values", JSON.stringify(opciones));
-  pagination();
-  filters();
-});
-
-selectNextPage.addEventListener("click", () => {
-  const nextPage = dataPagination.nextPage;
-  opciones = new NewParams(null, nextPage, null, null);
-  sessionStorage.setItem("values", JSON.stringify(opciones));
-  pagination();
-  filters();
-});
 
 /*****************************************************************CLASES*************************************************************/
 
@@ -118,7 +38,7 @@ class NewParams {
 
 /*****************************************************************FUNCIONES*************************************************************/
 
-async function crearHtml() {
+async function createHtml() {
   if (storeProducts.length == 0) {
     contain.innerHTML = "";
     contain.innerHTML = `
@@ -139,7 +59,9 @@ async function crearHtml() {
     let html;
     let error;
     for (const product of storeProducts) {
-      product.status == "error" && opc == "static"?error="error":error="";
+      product.status == "error" && opc == "static"
+        ? (error = "error")
+        : (error = "");
       html = `<div class="container__grid__card ${error}">
           <div class="card">
             <div class="card-header--filled">
@@ -167,28 +89,32 @@ async function crearHtml() {
 }
 
 async function filters() {
-  let valores = JSON.parse(sessionStorage.getItem("values"));
+  let values = JSON.parse(sessionStorage.getItem("values"));
   let totalParams;
   let valueQuery;
   let querys;
-  if (valores) {
-    valores.sort != null
-      ? (selectOrder.value = valores.sort)
+  if (values) {
+    values.sort != null
+      ? (selectOrder.value = values.sort)
       : (selectOrder.value = "");
-    if (valores.query != null) {
-      const conta = Object.keys(valores.query).length;
+    if (values.query != null) {
+      const conta = Object.keys(values.query).length;
       for (let i = 0; i < conta; i++) {
-        valueQuery = Object.entries(valores.query)[i][0];
-        querys = { [valueQuery]: valores.query[valueQuery] };
-        query = Object.assign(valores.query, querys);
+        valueQuery = Object.entries(values.query)[i][0];
+        querys = { [valueQuery]: values.query[valueQuery] };
+        query = Object.assign(values.query, querys);
       }
     }
+    storeProducts.length == 1
+      ? (values.page = values.page - 1)
+      : (values.page = values.page);
+    values.page == 0 ? (values.page = 1) : (values.page = values.page);
     let Params = {
-      limit: valores.limit,
-      page: valores.page,
-      sort: valores.sort,
+      limit: values.limit,
+      page: values.page,
+      sort: values.sort,
     };
-    valores.query == null
+    values.query == null
       ? (totalParams = Params)
       : (totalParams = Object.assign(Params, query));
     storeProducts = await getData(totalParams);
@@ -201,9 +127,8 @@ async function filters() {
       icon: "warning",
       confirmButtonText: "Accept",
     });
-   
-  } 
-  await crearHtml();
+  }
+  await createHtml();
 }
 
 async function pagination() {
@@ -267,6 +192,7 @@ async function focusbtn() {
 }
 
 /*INICIO FUNCIONES CRUD*/
+
 async function getData(params) {
   try {
     const queryParams = new URLSearchParams(params).toString();
@@ -305,5 +231,89 @@ socket.on("callProducts", async (getProducts) => {
   Object.assign(storeProducts, getProducts); //ASIGNAR PRODUCTOS AL STORE
   sessionStorage.removeItem("values");
   focusbtn();
+  filters();
+});
+
+/*****************************************************************EVENTS*************************************************************/
+
+selectStatus.addEventListener("change", async (event) => {
+  const selectedValue = event.target.value;
+  let query = { status: selectedValue };
+  let page = 1;
+  if (options) {
+    if (selectedValue == "") {
+      delete options.query.status;
+      if (JSON.stringify(options.query) == "{}") {
+        delete options.query;
+      } else {
+        query = options.query;
+      }
+      options.page = page;
+    } else {
+      options.query
+        ? (options.query = Object.assign(options.query, query))
+        : (options.query = query);
+      query = options.query;
+      options.page = page;
+    }
+  } else {
+    options = new NewParams(null, null, null, query);
+  }
+  sessionStorage.setItem("values", JSON.stringify(options));
+  filters();
+});
+
+selectOrder.addEventListener("change", async (event) => {
+  const selectedValue = event.target.value;
+  options
+    ? (options.sort = selectedValue)
+    : (options = new NewParams(null, null, selectedValue, null));
+  sessionStorage.setItem("values", JSON.stringify(options));
+  filters();
+});
+
+selectCategory.addEventListener("change", async (event) => {
+  const selectedValue = event.target.value;
+  let query = { category: selectedValue };
+  let page = 1;
+  if (options) {
+    if (selectedValue == "") {
+      delete options.query.category;
+      if (JSON.stringify(options.query) == "{}") {
+        delete options.query;
+      } else {
+        query = options.query;
+      }
+      options.page = page;
+    } else {
+      options.query
+        ? (options.query = Object.assign(options.query, query))
+        : (options.query = query);
+      options.page = page;
+    }
+  } else {
+    options = new NewParams(null, null, null, query);
+  }
+  sessionStorage.setItem("values", JSON.stringify(options));
+  filters();
+});
+
+selectPrevPage.addEventListener("click", () => {
+  const prevPage = dataPagination.prevPage;
+  options
+    ? (options.page = prevPage)
+    : (options = new NewParams(null, prevPage, null, null));
+  sessionStorage.setItem("values", JSON.stringify(options));
+  pagination();
+  filters();
+});
+
+selectNextPage.addEventListener("click", () => {
+  const nextPage = dataPagination.nextPage;
+  options
+    ? (options.page = nextPage)
+    : (options = new NewParams(null, nextPage, null, null));
+  sessionStorage.setItem("values", JSON.stringify(options));
+  pagination();
   filters();
 });

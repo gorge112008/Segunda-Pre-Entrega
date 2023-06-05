@@ -7,7 +7,7 @@ const middlewareInitProducts = async (req, res, next) => {
     const route = req.params.pid
       ? `/api/products/${req.params.pid}`
       : `/api/products`;
-    const resProducts = await axios.get(`${Url}${route}`, {
+    const resProducts =  await axios.get(`${Url}${route}`, {
       headers: {
         "Access-Control-Allow-Origin": "*",
         "Access-Control-Allow-Credentials": true,

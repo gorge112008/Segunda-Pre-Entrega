@@ -7,21 +7,17 @@ let UrlC = protocol + "//" + URLdomain + "/api/carts";
 let opc = "static";
 let btnAdd;
 let storeProducts = [],
-  resExo = [],
-  defaultStore = [];
-let opciones;
+  resExo = [];
+let options;
 let dataPagination;
-let querySelect;
 let query = {},
   ListCarts = [];
 
-const containDinamic = document.querySelector(".main__container__dinamic"),
-  tittleDinamic = document.querySelector(".dinamic__tittle--h3"),
+const tittleDinamic = document.querySelector(".dinamic__tittle--h3"),
   form = document.querySelector("form"),
   formInput = document.querySelectorAll(".input-field label"),
   btnviewClose = document.querySelector(".btnViewClose"),
-  contain = document.querySelector(".container__grid"),
-  asideButton = document.querySelector(".asideSD__dropdown--button");
+  contain = document.querySelector(".container__grid");
 
 const dinamicPages = document.querySelector(".dinav__pages--center"),
   selectPrevPage = document.getElementById("page__btnIzq"),
@@ -57,7 +53,7 @@ class NewParams {
 }
 
 /*****************************************************************FUNCIONES*************************************************************/
-async function crearListStock(stock) {
+async function createListStock(stock) {
   let optListStock = [];
   for (let i = 1; i <= stock; i++) {
     optListStock[i] = i.toString();
@@ -68,10 +64,10 @@ async function crearListStock(stock) {
 async function defaultCart() {
   const cart = new NewCart();
   await createCart(cart);
-  socket.emit("NewCart", `Nuevo carrito por defecto Creado`);
+  socket.emit("NewCart", `New default cart created`);
 }
 
-async function crearListCarts() {
+async function createListCarts() {
   let carts = await getDataCart();
   if (carts.length == 0) {
     await defaultCart();
@@ -86,7 +82,7 @@ async function crearListCarts() {
   return optListCarts;
 }
 
-async function crearHtml() {
+async function createHtml() {
   if (storeProducts.length == 0) {
     contain.innerHTML = "";
     contain.innerHTML = `
@@ -189,7 +185,7 @@ async function selectAction() {
     opc = "static";
   }
 }
-async function validarStock(idProduct, stockModif) {
+async function validateStock(idProduct, stockModif) {
   const product = await getDatabyID(idProduct);
   const newStock = product[0].stock - stockModif;
   updateProduct(idProduct, { stock: newStock });
@@ -197,17 +193,12 @@ async function validarStock(idProduct, stockModif) {
 
 async function selectAddCart() {
   try {
-    btnAdd = await crearHtml();
+    btnAdd = await createHtml();
     btnAdd.forEach((selectBtn) => {
       selectBtn.addEventListener("click", async (e) => {
         e.preventDefault();
         const idProduct = selectBtn.id;
-        const optCarts = await crearListCarts();
-        const productoSelect = await getDatabyID(selectBtn.id);
-        const pStock = productoSelect[0].stock;
-        const optStock = await crearListStock(pStock);
-        let numCart;
-        let selectedCardId;
+        const optCarts = await createListCarts();
         Swal.fire({
           text: "Which cart do you want to add products?",
           input: "select",
@@ -218,11 +209,13 @@ async function selectAddCart() {
           denyButtonText: "NOT",
         }).then(async (result) => {
           if (result.isConfirmed) {
-            numCart = Swal.getPopup().querySelector("select").value;
-            selectedCartId = ListCarts[numCart - 1];
-            console.log("Carrito "+numCart+" Seleccionado");
+            const productSelect = await getDatabyID(selectBtn.id);
+            const pStock = productSelect[0].stock;
+            const optStock = await createListStock(pStock);
+            const numCart = Swal.getPopup().querySelector("select").value;
+            const selectedCartId = ListCarts[numCart - 1];
             Swal.fire({
-              html: `How many ${productoSelect[0].tittle} do you want to add to the cart?`,
+              html: `How many ${productSelect[0].tittle} do you want to add to the cart?`,
               input: "select",
               inputOptions: optStock,
               showDenyButton: true,
@@ -234,7 +227,7 @@ async function selectAddCart() {
                 const selectValue =
                   Swal.getPopup().querySelector("select").value;
                 const quantity = { stock: selectValue };
-                validarStock(idProduct, +selectValue);
+                validateStock(idProduct, +selectValue);
                 updateCart(selectedCartId, idProduct, quantity)
                   .then(async (data) => {
                     Swal.fire({
@@ -244,14 +237,14 @@ async function selectAddCart() {
                         "ID: " +
                         idProduct +
                         " --> " +
-                        productoSelect[0].tittle,
+                        productSelect[0].tittle,
                       icon: "success",
                       confirmButtonText: "Accept",
                     });
-                    socket.emit("updateproduct", "Productos Actualizados");
+                    socket.emit("updateproduct", "Updated Products");
                     socket.emit(
                       "addingProductCart",
-                      `Se ha añadido ${selectValue} ${productoSelect[0].tittle} al carrito ${numCart}.`
+                      `Has been added ${selectValue} ${productSelect[0].tittle} al carrito ${numCart}.`
                     );
                   })
                   .catch((error) => console.log("Error:" + error));
@@ -266,33 +259,33 @@ async function selectAddCart() {
       });
     });
   } catch (error) {
-    console.log(error + ": No hay productos para agregar al carrito");
+    console.log(error + ": There are no products to add to the cart");
   }
 }
 
 async function filters() {
-  let valores = JSON.parse(sessionStorage.getItem("values"));
+  let values = JSON.parse(sessionStorage.getItem("values"));
   let totalParams;
   let valueQuery;
   let querys;
-  if (valores) {
-    valores.sort != null
-      ? (selectOrder.value = valores.sort)
+  if (values) {
+    values.sort != null
+      ? (selectOrder.value = values.sort)
       : (selectOrder.value = "");
-    if (valores.query != null) {
-      const conta = Object.keys(valores.query).length;
+    if (values.query != null) {
+      const conta = Object.keys(values.query).length;
       for (let i = 0; i < conta; i++) {
-        valueQuery = Object.entries(valores.query)[i][0];
-        querys = { [valueQuery]: valores.query[valueQuery] };
-        query = Object.assign(valores.query, querys);
+        valueQuery = Object.entries(values.query)[i][0];
+        querys = { [valueQuery]: values.query[valueQuery] };
+        query = Object.assign(values.query, querys);
       }
     }
     let Params = {
-      limit: valores.limit,
-      page: valores.page,
-      sort: valores.sort,
+      limit: values.limit,
+      page: values.page,
+      sort: values.sort,
     };
-    valores.query == null
+    values.query == null
       ? (totalParams = Params)
       : (totalParams = Object.assign(Params, query));
     storeProducts = await getData(totalParams);
@@ -311,35 +304,7 @@ async function filters() {
   }
 }
 
-function saveUpdate(data) {
-  Swal.fire({
-    title: "ESTA SEGURO DE MODIFICAR EL PRODUCTO?",
-    showDenyButton: true,
-    showCancelButton: false,
-    confirmButtonText: "SI",
-    denyButtonText: "NO",
-  }).then(async (result) => {
-    if (result.isConfirmed) {
-      Swal.fire({
-        position: "center",
-        text: "Updated Product: " + data.tittle,
-        icon: "success",
-        title: "Product Update Successfully!",
-        showConfirmButton: false,
-        allowOutsideClick: false,
-      });
-      socket.emit("updateproduct", "Se ha actualizado un producto");
-      setTimeout(() => {
-        window.location.href = "../realtimeproducts";
-      }, 1000);
-    } else if (result.isDenied) {
-      Swal.fire("ACCIÓN CANCELADA", "", "info");
-      return;
-    }
-  });
-}
-
-async function validarStatus(idExo) {
+async function validateStatus(idExo) {
   let getProducts = await getData();
   for (const product of getProducts) {
     console.log(JSON.stringify(product));
@@ -421,7 +386,7 @@ async function getData(params) {
       "Access-Control-Allow-Origin": "*",
       "Access-Control-Allow-Credentials": true,
       mode: "cors",
-    });
+    });JSON.stringify
     const data = await response.json();
     dataPagination = data;
     const newData = data.payload;
@@ -662,22 +627,22 @@ socket.on("updatingProduct", async (updatingMsj) => {
   }
 });
 
-socket.on("ordenExonerar", async (msj) => {
+socket.on("orderExonerate", async (msj) => {
   console.log(msj);
   if (RouteIndex==="productP/") {
-    socket.emit("responseExonerar", storeProducts[0]._id);
+    socket.emit("responseExonerate", storeProducts[0]._id);
     //console.log("Response de producto a exonerar emitido");
   }
 });
 
-socket.on("idExonerar", async (id) => {
+socket.on("idExonerate", async (id) => {
   //console.log("Id de exoneracion recibida: "+id);
   resExo.push(id);
   //console.log("Id de exoneracion agregada: "+resExo);
 });
 
-socket.on("actualizar", async (products) => {
-  console.log("Validacion Exitosa");
+socket.on("actualize", async (products) => {
+  console.log("Successfully Validation");
   if (RouteIndex==="productP") {
     storeProducts = products;
     filters();
@@ -721,17 +686,17 @@ CASO CONTRARIO SE EXCEPTA DEL GRUPO DE EXONERACION Y SOLO PODRA SER VALIDADO MED
 validateProducts.onclick = async () => {
   try {
     //console.log("Iniciando Validación de Productos");
-    socket.emit("exonerarStatus", "Exonerando Status");
-    const validProducts = await validarStatus(resExo);
+    socket.emit("exonerateStatus", "Exonerating Status");
+    const validProducts = await validateStatus(resExo);
     //console.log("Productos Validados Correctamente" + validProducts);
     //console.log("Vaciando arreglo de Exoneraciones");
     resExo.length == 0
-      ? socket.emit("finExo", "Exoneración Finalizada")
+      ? socket.emit("finExo", "Exemption Completed")
       : validateProducts.classList.remove("hidden");
     resExo = [];
     socket.emit("validateStatus", validProducts);
   } catch {
-    console.log("Error al Validando Productos");
+    console.log("Error Validating Products");
   }
 };
 
@@ -743,35 +708,35 @@ selectStatus.addEventListener("change", async (event) => {
   const selectedValue = event.target.value;
   let query = { status: selectedValue };
   let page = 1;
-  if (opciones) {
+  if (options) {
     if (selectedValue == "") {
-      delete opciones.query.status;
-      if (JSON.stringify(opciones.query) == "{}") {
-        delete opciones.query;
+      delete options.query.status;
+      if (JSON.stringify(options.query) == "{}") {
+        delete options.query;
       } else {
-        query = opciones.query;
+        query = options.query;
       }
-      opciones.page = page;
+      options.page = page;
     } else {
-      opciones.query
-        ? (opciones.query = Object.assign(opciones.query, query))
-        : (opciones.query = query);
-      query = opciones.query;
-      opciones.page = page;
+      options.query
+        ? (options.query = Object.assign(options.query, query))
+        : (options.query = query);
+      query = options.query;
+      options.page = page;
     }
   } else {
-    opciones = new NewParams(null, null, null, query);
+    options = new NewParams(null, null, null, query);
   }
-  sessionStorage.setItem("values", JSON.stringify(opciones));
+  sessionStorage.setItem("values", JSON.stringify(options));
   filters();
 });
 
 selectOrder.addEventListener("change", async (event) => {
   const selectedValue = event.target.value;
-  opciones
-    ? (opciones.sort = selectedValue)
-    : (opciones = new NewParams(null, null, selectedValue, null));
-  sessionStorage.setItem("values", JSON.stringify(opciones));
+  options
+    ? (options.sort = selectedValue)
+    : (options = new NewParams(null, null, selectedValue, null));
+  sessionStorage.setItem("values", JSON.stringify(options));
   filters();
 });
 
@@ -779,44 +744,44 @@ selectCategory.addEventListener("change", async (event) => {
   const selectedValue = event.target.value;
   let query = { category: selectedValue };
   let page = 1;
-  if (opciones) {
+  if (options) {
     if (selectedValue == "") {
-      delete opciones.query.category;
-      if (JSON.stringify(opciones.query) == "{}") {
-        delete opciones.query;
+      delete options.query.category;
+      if (JSON.stringify(options.query) == "{}") {
+        delete options.query;
       } else {
-        query = opciones.query;
+        query = options.query;
       }
-      opciones.page = page;
+      options.page = page;
     } else {
-      opciones.query
-        ? (opciones.query = Object.assign(opciones.query, query))
-        : (opciones.query = query);
-      opciones.page = page;
+      options.query
+        ? (options.query = Object.assign(options.query, query))
+        : (options.query = query);
+      options.page = page;
     }
   } else {
-    opciones = new NewParams(null, null, null, query);
+    options = new NewParams(null, null, null, query);
   }
-  sessionStorage.setItem("values", JSON.stringify(opciones));
+  sessionStorage.setItem("values", JSON.stringify(options));
   filters();
 });
 
 selectPrevPage.addEventListener("click", () => {
   const prevPage = dataPagination.prevPage;
-  opciones
-    ? (opciones.page = prevPage)
-    : (opciones = new NewParams(null, prevPage, null, null));
-  sessionStorage.setItem("values", JSON.stringify(opciones));
+  options
+    ? (options.page = prevPage)
+    : (options = new NewParams(null, prevPage, null, null));
+  sessionStorage.setItem("values", JSON.stringify(options));
   pagination();
   filters();
 });
 
 selectNextPage.addEventListener("click", () => {
   const nextPage = dataPagination.nextPage;
-  opciones
-    ? (opciones.page = nextPage)
-    : (opciones = new NewParams(null, nextPage, null, null));
-  sessionStorage.setItem("values", JSON.stringify(opciones));
+  options
+    ? (options.page = nextPage)
+    : (options = new NewParams(null, nextPage, null, null));
+  sessionStorage.setItem("values", JSON.stringify(options));
   pagination();
   filters();
 });

@@ -62,18 +62,18 @@ async function initSocketServer(server) {
       io.emit("transferCart", msj);
     });
 
-    socket.on("exonerarStatus", async (msj) => {
-      console.log("Emision de Orden de Exoneracion");
-      socket.broadcast.emit("ordenExonerar", msj);
+    socket.on("exonerateStatus", async (msj) => {
+      console.log("Issuance of Order of Exoneration");
+      socket.broadcast.emit("orderExonerate", msj);
     });
 
-    socket.on("responseExonerar", async (id) => {
-      console.log("Respuesta de Orden de Exoneracion");
-      socket.broadcast.emit("idExonerar", id);
+    socket.on("responseExonerate", async (id) => {
+      console.log("Exemption Order Response");
+      socket.broadcast.emit("idExonerate", id);
     });
 
     socket.on("validateStatus", async (productsValid) => {
-      io.emit("actualizar", productsValid);
+      io.emit("actualize", productsValid);
     });
 
     socket.on("finExo", async (msj) => {

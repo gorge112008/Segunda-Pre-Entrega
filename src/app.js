@@ -41,10 +41,10 @@ const environment = async () => {
       }
     )
     .then(() => {
-      console.log("Conexion a la base de datos exitosa");
+      console.log("Connection to the database successfully");
     })
     .catch((error) => {
-      console.log(`Error en la conexion a la base de datos: ${error.message}`);
+      console.log(`Database connection error: ${error.message}`);
     });
 };
 

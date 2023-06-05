@@ -11,7 +11,7 @@ let opc = "static";
 let btnsDelete, btnAdd;
 let storeProducts = [],
   resExo = [];
-let opciones;
+let options;
 let dataPagination;
 let querySelect;
 let query = {};
@@ -96,8 +96,8 @@ async function crearHtml() {
     let html;
     let error, empty;
     for (const product of storeProducts) {
-      (product.stock)==0?empty="empty":empty="";
-      product.status == "error" && opc == "static" && product.stock!=0
+      product.stock == 0 ? (empty = "empty") : (empty = "");
+      product.status == "error" && opc == "static" && product.stock != 0
         ? (error = "error")
         : (error = "");
       html = `<div class="container__grid__card ${error}">
@@ -158,7 +158,7 @@ function validarUrl() {
 }
 
 async function selectAction() {
-  if (RouteIndex==="realTP/") {
+  if (RouteIndex === "realTP/") {
     categoryOption.value = storeProducts[0].category;
     tittleDinamic.innerHTML = "Update Product";
     inputTittle.value = storeProducts[0].tittle;
@@ -172,10 +172,7 @@ async function selectAction() {
     });
     if (opc == "static") {
       updateData(storeProducts[0]._id, { status: "error" });
-      socket.emit(
-        "updatingProduct",
-        storeProducts[0].tittle + " actualizandose..."
-      );
+      socket.emit("updatingProduct", storeProducts[0].tittle + " updating...");
       opc = "updating";
     } else {
       selectDelete();
@@ -192,11 +189,11 @@ async function selectDelete() {
       btnsDelete.forEach((selectBtn) => {
         selectBtn.addEventListener("click", async (e) => {
           e.preventDefault();
-          const productoSelect = await getDatabyID(selectBtn.id);
+          const productSelect = await getDatabyID(selectBtn.id);
           Swal.fire({
             title:
               "YOU WANT TO DELETE THE PRODUCT " +
-              productoSelect[0].tittle.toUpperCase() +
+              productSelect[0].tittle.toUpperCase() +
               " ?",
             showDenyButton: true,
             showCancelButton: false,
@@ -213,13 +210,13 @@ async function selectDelete() {
                       "ID: " +
                       data +
                       " --> " +
-                      productoSelect[0].tittle,
+                      productSelect[0].tittle,
                     icon: "success",
                     showConfirmButton: true,
                     allowOutsideClick: false,
                   });
                   filters();
-                  socket.emit("deleteproduct", "Producto Eliminado");
+                  socket.emit("deleteproduct", "Product Removed");
                 })
                 .catch((error) => console.log("Error:" + error));
             } else if (result.isDenied) {
@@ -257,30 +254,32 @@ async function selectDelete() {
 }
 
 async function filters() {
-  let valores = JSON.parse(sessionStorage.getItem("values"));
+  let values = JSON.parse(sessionStorage.getItem("values"));
   let totalParams;
   let valueQuery;
   let querys;
-  if (valores) {
-    valores.sort != null
-      ? (selectOrder.value = valores.sort)
+  if (values) {
+    values.sort != null
+      ? (selectOrder.value = values.sort)
       : (selectOrder.value = "");
-    if (valores.query != null) {
-      const conta = Object.keys(valores.query).length;
+    if (values.query != null) {
+      const conta = Object.keys(values.query).length;
       for (let i = 0; i < conta; i++) {
-        valueQuery = Object.entries(valores.query)[i][0];
-        querys = { [valueQuery]: valores.query[valueQuery] };
-        query = Object.assign(valores.query, querys);
+        valueQuery = Object.entries(values.query)[i][0];
+        querys = { [valueQuery]: values.query[valueQuery] };
+        query = Object.assign(values.query, querys);
       }
     }
-    storeProducts.length==1?valores.page=(valores.page)-1:valores.page=valores.page;
-    valores.page==0?valores.page=1:valores.page=valores.page;
+    storeProducts.length == 1
+      ? (values.page = values.page - 1)
+      : (values.page = values.page);
+    values.page == 0 ? (values.page = 1) : (values.page = values.page);
     let Params = {
-      limit: valores.limit,
-      page: valores.page,
-      sort: valores.sort,
+      limit: values.limit,
+      page: values.page,
+      sort: values.sort,
     };
-    valores.query == null
+    values.query == null
       ? (totalParams = Params)
       : (totalParams = Object.assign(Params, query));
     storeProducts = await getData(totalParams);
@@ -293,19 +292,17 @@ async function filters() {
       icon: "warning",
       confirmButtonText: "Accept",
     });
-    selectDelete();
-  } else {
-    selectDelete();
   }
+  selectDelete();
 }
 
 function saveUpdate(data) {
   Swal.fire({
-    title: "ESTA SEGURO DE MODIFICAR EL PRODUCTO?",
+    title: "ARE YOU SURE TO MODIFY THE PRODUCT?",
     showDenyButton: true,
     showCancelButton: false,
-    confirmButtonText: "SI",
-    denyButtonText: "NO",
+    confirmButtonText: "YES",
+    denyButtonText: "NOT",
   }).then(async (result) => {
     if (result.isConfirmed) {
       Swal.fire({
@@ -316,7 +313,7 @@ function saveUpdate(data) {
         showConfirmButton: false,
         allowOutsideClick: false,
       });
-      socket.emit("updateproduct", "Se ha actualizado un producto");
+      socket.emit("updateproduct", "A product has been updated");
       setTimeout(() => {
         window.location.href = "../realtimeproducts";
       }, 1000);
@@ -327,14 +324,48 @@ function saveUpdate(data) {
   });
 }
 
-async function validarStatus(idExo) {
-  let getProducts = await getData({ limit:100,status: "error" });
+async function validateStatus(idExo) {
+  let getProducts = await getData({ limit: 100, status: "error" });
   for (const product of getProducts) {
     if (idExo.includes(product._id)) continue;
-    await updateData(product._id, { status: "success" })
+    await updateData(product._id, { status: "success" });
   }
   const newProducts = await getData();
   return newProducts;
+}
+
+async function validateProduct(product) {
+  const codeProduct = await getData({ code: product.code });
+  const inputError = [];
+  let result = "Success";
+  if (inputStock.value <= 0) {
+    inputStock.value = "";
+    inputStock.focus();
+    inputError.unshift("The entered stock cannot be negative");
+    result = "Error";
+  }
+  if (inputPrice.value <= 0) {
+    inputPrice.value = "";
+    inputPrice.focus();
+    inputError.unshift("The entered price cannot be negative");
+    result = "Error";
+  }
+  if (codeProduct.length == 0) {
+    if (product.code < 0) {
+      inputCode.value = "";
+      inputCode.focus();
+      inputError.unshift("The code entered cannot be negative");
+      result = "Error";
+    }
+  } else {
+    if (RouteIndex === "realTP") {
+      inputCode.value = "";
+      inputCode.focus();
+      inputError.unshift("The code entered already exists");
+      result = "Error";
+    }
+  }
+  return [result, inputError];
 }
 
 async function pagination() {
@@ -494,15 +525,14 @@ socket.on("callProducts", async (getProducts) => {
   Object.assign(storeProducts, getProducts); //ASIGNAR PRODUCTOS AL STORE
   if (storeProducts.length == 1) {
     sessionStorage.setItem("productUpdate", storeProducts[0]._id);
-    if (RouteIndex==="realTP") {
+    if (RouteIndex === "realTP") {
       storeProducts = await getData();
       filters();
       validateProducts.click();
-      ;
     }
-  }else if (storeProducts.length != 1) {
-    if (RouteIndex==="realTP/" ) {
-      let idProduct=sessionStorage.getItem("productUpdate");
+  } else if (storeProducts.length != 1) {
+    if (RouteIndex === "realTP/") {
+      let idProduct = sessionStorage.getItem("productUpdate");
       storeProducts = await getDatabyID(idProduct);
       filters();
     }
@@ -515,7 +545,7 @@ socket.on("callProducts", async (getProducts) => {
 
 socket.on("f5NewProduct", async (addMsj) => {
   console.log(addMsj);
-  if (RouteIndex==="realTP") {
+  if (RouteIndex === "realTP") {
     storeProducts = await getData();
     filters();
   }
@@ -523,17 +553,17 @@ socket.on("f5NewProduct", async (addMsj) => {
 
 socket.on("f5deleteProduct", async (deletedMsj) => {
   console.log(deletedMsj);
-  if (RouteIndex==="realTP") {
+  if (RouteIndex === "realTP") {
     storeProducts = await getData();
     filters();
-  } 
+  }
 });
 
 socket.on("f5updateProduct", async (updatedMsj) => {
   console.log(updatedMsj);
   const btnDel = document.querySelector(".card__btnDelete");
   btnDel.classList.remove("hidden");
-  if (RouteIndex==="realTP") {
+  if (RouteIndex === "realTP") {
     storeProducts = await getData({});
     filters();
     const btnDel = document.querySelector(".card__btnDelete");
@@ -543,7 +573,7 @@ socket.on("f5updateProduct", async (updatedMsj) => {
 
 socket.on("updatingProduct", async (updatingMsj) => {
   console.log(updatingMsj);
-  if (RouteIndex==="realTP/") {
+  if (RouteIndex === "realTP/") {
     validateProducts.classList.add("hidden");
     let productUpdate = await getDatabyID(storeProducts[0]._id);
     storeProducts = productUpdate;
@@ -555,7 +585,7 @@ socket.on("updatingProduct", async (updatingMsj) => {
 });
 
 socket.on("viewingProduct", async (id) => {
-  if (RouteIndex==="realTP/") {
+  if (RouteIndex === "realTP/") {
     validateProducts.classList.add("hidden");
     let productView = await getDatabyID(storeProducts[0]._id);
     storeProducts = productView;
@@ -576,23 +606,23 @@ socket.on("viewingProduct", async (id) => {
   }
 });
 
-socket.on("ordenExonerar", async (msj) => {
+socket.on("orderExonerate", async (msj) => {
   console.log(msj);
-  if (RouteIndex==="realTP/") {
-    socket.emit("responseExonerar", storeProducts[0]._id);
+  if (RouteIndex === "realTP/") {
+    socket.emit("responseExonerate", storeProducts[0]._id);
     //console.log("Response de producto a exonerar emitido");
   }
 });
 
-socket.on("idExonerar", async (id) => {
+socket.on("idExonerate", async (id) => {
   //console.log("Id de exoneracion recibida: "+id);
   resExo.push(id);
   //console.log("Id de exoneracion agregada: "+resExo);
 });
 
-socket.on("actualizar", async (products) => {
-  console.log("Validacion Exitosa");
-  if (RouteIndex==="realTP") {
+socket.on("actualize", async (products) => {
+  console.log("Successful Validation");
+  if (RouteIndex === "realTP") {
     storeProducts = products;
     filters();
   }
@@ -625,25 +655,25 @@ CASO CONTRARIO SE EXCEPTA DEL GRUPO DE EXONERACION Y SOLO PODRA SER VALIDADO MED
 validateProducts.onclick = async () => {
   try {
     //console.log("Iniciando Validación de Productos");
-    socket.emit("exonerarStatus", "Exonerando Status");
-    const validProducts = await validarStatus(resExo);
+    socket.emit("exonerateStatus", "Exonerating Status");
+    const validProducts = await validateStatus(resExo);
     //console.log("Productos Validados Correctamente" + validProducts);
     //console.log("Vaciando arreglo de Exoneraciones");
     resExo.length == 0
-      ? socket.emit("finExo", "Exoneración Finalizada")
+      ? socket.emit("finExo", "Exemption Completed")
       : validateProducts.classList.remove("hidden");
     resExo = [];
     socket.emit("validateStatus", validProducts);
   } catch {
-    console.log("Error al Validando Productos");
+    console.log("Error Validating Products");
   }
 };
 
 formCancel.onclick = () => {
-  if (RouteIndex==="realTP/") {
+  if (RouteIndex === "realTP/") {
     updateData(storeProducts[0]._id, { status: "success" });
     opc = "static";
-    socket.emit("updateproduct", "Productos Actualizados");
+    socket.emit("updateproduct", "Updated Products");
     window.location.href = "../realtimeproducts";
   } else {
     form.reset();
@@ -657,86 +687,82 @@ inputThumbnail.addEventListener("click", () => {
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
   const product = new NewProduct();
-  console.log("MUESTRAME"+RouteIndex);
-  if (RouteIndex==="realTP/") {
-    updateData(storeProducts[0]._id, product)
-      .then((data) => {
-        if (data == null) {
-          Swal.fire({
-            title: "Error>> Repeated Code f",
-            text: "Please enter a new code",
-            icon: "error",
-            confirmButtonText: "Accept",
-          });
-          inputCode.value = "";
-          inputCode.focus();
-        } else {
-          saveUpdate(data);
+  validateProduct(product)
+    .then((response) => {
+      [result, inputError] = response;
+      if (result == "Success") {
+        if (RouteIndex === "realTP/") {
+          updateData(storeProducts[0]._id, product)
+            .then((data) => {
+              saveUpdate(data);
+            })
+            .catch((error) => console.log("Error:" + error));
+        } else if (RouteIndex === "realTP") {
+          postData(product)
+            .then(async (data) => {
+              storeProducts = await getData();
+              filters();
+              Swal.fire({
+                title: "Product Added Successfully!",
+                text: "Registered Product: " + data.tittle,
+                icon: "success",
+                confirmButtonText: "Accept",
+              });
+              form.reset();
+              socket.emit("addproduct", "New Product Added");
+            })
+            .catch((error) => console.log("Error:" + error));
         }
-      })
-      .catch((error) => console.log("Error:" + error));
-  } else if(RouteIndex==="realTP"){
-    postData(product)
-      .then(async (data) => {
-        if (data == null) {
-          Swal.fire({
-            title: "Error>> Repeated Code f",
-            text: "Please enter a new code",
-            icon: "error",
-            confirmButtonText: "Accept",
-          });
-          inputCode.value = "";
-          inputCode.focus();
-        } else {
-          storeProducts = await getData();
-          filters();
-          Swal.fire({
-            title: "Product Added Successfully!",
-            text: "Registered Product: " + data.tittle,
-            icon: "success",
-            confirmButtonText: "Accept",
-          });
-          form.reset();
-          socket.emit("addproduct", "Nuevo Producto Agregado");
-        }
-      })
-      .catch((error) => console.log("Error:" + error));
-  }
+      } else if (result == "Error") {
+        let i = 1;
+        const errorMsj = inputError.reduce(
+          (acum, ele) =>
+            acum + `<ul><li><b>Error ${i++}>></b> ${ele}...</li></ul>`,
+          `<b>Invalid Product</b>`
+        );
+        Swal.fire({
+          html: `<ul>${errorMsj}</ul>`,
+          icon: "error",
+          confirmButtonText: "Accept",
+        });
+      }
+    })
+    .catch((error) => console.log("Error:" + error));
 });
 
 selectStatus.addEventListener("change", async (event) => {
   const selectedValue = event.target.value;
   let query = { status: selectedValue };
   let page = 1;
-  if (opciones) {
+  if (options) {
     if (selectedValue == "") {
-      delete opciones.query.status;
-      if (JSON.stringify(opciones.query) == "{}") {
-        delete opciones.query;
+      delete options.query.status;
+      if (JSON.stringify(options.query) == "{}") {
+        delete options.query;
       } else {
-        query = opciones.query;
+        query = options.query;
       }
-      opciones.page = page;
+      options.page = page;
     } else {
-      opciones.query
-        ? (opciones.query = Object.assign(opciones.query, query))
-        : (opciones.query = query);
-      query = opciones.query;
-      opciones.page = page;
+      options.query
+        ? (options.query = Object.assign(options.query, query))
+        : (options.query = query);
+      query = options.query;
+      options.page = page;
     }
   } else {
-    opciones = new NewParams(null, null, null, query);
+    options = new NewParams(null, null, null, query);
   }
-  sessionStorage.setItem("values", JSON.stringify(opciones));
+  sessionStorage.setItem("values", JSON.stringify(options));
   filters();
 });
 
 selectOrder.addEventListener("change", async (event) => {
   const selectedValue = event.target.value;
-  opciones
-    ? (opciones.sort = selectedValue)
-    : (opciones = new NewParams(null, null, selectedValue, null));
-  sessionStorage.setItem("values", JSON.stringify(opciones));
+  options
+    ? (options.sort = selectedValue)
+    : (options = new NewParams(null, null, selectedValue, null));
+  sessionStorage.setItem("values", JSON.stringify(options));
   filters();
 });
 
@@ -744,44 +770,44 @@ selectCategory.addEventListener("change", async (event) => {
   const selectedValue = event.target.value;
   let query = { category: selectedValue };
   let page = 1;
-  if (opciones) {
+  if (options) {
     if (selectedValue == "") {
-      delete opciones.query.category;
-      if (JSON.stringify(opciones.query) == "{}") {
-        delete opciones.query;
+      delete options.query.category;
+      if (JSON.stringify(options.query) == "{}") {
+        delete options.query;
       } else {
-        query = opciones.query;
+        query = options.query;
       }
-      opciones.page = page;
+      options.page = page;
     } else {
-      opciones.query
-        ? (opciones.query = Object.assign(opciones.query, query))
-        : (opciones.query = query);
-      opciones.page = page;
+      options.query
+        ? (options.query = Object.assign(options.query, query))
+        : (options.query = query);
+      options.page = page;
     }
   } else {
-    opciones = new NewParams(null, null, null, query);
+    options = new NewParams(null, null, null, query);
   }
-  sessionStorage.setItem("values", JSON.stringify(opciones));
+  sessionStorage.setItem("values", JSON.stringify(options));
   filters();
 });
 
 selectPrevPage.addEventListener("click", () => {
   const prevPage = dataPagination.prevPage;
-  opciones
-    ? (opciones.page = prevPage)
-    : (opciones = new NewParams(null, prevPage, null, null));
-  sessionStorage.setItem("values", JSON.stringify(opciones));
+  options
+    ? (options.page = prevPage)
+    : (options = new NewParams(null, prevPage, null, null));
+  sessionStorage.setItem("values", JSON.stringify(options));
   pagination();
   filters();
 });
 
 selectNextPage.addEventListener("click", () => {
   const nextPage = dataPagination.nextPage;
-  opciones
-    ? (opciones.page = nextPage)
-    : (opciones = new NewParams(null, nextPage, null, null));
-  sessionStorage.setItem("values", JSON.stringify(opciones));
+  options
+    ? (options.page = nextPage)
+    : (options = new NewParams(null, nextPage, null, null));
+  sessionStorage.setItem("values", JSON.stringify(options));
   pagination();
   filters();
 });

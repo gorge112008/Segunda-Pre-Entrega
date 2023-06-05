@@ -76,12 +76,12 @@ function loadMessages() {
 async function validateSession(email) {
   swalActive = "active";
   Swal.fire({
-    title: "SESION ACTIVA",
-    text: "Bienvenido Usuario: " + email,
+    title: "ACTIVE SESSION",
+    text: "Welcome user: " + email,
     icon: "info",
     showDenyButton: true,
-    confirmButtonText: "Continuar Sesion",
-    denyButtonText: "Cerrar Sesión",
+    confirmButtonText: "Continue session",
+    denyButtonText: "Close session",
     preConfirm: () => {
       swalActive = "inactive";
     },
@@ -93,7 +93,7 @@ async function validateSession(email) {
       Swal.fire({
         position: "center",
         icon: "success",
-        title: "Sesion Iniciada Correctamente",
+        title: "Session Started Successfully",
         showConfirmButton: false,
         allowOutsideClick: false,
         timer: 1500,
@@ -107,14 +107,14 @@ async function validateSession(email) {
 async function closeSession(email) {
   swalActive = "active";
   Swal.fire({
-    title: "ESTA SEGURO DE FINALIZAR SU SESIÓN?",
-    text: "Sesion activa: " + email + "",
+    title: "ARE YOU SURE TO END YOUR SESSION?",
+    text: "Active session: " + email + "",
     icon: "warning",
     showDenyButton: true,
     confirmButtonColor: "#3085d6",
     denyButtonColor: "#d33",
-    confirmButtonText: "Si, cerrar sesión.",
-    denyButtonText: "No, cancelar.",
+    confirmButtonText: "Yes, close session.",
+    denyButtonText: "Not, cancel.",
     preConfirm: () => {
       swalActive = "inactive";
     },
@@ -127,7 +127,7 @@ async function closeSession(email) {
         Swal.fire({
           position: "center",
           icon: "success",
-          title: "Ha finalizado correctamente su sesión",
+          title: "You have successfully ended your session",
           showConfirmButton: false,
           allowOutsideClick: false,
         });
@@ -141,7 +141,7 @@ function sendMessage(){
   if (chatBox.value.trim().length > 0) {
     const newmessage = new newMessage(email, chatBox.value);
     postData(UrlM, newmessage).then((lastMessage) => {
-      console.log("Mensaje enviado");
+      console.log("Message send");
       socket.emit("newMessage", lastMessage);
     });
     chatBox.value = "";
@@ -247,14 +247,14 @@ async function deleteData(url, id) {
 socket.on("backMessages", (getMessages) => {
   Object.assign(backMessages, getMessages);
   focusbtn();
-  console.log("RESUMEN DE MENSAJES: " + backMessages.length);
+  console.log("SUMMARY OF MESSAGES: " + backMessages.length);
 });
 
 socket.on("newUser-connected", (userNew) => {
   if (swalActive == "inactive") {
     if (userNew.id !== socket.id)
       Swal.fire({
-        html: `<b class="chat__login--notification">${userNew.user} se ha conectado al chat<b>`,
+        html: `<b class="chat__login--notification">${userNew.user} has connected to the chat<b>`,
         toast: true,
         position: "top-end",
         timer: 2000,
@@ -265,7 +265,7 @@ socket.on("newUser-connected", (userNew) => {
 
 socket.on("messageLogs", (lastMessage) => {
   backMessages.push(lastMessage);
-  console.log("RESUMEN DE MENSAJES: " + backMessages.length);
+  console.log("SUMMARY OF MESSAGES: " + backMessages.length);
   let log = document.querySelector(".chat__container__dinamic");
   const { user, message } = lastMessage;
   const newBubble = `
@@ -288,8 +288,8 @@ if (existSession != null) {
 } else {
   swalActive = "active";
   Swal.fire({
-    title: '<b class="chat__login--tittle">Bienvenido al Chat</b>',
-    html: '<u class="chat__login--text">Ingresa tu correo</u>',
+    title: '<b class="chat__login--tittle">Welcome to chat</b>',
+    html: '<u class="chat__login--text">Enter your email</u>',
     input: "email",
     showDenyButton: true,
     confirmButtonText: '<b class="chat__login--confirm">Confirm</b>',
@@ -299,7 +299,7 @@ if (existSession != null) {
       '#fff url("https://img.freepik.com/vector-gratis/fondo-degradado-cielo-pastel_23-2148917404.jpg?w=2000")',
     footer:
       '<a class="chat__footer--left" href="../home">Go to Home</a><a class="chat__footer--right" href="../realtimeproducts">Go to RealtimeProducts</a>',
-    inputPlaceholder: "Ingresar aqui...",
+    inputPlaceholder: "Enter here...",
     preConfirm: () => {
       swalActive = "inactive";
     },
@@ -317,9 +317,8 @@ if (existSession != null) {
             emailLogged.innerHTML = `<b>${email}<b>`;
             postData(UrlU, newuser)
               .then((data) => {
-                console.log("LA DATA RECIBIDA ES: "+data);
                   const { email } = data;
-                  console.log("Se almaceno el email: " + email);
+                  console.log("Email is stored: " + email);
                   sessionStorage.setItem("user", email);     
               })
               .catch((error) => console.log("Error:" + error));
@@ -327,7 +326,7 @@ if (existSession != null) {
             Swal.fire({
               position: "center",
               icon: "success",
-              title: "Sesion Iniciada Correctamente",
+              title: "Session Started Successfully",
               timer: 1500,
               showConfirmButton: false,
               allowOutsideClick: false,
@@ -356,3 +355,7 @@ chatBox.addEventListener("keyup", (e) => {
 btnSend.addEventListener("click", () => {
     sendMessage();
 });
+
+emailLogged.onclick = () => {
+  validateSession(email).click();
+};
